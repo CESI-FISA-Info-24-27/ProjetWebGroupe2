@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 
 import {
   getAllUsers,
@@ -10,12 +10,12 @@ import {
   updateUser,
   updateUserAsAdmin,
   getUserForOwnProfile,
-} from '../controllers/user.controller.js';
-import { protectAdmin, protectOwn } from '../middlewares/auth.middleware.js';
+} from "../controllers/user.controller.js";
+import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/", getAllUsers);
+router.get("/", protectAdmin, getAllUsers);
 router.get("/admin/:id", protectAdmin, getUserById);
 router.get("/forMyProfile", protectOwn, getUserForOwnProfile);
 router.get("/forPostUser/:id", getUserForPost);
