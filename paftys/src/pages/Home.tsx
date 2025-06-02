@@ -10,8 +10,10 @@ const randomPosts: PostComponentProps[] = [
       bio: "Web developer & coffee lover ☕",
     },
     message: {
-      id_string: "m1",
+      _id: "m1",
       message: "Just finished a new React project! 🚀",
+      likes: 120,
+      comments: 45,
     },
     date: new Date("2024-06-01T10:00:00Z"),
   },
@@ -23,9 +25,11 @@ const randomPosts: PostComponentProps[] = [
       bio: "Full-stack engineer. Building cool stuff.",
     },
     message: {
-      id_string: "m2",
+      _id: "m2",
       message:
         "Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?Anyone going to the next JS meetup?",
+      likes: 120,
+      comments: 45,
     },
     date: new Date("2024-06-01T12:15:00Z"),
   },
@@ -37,9 +41,11 @@ const randomPosts: PostComponentProps[] = [
       bio: "Music, code, repeat.",
     },
     message: {
-      id_string: "m3",
+      _id: "m3",
       message:
         "Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶Listening to some great synthwave while coding 🎶",
+      likes: 120,
+      comments: 45,
     },
     date: new Date("2024-06-01T15:30:00Z"),
   },
@@ -51,8 +57,10 @@ const randomPosts: PostComponentProps[] = [
       bio: "UI/UX designer. Making the web beautiful.",
     },
     message: {
-      id_string: "m4",
+      _id: "m4",
       message: "Check out my latest Dribbble shot!",
+      likes: 120,
+      comments: 45,
     },
     date: new Date("2024-06-01T18:45:00Z"),
   },
@@ -63,7 +71,7 @@ export default class HomeComponent extends Component {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-4">
         {randomPosts.map((post) => (
-          <PostComponent key={post.message.id_string} {...post} />
+          <PostComponent key={post.message._id} {...post} />
         ))}
       </div>
     );
