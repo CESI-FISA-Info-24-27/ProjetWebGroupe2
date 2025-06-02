@@ -4,15 +4,16 @@ import cors from 'cors';
 import { connectDB } from './config/db.js';
 dotenv.config();
 
+const PORT = process.env.PORT || 5000;
+
+import userRoutes from './routes/user.route.js';
+
 
 const app = express();
-app.use(cors());
+app.use(cors( { origin: "*", credentials: true } ));
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {
   connectDB();

@@ -1,9 +1,374 @@
 {
 	"info": {
-		"_postman_id": "147fcd97-447f-4ce4-96b5-d13f342a86aa",
-		"name": "New Collection",
+		"_postman_id": "e86eb55d-381d-4e2c-81df-0f7319c86f6b",
+		"name": "Paftys",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33475589"
+		"_exporter_id": "33475889"
 	},
-	"item": []
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "GET ALL USERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Lucile",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "La Grande-Motte",
+									"type": "text"
+								},
+								{
+									"key": "streetNumber",
+									"value": "01",
+									"type": "text"
+								},
+								{
+									"key": "streetName",
+									"value": "Rue de test",
+									"type": "text"
+								},
+								{
+									"key": "coordinates",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "bateau",
+									"type": "text"
+								},
+								{
+									"key": "contentText",
+									"value": "Super Partenrnaire !",
+									"type": "text"
+								},
+								{
+									"key": "contentPictures",
+									"value": "photo.png",
+									"type": "text"
+								},
+								{
+									"key": "contentVideos",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "website",
+									"value": "www.sitewebtest.fr",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0699999999",
+									"type": "text"
+								},
+								{
+									"key": "emailAddress",
+									"value": "emailtest@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "isActive",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET USER BY ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/admin/683db02c0c4f6599618fa6da",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"admin",
+								"683db02c0c4f6599618fa6da"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Own USER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/forMyProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"forMyProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET USER for profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/forMyProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"forMyProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET USER for post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users/forMyProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"forMyProfile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "REGISTER USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Mizano\",\r\n    \"email\": \"xav@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"xav@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Own USER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2RiMDJjMGM0ZjY1OTk2MThmYTZkYSIsImlhdCI6MTc0ODg3NTgzOSwiZXhwIjoxNzUxNDY3ODM5fQ.aNaaBQ6mhq5JYcDUdMU-DD5Zzk0rq-zhsno3tidNOCg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Mizano\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/updateMe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"updateMe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change USER as Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"BenRep\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/admin/683d95a1b5cfc4719da593d9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"admin",
+								"683d95a1b5cfc4719da593d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
