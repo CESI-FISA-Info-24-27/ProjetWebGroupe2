@@ -1,9 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import LoginComponent from "./LoginComponent";
 
 export default class homecomponent extends Component {
   render() {
     return (
-      <div>homecomponent</div>
-    )
+      <div>
+        Ici c'est l'homme
+        <LoginComponent />
+      </div>
+    );
   }
 }
