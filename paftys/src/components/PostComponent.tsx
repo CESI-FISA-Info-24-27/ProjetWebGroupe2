@@ -1,5 +1,12 @@
 import { Component } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 export interface UserForPost {
   _id: string;
@@ -9,8 +16,10 @@ export interface UserForPost {
 }
 
 export interface Message {
-  id_string: string;
+  _id: string;
   message: string;
+  likes: number;
+  comments: number;
 }
 
 export interface PostComponentProps {
@@ -46,21 +55,47 @@ export default class PostComponent extends Component<
 
     return (
       <Card className="w-fit gap-2">
-        <CardHeader className="flex flex-row justify-between">
-          <div className="flex flex-row items-center gap-2">
-            <img
-              src={user.profilePicture}
-              alt={`Profil de ${user.username}`}
-              className="w-[40px] h-[40px] rounded-full cursor-pointer"
-            />
-            <CardTitle className="username-underline cursor-pointer">{`@${user.username}`}</CardTitle>
+        <CardHeader className="flex flex-row justify-between px-4">
+          <div className="flex flex-row items-center gap-2 cursor-pointer">
+            <HoverCard>
+              <HoverCardTrigger>
+                <div className="flex items-center gap-2">
+                  <Avatar className="r">
+                    <AvatarImage
+                      src={user.profilePicture}
+                      alt={`@${user.username}`}
+                    />
+                  </Avatar>
+                  <CardTitle className="username-underline">
+                    @{user.username}
+                  </CardTitle>
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-64">
+                <div className="flex flex-col items-start gap-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarImage
+                        src={user.profilePicture}
+                        alt={`@${user.username}`}
+                      />
+                      <AvatarFallback>
+                        {user.username[0]?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <p className="font-semibold text-sm">@{user.username}</p>
+                  </div>
+                  <p className="text-sm text-gray-100">{user.bio}</p>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
 
           <span className="text-sm text-gray-500">
             Posté le {date.toLocaleString()}
           </span>
         </CardHeader>
-        <CardContent className="w-[600px]">
+        <CardContent className="w-[600px] px-4">
           <p>
             {shouldTruncate && !expanded
               ? message.message.slice(0, 240) + "..."
@@ -74,6 +109,26 @@ export default class PostComponent extends Component<
               </a>
             )}
           </p>
+          <div className="flex flex-row items-center gap-6">
+            <div className="flex flex-row items-center mt-4 gap-1">
+              <Button
+                variant="ghost"
+                className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+              >
+                <i className="bx bx-heart text-red-800 text-2xl"></i>
+              </Button>
+              <div className="text-sm">{message.likes}</div>
+            </div>
+            <div className="flex flex-row items-center mt-4 gap-1">
+              <Button
+                variant="ghost"
+                className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+              >
+                <i className="bx bx-message text-white text-2xl"></i>
+              </Button>
+              <div className="text-sm">{message.likes}</div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     );
