@@ -1,15 +1,13 @@
-import mongoose from 'mongoose';
-import { type } from 'os';
-import { text } from 'stream/consumers';
+import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  content: {
-    type: {
+const postSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    content: {
       text: {
         type: String,
         required: true,
@@ -19,33 +17,41 @@ const postSchema = new mongoose.Schema({
         required: false,
       },
     },
-    required: true,
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    replies: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
+    repliesTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      required: false,
+    },
+    reports: {
+      type: Number,
+      default: 0,
+    },
+    tags: {
+      type: [String],
+      default: [],
+    },
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-  likes: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
-  replies: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post',
-  }],
-  repliesTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Post',
-    nullable: true,
-  },
-  reports: {
-    type: integer,
-    default: 0,
-  },
-  tags: {
-    type: [String],
-    default: [],
-  },
-}, {
-  timestamps: true, // Automatically manage createdAt and updatedAt fields
-});
+  {
+    timestamps: true, // Automatically manage createdAt and updatedAt fields
+  }
+);
+
+const Post = mongoose.model("Post", postSchema);
+
+export default Post;
