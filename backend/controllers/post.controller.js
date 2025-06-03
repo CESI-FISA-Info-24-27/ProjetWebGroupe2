@@ -6,9 +6,9 @@ export async function getAllPosts(req, res) {
       "userId",
       "username profilePicture"
     );
-    res.status(200).json(posts);
+    res.status(200).json({ success: true, data: posts});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching posts", error });
+    res.status(500).json({ success: false, message: "Error fetching posts", error });
   }
 }
 
@@ -19,11 +19,11 @@ export async function getPostById(req, res) {
       "username profilePicture"
     );
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
-    res.status(200).json(post);
+    res.status(200).json({ success: true, data: post});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching post", error });
+    res.status(500).json({ success: false, message: "Error fetching post", error });
   }
 }
 
@@ -33,9 +33,9 @@ export async function getPostsByUser(req, res) {
       "userId",
       "username profilePicture"
     );
-    res.status(200).json(posts);
+    res.status(200).json({ success: true, data: posts});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching posts by user", error });
+    res.status(500).json({ success: false, message: "Error fetching posts by user", error });
   }
 }
 
@@ -47,9 +47,9 @@ export async function createPost(req, res) {
       tags: req.body.tags || [],
     });
     const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
+    res.status(201).json({ success: true, data: savedPost});
   } catch (error) {
-    res.status(500).json({ message: "Error creating post", error });
+    res.status(500).json({ success: false, message: "Error creating post", error });
   }
 }
 
@@ -67,11 +67,11 @@ export async function updatePost(req, res) {
       { new: true }
     );
     if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
-    res.status(200).json(updatedPost);
+    res.status(200).json({ success: true, data: updatedPost});
   } catch (error) {
-    res.status(500).json({ message: "Error updating post", error });
+    res.status(500).json({ success: false, message: "Error updating post", error });
   }
 }
 
@@ -89,11 +89,11 @@ export async function updatePostAsAdmin(req, res) {
       { new: true }
     );
     if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
-    res.status(200).json(updatedPost);
+    res.status(200).json({ success: true, data: updatedPost});
   } catch (error) {
-    res.status(500).json({ message: "Error updating post as admin", error });
+    res.status(500).json({ success: false, message: "Error updating post as admin", error });
   }
 }
 
@@ -101,10 +101,10 @@ export async function deletePost(req, res) {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (!deletedPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ success: false, message: "Post not found" });
     }
-    res.status(200).json({ message: "Post deleted successfully" });
+    res.status(200).json({ success: true, data: {message: "Post deleted successfully"} });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting post", error });
+    res.status(500).json({ success: false, message: "Error deleting post", error });
   }
 }

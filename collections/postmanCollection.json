@@ -15,77 +15,21 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "name",
-									"value": "Lucile",
-									"type": "text"
-								},
-								{
-									"key": "city",
-									"value": "La Grande-Motte",
-									"type": "text"
-								},
-								{
-									"key": "streetNumber",
-									"value": "01",
-									"type": "text"
-								},
-								{
-									"key": "streetName",
-									"value": "Rue de test",
-									"type": "text"
-								},
-								{
-									"key": "coordinates",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "category",
-									"value": "bateau",
-									"type": "text"
-								},
-								{
-									"key": "contentText",
-									"value": "Super Partenrnaire !",
-									"type": "text"
-								},
-								{
-									"key": "contentPictures",
-									"value": "photo.png",
-									"type": "text"
-								},
-								{
-									"key": "contentVideos",
-									"value": "",
-									"type": "text"
-								},
-								{
-									"key": "website",
-									"value": "www.sitewebtest.fr",
-									"type": "text"
-								},
-								{
-									"key": "phoneNumber",
-									"value": "0699999999",
-									"type": "text"
-								},
-								{
-									"key": "emailAddress",
-									"value": "emailtest@gmail.com",
-									"type": "text"
-								},
-								{
-									"key": "isActive",
-									"value": "true",
-									"type": "text"
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "http://localhost:5000/api/users",
@@ -181,7 +125,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/users/forMyProfile",
+							"raw": "http://localhost:5000/api/users/forProfilePageUser/683db02c0c4f6599618fa6da",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -190,7 +134,8 @@
 							"path": [
 								"api",
 								"users",
-								"forMyProfile"
+								"forProfilePageUser",
+								"683db02c0c4f6599618fa6da"
 							]
 						}
 					},
@@ -200,19 +145,12 @@
 					"name": "GET USER for post",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
-									"type": "string"
-								}
-							]
+							"type": "basic"
 						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/users/forMyProfile",
+							"raw": "http://localhost:5000/api/users/forPostUser/683db02c0c4f6599618fa6da",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -221,7 +159,8 @@
 							"path": [
 								"api",
 								"users",
-								"forMyProfile"
+								"forPostUser",
+								"683db02c0c4f6599618fa6da"
 							]
 						}
 					},
@@ -234,7 +173,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\": \"Mizano\",\r\n    \"email\": \"xav@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"raw": "{\r\n    \"userName\": \"ChèvreNaine\",\r\n    \"email\": \"luk@gmail.com\",\r\n    \"password\": \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -363,6 +302,207 @@
 								"users",
 								"admin",
 								"683d95a1b5cfc4719da593d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conversation",
+			"item": [
+				{
+					"name": "GET CONVERSATION by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/myConversation/id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"myConversation",
+								"id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all my CONVERSATIONS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2VhY2JiMDljZTE4ZTUxMTkzZTgyOSIsImlhdCI6MTc0ODkzNzkxNiwiZXhwIjoxNzUxNTI5OTE2fQ.S3G4_Tp3yUsqnLosid4aFiu2MVibBtb2TrB87mTLzw0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/allMyConversations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"allMyConversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET CONVERSATION by id as admin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/admin/id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"admin",
+								"id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE CONVERSATION",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"participants\": [\"683d95a1b5cfc4719da593d9\", \"683db02c0c4f6599618fa6da\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/conversations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT CONVERSATION by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"participants\": [\"683d95a1b5cfc4719da593d9\", \"683db02c0c4f6599618fa6da\", \"683eacbb09ce18e51193e829\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/update/683ea9f52a90e15f7b7a6d8b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"update",
+								"683ea9f52a90e15f7b7a6d8b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT CONVERSATION by as admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"participants\": [\"683d95a1b5cfc4719da593d9\", \"683db02c0c4f6599618fa6da\", \"683eacbb09ce18e51193e829\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/admin/683ea9f52a90e15f7b7a6d8b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"admin",
+								"683ea9f52a90e15f7b7a6d8b"
 							]
 						}
 					},
