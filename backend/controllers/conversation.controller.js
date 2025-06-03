@@ -4,14 +4,14 @@ export async function getConversationById(req, res) {
   try {
     const conversation = await Conversation.findById(req.params.id);
     if (!conversation) {
-      return res.status(404).json({ message: "Conversation not found" });
+      return res.status(404).json({ success: false, message: "Conversation not found" });
     }
     if (!conversation.participants.includes(req.user._id.toString())) {
-      return res.status(403).json({ message: "Access denied" });
+      return res.status(403).json({ success: false, message: "Access denied" });
     }
-    res.status(200).json(conversation);
+    res.status(200).json( {success: true, data: conversation} );
   } catch (error) {
-    res.status(500).json({ message: "Error fetching conversation", error });
+    res.status(500).json({ success: false, message: "Error fetching conversation", error });
   }
 }
 
@@ -22,12 +22,12 @@ export async function getConversationsByUser(req, res) {
     });
     
     if (!conversations) {
-      return res.status(404).json({ message: "No conversations found" });
+      return res.status(404).json({ success: false, message: "No conversations found" });
     }
     
     res.status(200).json({success: true, data: conversations});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching conversations", error });
+    res.status(500).json({ success: false, message: "Error fetching conversations", error });
   }
 }
 
@@ -35,11 +35,11 @@ export async function getConversationAsAdmin(req, res) {
   try {
     const conversation = await Conversation.findById(req.params.id);
     if (!conversation) {
-      return res.status(404).json({ message: "Conversation not found" });
+      return res.status(404).json({ success: false, message: "Conversation not found" });
     }
-    res.status(200).json(conversation);
+    res.status(200).json({ success: true, data: conversation});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching conversation", error });
+    res.status(500).json({ success: false, message: "Error fetching conversation", error });
   }
 }
 
@@ -77,6 +77,32 @@ export async function updateConversation(req, res) {
   }
 }
 
+export async function addMessageToConversation(req, res) {
+  try {
+    const conversation = await Conversation.findById(req.params.id);
+    if (!conversation) {
+      return res.status(404).json({ success: false, message: "Conversation not found" });
+    }
+
+    if (!conversation.participants.includes(req.user._id.toString())) {
+      return res.status(403).json({ success: false, message: "You are not a participant in this conversation" });
+    }
+    
+    const newMessage = {
+      sender: req.user._id,
+      content: req.body.content,
+      timestamp: Date.now(),
+    };
+    
+    conversation.messages.push(newMessage);
+    await conversation.save();
+    
+    res.status(200).json({ success: true, data: conversation });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error adding message", error });
+  }
+}
+
 export async function updateConversationAsAdmin(req, res) {
   try {
     const updatedConversation = await Conversation.findByIdAndUpdate(
@@ -90,5 +116,26 @@ export async function updateConversationAsAdmin(req, res) {
     res.status(200).json({ success: true, data: updatedConversation });
   } catch (error) {
     res.status(500).json({ success: false, message: "Error updating conversation as admin", error });
+  }
+}
+
+export async function deleteMessageFromConversation(req, res) {
+  try {
+    const conversation = await Conversation.findById(req.params.id);
+    if (!conversation) {
+      return res.status(404).json({ success: false, message: "Conversation not found" });
+    }
+    
+    const messageIndex = conversation.messages.findIndex(msg => msg._id.toString() === req.params.messageId);
+    if (messageIndex === -1) {
+      return res.status(404).json({ success: false, message: "Message not found" });
+    }
+    
+    conversation.messages.splice(messageIndex, 1);
+    await conversation.save();
+    
+    res.status(200).json({ success: true, data: conversation });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error deleting message", error });
   }
 }

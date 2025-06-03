@@ -14,9 +14,9 @@ function generateToken(id) {
 export async function getAllUsers(req, res) {
   try {
     const users = await User.find();
-    res.status(200).json(users);
+    res.status(200).json({ success: true, data: users});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching users", error: error.message });
+    res.status(500).json({ success: false, message: "Error fetching users", error: error.message });
   }
 }
 
@@ -24,12 +24,12 @@ export async function getUserById(req, res) {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
     const { password, ...userWithoutPassword } = user.toObject();
-    res.status(200).json({ user: userWithoutPassword });
+    res.status(200).json({ success: true, data: userWithoutPassword});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user", error: error.message });
+    res.status(500).json({ success: false, message: "Error fetching user", error: error.message });
   }
 }
 
@@ -37,9 +37,9 @@ export async function getUserForOwnProfile(req, res) {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ status: "success", user: {
+    res.status(200).json({  success: true, data: {
       id: user._id,
       email: user.email,
       userName: user.userName,
@@ -52,7 +52,7 @@ export async function getUserForOwnProfile(req, res) {
       state: user.state,
     }});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching own profile", error: error.message });
+    res.status(500).json({ success: false, message: "Error fetching own profile", error: error.message });
   }
 }
 
@@ -62,14 +62,14 @@ export async function getUserForPost(req, res) {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ status: "success", user: {
+    res.status(200).json({ success: true, user: {
       id: user._id,
       userName: user.userName,
       profilePicture: user.profilePicture,
       biography: user.biography,
     }});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user for post", error: error.message });
+    res.status(500).json({ success: false, message: "Error fetching user for post", error: error.message });
   }
 }
 
@@ -77,9 +77,9 @@ export async function getUserForProfilePage(req, res) {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ status: "success", user: {
+    res.status(200).json({ success: true, data: {
       id: user._id,
       userName: user.userName,
       biography: user.biography,
@@ -89,14 +89,14 @@ export async function getUserForProfilePage(req, res) {
       state: user.state,
     }});
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user for profile page", error: error.message });
+    res.status(500).json({ success: false, message: "Error fetching user for profile page", error: error.message });
   }
 }
 
 export async function registerUser(req, res) {
   const { userName, email, password } = req.body;
   if (!userName || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ success: false, message: "All fields are required" });
   }
   const existingUser = await User.find({ email });
   if (existingUser.length > 0) {
@@ -114,7 +114,7 @@ export async function registerUser(req, res) {
     }
     res.status(201).json({ 
       success: true, 
-      user: {
+      data: {
         id: newUser._id,
         userName: newUser.userName,
         email: newUser.email,
@@ -124,7 +124,7 @@ export async function registerUser(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: "Error registering user", error: error.message });
+    res.status(500).json({ success: false, message: "Error registering user", error: error.message });
   }
 }
 
@@ -135,7 +135,7 @@ export async function loginUser(req, res) {
     if (user && await bcrypt.compare(password, user.password)) {
       return res.status(200).json({ 
         success: true, 
-        user: {
+        data: {
           id: user._id,
           userName: user.userName,
           email: user.email,
@@ -145,10 +145,9 @@ export async function loginUser(req, res) {
         }
        });
     }
-    res.status(200).json({ message: "Login successful", user });
   }
   catch (error) {
-    res.status(500).json({ message: "Error logging in", error: error.message });
+    res.status(500).json({ success: false, message: "Error logging in", error: error.message });
   }
 }
 
@@ -161,11 +160,11 @@ export async function updateUser(req, res) {
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Error updating user", error: error.message });
+    res.status(500).json({ success: false, message: "Error updating user", error: error.message });
   }
 }
 
@@ -178,10 +177,10 @@ export async function updateUserAsAdmin(req, res) {
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    res.status(500).json({ message: "Error updating user", error: error.message });
+    res.status(500).json({ success: false, message: "Error updating user", error: error.message });
   }
 }
