@@ -14,7 +14,6 @@ import {
   SidebarTrigger,
 } from "./components/ui/sidebar";
 
-
 const App = () => {
   return (
     <ThemeProvider>
@@ -47,6 +46,5 @@ const App = () => {
     </ThemeProvider>
   );
 };
-
 
 export default App;
