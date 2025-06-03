@@ -315,10 +315,20 @@
 				{
 					"name": "GET CONVERSATION by id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:5000/api/conversations/myConversation/id",
+							"raw": "http://localhost:5000/api/conversations/myConversation/683ea9f52a90e15f7b7a6d8b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -328,7 +338,7 @@
 								"api",
 								"conversations",
 								"myConversation",
-								"id"
+								"683ea9f52a90e15f7b7a6d8b"
 							]
 						}
 					},
@@ -468,7 +478,7 @@
 					"response": []
 				},
 				{
-					"name": "PUT CONVERSATION by as admin",
+					"name": "PUT CONVERSATION to delete message",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -492,6 +502,59 @@
 							}
 						},
 						"url": {
+							"raw": "http://localhost:5000/api/conversations/deleteMessage/:messageId/fromConversation/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"deleteMessage",
+								":messageId",
+								"fromConversation",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "messageId",
+									"value": "683eb619b4c2691781035de0"
+								},
+								{
+									"key": "id",
+									"value": "683ea9f52a90e15f7b7a6d8b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT CONVERSATION by id as admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"messages\": [{\"sender\" : \"683d95a1b5cfc4719da593d9\", \"content\": {\"text\": \"Bonjour\"}}, {\"sender\" : \"683d95a1b5cfc4719da593d9\", \"content\": {\"text\": \"B\"}}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
 							"raw": "http://localhost:5000/api/conversations/admin/683ea9f52a90e15f7b7a6d8b",
 							"protocol": "http",
 							"host": [
@@ -502,6 +565,47 @@
 								"api",
 								"conversations",
 								"admin",
+								"683ea9f52a90e15f7b7a6d8b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT CONVERSATION to add message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODkzNDI1OSwiZXhwIjoxNzUxNTI2MjU5fQ.zErFgteweY3KitT-fu5xWBijDlQqMCSPtP8oFgvXBm0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sender\" : \"683d95a1b5cfc4719da593d9\", \r\n    \"content\": {\"text\": \"Coucou, ca va ?\"}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/conversations/addMessage/683ea9f52a90e15f7b7a6d8b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"conversations",
+								"addMessage",
 								"683ea9f52a90e15f7b7a6d8b"
 							]
 						}
