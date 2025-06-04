@@ -4,16 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import rootReducer from "./reducers";
-import { configureStore } from "@reduxjs/toolkit";
-import { getAllPosts } from "./actions/post.action.ts";
-
-const store = configureStore({
-  reducer: rootReducer,
-  devTools: true,
-});
-
-store.dispatch(getAllPosts());
+import store from "./redux/store.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -24,3 +15,4 @@ createRoot(document.getElementById("root")!).render(
     </Provider>
   </StrictMode>
 );
+
