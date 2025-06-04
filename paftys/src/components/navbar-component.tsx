@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import {
   SidebarProvider,
   Sidebar,
@@ -15,52 +16,54 @@ export default function AppLayout() {
       <div className="flex">
         <Sidebar>
           <SidebarContent>
-            <div className="flex justify-center items-center py-6">
-              <a href="/">
+            <div className="flex items-center py-4 px-4">
+              <NavLink to="/">
                 <img
                   src="https://img.freepik.com/vecteurs-libre/nouvelle-conception-icone-x-du-logo-twitter-2023_1017-45418.jpg?semt=ais_hybrid&w=740"
                   alt="Logo"
-                  className="w-16 h-16 rounded-full object-cover"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
-              </a>
+              </NavLink>
             </div>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <a href="/" className="w-full">
-                  <SidebarMenuButton className="flex justify-center text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
-                    Home
-                  </SidebarMenuButton>
-                </a>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <a href="/login" className="w-full">
-                  <SidebarMenuButton className="flex justify-center text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
-                    Login
-                  </SidebarMenuButton>
-                </a>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <a href="/notifications" className="w-full">
-                  <SidebarMenuButton className="flex justify-center text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
-                    Notifications
-                  </SidebarMenuButton>
-                </a>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <a href="/friends" className="w-full">
-                  <SidebarMenuButton className="flex justify-center text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
-                    Friend list
-                  </SidebarMenuButton>
-                </a>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <a href="/settings" className="w-full">
-                  <SidebarMenuButton className="flex justify-center text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
-                    Paramètres
-                  </SidebarMenuButton>
-                </a>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <div className="">  
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <NavLink to="/" className="w-full">
+                    <SidebarMenuButton className="flex pl-20 text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
+                      Home
+                    </SidebarMenuButton>
+                  </NavLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <NavLink to="/login" className="w-full">
+                    <SidebarMenuButton className="flex pl-20 text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
+                      Login
+                    </SidebarMenuButton>
+                  </NavLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <NavLink to="/notifications" className="w-full">
+                    <SidebarMenuButton className="flex pl-20 text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
+                      Notifications
+                    </SidebarMenuButton>
+                  </NavLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <NavLink to="/friends" className="w-full">
+                    <SidebarMenuButton className="flex pl-20 text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
+                      Friend list
+                    </SidebarMenuButton>
+                  </NavLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <NavLink to="/settings" className="w-full">
+                    <SidebarMenuButton className="flex pl-20 text-xl py-6 cursor-pointer hover:scale-105 transition-transform duration-200">
+                      Paramètres
+                    </SidebarMenuButton>
+                  </NavLink>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </div>
           </SidebarContent>
         </Sidebar>
         <SidebarInset>
