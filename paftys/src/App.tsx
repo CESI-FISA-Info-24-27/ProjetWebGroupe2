@@ -11,7 +11,7 @@ const App = () => {
     location.pathname === "/login" || location.pathname === "/signup";
 
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="dark">
       {!hideSidebar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
