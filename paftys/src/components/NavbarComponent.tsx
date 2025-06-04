@@ -8,6 +8,8 @@ import {
   SidebarMenuButton,
 } from "./ui/sidebar";
 
+import logo from "@/assets/p_logo_paftys.svg";
+
 export default function SideBarComponent() {
   return (
     <SidebarProvider>
@@ -16,7 +18,7 @@ export default function SideBarComponent() {
           <SidebarContent>
             <div className="flex flex-col items-center justify-center pt-4 cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]">
               <img
-                src="https://img.freepik.com/vecteurs-libre/nouvelle-conception-icone-x-du-logo-twitter-2023_1017-45418.jpg?semt=ais_hybrid&w=740"
+                src={logo}
                 alt="Logo"
                 className="w-14 h-14 rounded-full object-cover"
               />
