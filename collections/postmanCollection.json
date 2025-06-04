@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "e86eb55d-381d-4e2c-81df-0f7319c86f6b",
+		"_postman_id": "ff88bc98-5595-4933-b483-87928c27f3fd",
 		"name": "Paftys",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33475889"
+		"_exporter_id": "45476189",
+		"_collection_link": "https://ben-5046889.postman.co/workspace/Ben's-Workspace~951c3574-2a19-452d-8406-358257729333/collection/45476189-ff88bc98-5595-4933-b483-87928c27f3fd?action=share&source=collection_link&creator=45476189"
 	},
 	"item": [
 		{
@@ -302,6 +303,217 @@
 								"users",
 								"admin",
 								"683d95a1b5cfc4719da593d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "GET ALL POSTS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg4MzU0MiwiZXhwIjoxNzUxNDc1NTQyfQ.Obva2dE6oFkicBu9czpC2RuCPzMSajmsTc37vgVFK5E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET POST by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/posts/683ddb1856521476a772238d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"683ddb1856521476a772238d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET POST by userId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts/user/683d95a1b5cfc4719da593d9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"user",
+								"683d95a1b5cfc4719da593d9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST POST",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg4MzU0MiwiZXhwIjoxNzUxNDc1NTQyfQ.Obva2dE6oFkicBu9czpC2RuCPzMSajmsTc37vgVFK5E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"683d95a1b5cfc4719da593d9\",\r\n    \"content\": {\r\n        \"text\": \"La c bon !\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Own POST by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg4MzU0MiwiZXhwIjoxNzUxNDc1NTQyfQ.Obva2dE6oFkicBu9czpC2RuCPzMSajmsTc37vgVFK5E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": {\r\n        \"text\": \"La cé bon !\"\r\n    },\r\n    \"likes\": [\"683d95a1b5cfc4719da593d9\"],\r\n    \"reports\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts/683ddb1856521476a772238d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"683ddb1856521476a772238d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT POST by id as admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg4MzU0MiwiZXhwIjoxNzUxNDc1NTQyfQ.Obva2dE6oFkicBu9czpC2RuCPzMSajmsTc37vgVFK5E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": {\r\n        \"text\": \"La cé bon !\"\r\n    },\r\n    \"likes\": [\"683d95a1b5cfc4719da593d9\"],\r\n    \"reports\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts/683ddb1856521476a772238d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"683ddb1856521476a772238d"
 							]
 						}
 					},
