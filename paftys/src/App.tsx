@@ -2,8 +2,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import AuthPage from "./pages/AuthPage";
 import { SignupForm } from "./components/ui/signup-form";
-import { ThemeProvider } from "./components/theme-provider";
-import Navbar from "./components/navbar-component.tsx";
+import { ThemeProvider } from "./components/ThemeProvider.tsx";
+import Navbar from "./components/NavbarComponent.tsx";
 
 const App = () => {
   const location = useLocation();

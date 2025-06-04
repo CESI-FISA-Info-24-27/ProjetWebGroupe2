@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginComponent() {
+export default function LoginComponent() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -58,5 +58,3 @@ export function LoginComponent() {
     </Card>
   );
 }
-
-export default LoginComponent;
