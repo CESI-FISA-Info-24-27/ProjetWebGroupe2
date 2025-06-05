@@ -63,7 +63,10 @@ export default function SubNavBar() {
           {trendingTags.map((tag, index) => (
             <li key={tag.id} className="text-gray-300">
               <span className="font-bold text-white mr-2">{index + 1}.</span>
-              {tag.name} <span className="text-sm text-gray-500">({tag.nbPost} posts)</span>
+              {tag.name}{" "}
+              <span className="text-sm text-gray-500">
+                ({tag.nbPost} posts)
+              </span>
             </li>
           ))}
         </ul>
