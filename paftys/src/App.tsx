@@ -12,12 +12,17 @@ const App = () => {
 
   return (
     <ThemeProvider defaultTheme="dark">
-      {!hideSidebar && <Navbar />}
+      <div className="flex w-full">
+      <div className="w-[20%]">
+        {!hideSidebar && <Navbar />}
+      </div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
       </Routes>
+      </div>
+
     </ThemeProvider>
   );
 };

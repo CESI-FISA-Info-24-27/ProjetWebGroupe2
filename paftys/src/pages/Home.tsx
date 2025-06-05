@@ -3,6 +3,8 @@ import type Post from "@/models/Post";
 import { useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
+import SubNavBar from "@/components/SubNavBar";
+import { Sub } from "@radix-ui/react-dropdown-menu";
 export default function HomeComponent() {
   const posts = useAppSelector((state) => state.postReducer || []);
 
@@ -17,13 +19,16 @@ export default function HomeComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4">
-      {!isEmptyHelper(parsedPosts) &&
+      <div className="flex">
+      <SubNavBar />
+        {!isEmptyHelper(parsedPosts) &&
         parsedPosts.map((post: Post) => (
           <PostComponent key={post._id} {...post} />
         ))}
       {isEmptyHelper(parsedPosts) && (
         <LoadingComponent message={"Chargement des posts..."} />
       )}
+      </div>
     </div>
   );
 }
