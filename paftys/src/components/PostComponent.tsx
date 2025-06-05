@@ -6,8 +6,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import type Post from "@/models/Post";
 import { useState } from "react";
+import type Post from "@/models/Post";
 
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
