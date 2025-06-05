@@ -4,6 +4,7 @@ import AuthPage from "./pages/AuthPage";
 import { SignupForm } from "./components/ui/signup-form";
 import { ThemeProvider } from "./components/ThemeProvider.tsx";
 import Navbar from "./components/NavbarComponent.tsx";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   const location = useLocation();
@@ -14,7 +15,14 @@ const App = () => {
     <ThemeProvider defaultTheme="dark">
       {!hideSidebar && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
       </Routes>
