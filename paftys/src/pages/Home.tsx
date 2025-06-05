@@ -1,5 +1,5 @@
 import PostComponent from "@/components/PostComponent";
-import type { Post } from "@/reducers/postSlice";
+import Post from "@/models/Post";
 import { useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
@@ -12,7 +12,7 @@ export default function HomeComponent() {
     ...post,
     createdAt: new Date(),
     updatedAt: new Date(post.updatedAt),
-    date: post.date ? new Date(post.date) : undefined,
+    date: post.date ? new Date(post.date) : new Date(),
   }));
 
   return (

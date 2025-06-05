@@ -1,14 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-// Type de post
-export interface Post {
-  _id: string;
-  title: string;
-  content: string;
-  authorId: string;
-  // ajoute les autres champs si besoin
-}
+import type Post from "@/models/Post";
 
 // State
 interface PostState {
