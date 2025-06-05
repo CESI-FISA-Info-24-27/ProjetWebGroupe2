@@ -56,7 +56,7 @@ export default function SideBarComponent() {
                   </NavLink>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <NavLink to="/settings" className="w-full">
+                  <NavLink to="/myProfile" className="w-full">
                     <SidebarMenuButton className="flex pl-10 text-2xl py-8 cursor-pointer hover:scale-102 transition-transform duration-200">
                       <div className="flex items-center gap-4">
                         <i className="bi bi-person leading-none align-middle"></i>
