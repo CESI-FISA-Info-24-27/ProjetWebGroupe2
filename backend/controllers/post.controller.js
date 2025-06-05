@@ -17,8 +17,8 @@ export async function getAllPosts(req, res) {
 export async function getPostById(req, res) {
   try {
     const post = await Post.findById(req.params.id).populate(
-      "userId",
-      "username profilePicture"
+      "userData",
+      "userName profilePicture biography"
     );
     if (!post) {
       return res
@@ -36,8 +36,8 @@ export async function getPostById(req, res) {
 export async function getPostsByUser(req, res) {
   try {
     const posts = await Post.find({ userId: req.params.userId }).populate(
-      "userId",
-      "username profilePicture"
+      "userData",
+      "userName profilePicture biography"
     );
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
