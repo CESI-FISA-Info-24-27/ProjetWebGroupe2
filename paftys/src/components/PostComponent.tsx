@@ -1,42 +1,19 @@
-import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import type Post from "@/models/Post";
 
-export interface UserForPost {
-  _id: string;
-  username: string;
-  profilePicture: string;
-  bio: string;
-}
-
-export interface Message {
-  _id: string;
-  message: string;
-  likes: number;
-  comments: number;
-}
-
-export interface PostComponentProps {
-  user: UserForPost;
-  message: Message;
-  date: Date;
-}
-
-export default function PostComponent({
-  user,
-  message,
-  date,
-}: PostComponentProps) {
+export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((prev) => !prev);
-  const shouldTruncate = message.message.length > 240;
+  const shouldTruncate = postData.content.text.length > 240;
 
   return (
     <Card className="w-fit gap-2">
@@ -47,12 +24,12 @@ export default function PostComponent({
               <div className="flex items-center gap-2">
                 <Avatar>
                   <AvatarImage
-                    src={user.profilePicture}
-                    alt={`@${user.username}`}
+                    src={postData.userData.profilePicture}
+                    alt={`@${postData.userData.userName}`}
                   />
                 </Avatar>
                 <CardTitle className="username-underline">
-                  @{user.username}
+                  @{postData.userData.userName}
                 </CardTitle>
               </div>
             </HoverCardTrigger>
@@ -61,23 +38,27 @@ export default function PostComponent({
                 <div className="flex items-center gap-3">
                   <Avatar>
                     <AvatarImage
-                      src={user.profilePicture}
-                      alt={`@${user.username}`}
+                      src={postData.userData.profilePicture}
+                      alt={`@${postData.userData.userName}`}
                     />
                     <AvatarFallback>
-                      {user.username[0]?.toUpperCase()}
+                      {postData.userData.userName[0]?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <p className="font-semibold text-sm">@{user.username}</p>
+                  <p className="font-semibold text-sm">
+                    @{postData.userData.userName}
+                  </p>
                 </div>
-                <p className="text-sm text-gray-100">{user.bio}</p>
+                <p className="text-sm text-gray-100">
+                  {postData.userData.biography}
+                </p>
               </div>
             </HoverCardContent>
           </HoverCard>
         </div>
         <span className="text-sm text-gray-500">
-          Posté le {date.toLocaleDateString()} à{" "}
-          {date.toLocaleTimeString([], {
+          Posté le {postData.createdAt.toLocaleDateString()} à{" "}
+          {postData.createdAt.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}
@@ -86,8 +67,8 @@ export default function PostComponent({
       <CardContent className="w-[600px] px-4">
         <p>
           {shouldTruncate && !expanded
-            ? message.message.slice(0, 240) + "..."
-            : message.message}{" "}
+            ? postData.content.text.slice(0, 240) + "..."
+            : postData.content.text}{" "}
           {shouldTruncate && (
             <a
               onClick={toggleExpanded}
@@ -105,7 +86,7 @@ export default function PostComponent({
             >
               <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
             </Button>
-            <div className="text-sm">{message.likes}</div>
+            <div className="text-sm">{postData.likes}</div>
           </div>
           <div className="flex flex-row items-center mt-4 gap-1">
             <Button
@@ -114,7 +95,7 @@ export default function PostComponent({
             >
               <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
             </Button>
-            <div className="text-sm">{message.likes}</div>
+            <div className="text-sm">{postData.likes}</div>
           </div>
         </div>
       </CardContent>
