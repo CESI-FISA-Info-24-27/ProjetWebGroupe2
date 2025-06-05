@@ -1,5 +1,6 @@
 import PostComponent from "@/components/PostComponent";
-import { fetchPosts, type Post } from "@/reducers/postSlice";
+import { fetchPosts } from "@/reducers/postSlice";
+import type Post from "@/models/Post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
