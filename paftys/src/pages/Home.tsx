@@ -1,28 +1,29 @@
 import PostComponent from "@/components/PostComponent";
-import type Post from "@/models/Post";
+import type { Post } from "@/reducers/postSlice";
 import { useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
-export default function HomeComponent() {
-  const posts = useAppSelector((state) => state.postReducer || []);
 
-  const parsedPosts = Array.isArray(posts)
-    ? posts.map((post: Post) => ({
-        ...post,
-        date: new Date(post.date),
-        createdAt: new Date(post.createdAt),
-        updatedAt: new Date(post.updatedAt),
-      }))
-    : [];
+export default function HomeComponent() {
+  const posts = useAppSelector((state) => state.post.posts);
+  const loading = useAppSelector((state) => state.post.loading);
+
+  const parsedPosts = posts.map((post) => ({
+    ...post,
+    createdAt: new Date(),
+    updatedAt: new Date(post.updatedAt),
+    date: post.date ? new Date(post.date) : undefined,
+  }));
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4">
-      {!isEmptyHelper(parsedPosts) &&
+      {!loading &&
+        !isEmptyHelper(parsedPosts) &&
         parsedPosts.map((post: Post) => (
           <PostComponent key={post._id} {...post} />
         ))}
-      {isEmptyHelper(parsedPosts) && (
-        <LoadingComponent message={"Chargement des posts..."} />
+      {(loading || isEmptyHelper(parsedPosts)) && (
+        <LoadingComponent message="Chargement des posts..." />
       )}
     </div>
   );

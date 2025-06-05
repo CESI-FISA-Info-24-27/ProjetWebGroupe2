@@ -8,7 +8,7 @@ import type {
 import Cookies from "js-cookie";
 
 // Base de l’API
-const API_BASE_URL = "http://10.134.128.75:5000/api/users";
+const API_BASE_URL = "http://localhost:5000/api/users";
 
 const tokenFromCookies = Cookies.get("token");
 
@@ -35,6 +35,12 @@ export const login = createAsyncThunk<
         username: data.userName,
         role: data.role,
         state: data.state,
+        biography: data.biography,
+        profilePicture: data.profilePicture,
+        conversations: data.conversations,
+        notifications: data.notifications,
+        firendList: data.firendList,
+        posts: data.posts,
       },
       token: data.token,
     };

@@ -18,6 +18,12 @@ export interface AuthResponse {
     role: string;
     state: string;
     token: string;
+    biography: string;
+    profilePicture: string;
+    conversations: string[];
+    notifications: string[];
+    firendList: string[];
+    posts: string[];
   };
 }
 
