@@ -1,8 +1,9 @@
 import PostComponent from "@/components/PostComponent";
-import Post from "@/models/Post";
+import type Post from "@/models/Post";
 import { useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
+import SubNavBar from "@/components/SubNavBar";
 
 export default function HomeComponent() {
   const posts = useAppSelector((state) => state.post.posts);
@@ -17,14 +18,16 @@ export default function HomeComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4">
-      {!loading &&
-        !isEmptyHelper(parsedPosts) &&
-        parsedPosts.map((post: Post) => (
-          <PostComponent key={post._id} {...post} />
-        ))}
-      {(loading || isEmptyHelper(parsedPosts)) && (
-        <LoadingComponent message="Chargement des posts..." />
-      )}
+      <div className="flex">
+        <SubNavBar />
+        {!isEmptyHelper(parsedPosts) &&
+          parsedPosts.map((post: Post) => (
+            <PostComponent key={post._id} {...post} />
+          ))}
+        {(loading || isEmptyHelper(parsedPosts)) && (
+          <LoadingComponent message="Chargement des posts..." />
+        )}
+      </div>
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function SideBarComponent() {
       <div className="flex">
         <Sidebar>
           <SidebarContent>
-            <div className="flex flex-col items-center justify-center pt-4 cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]">
+            <div className="flex flex-col items-center justify-center pt-4 cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] w-full">
               <img
                 src={logo}
                 alt="Logo"
