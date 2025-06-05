@@ -6,8 +6,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { useState } from "react";
 import type Post from "@/models/Post";
+import { useState } from "react";
 
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
@@ -27,6 +27,9 @@ export default function PostComponent(postData: Post) {
                     src={postData.userData.profilePicture}
                     alt={`@${postData.userData.userName}`}
                   />
+                  <AvatarFallback>
+                    {postData.userData.userName[0]?.toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <CardTitle className="username-underline">
                   @{postData.userData.userName}
@@ -86,7 +89,7 @@ export default function PostComponent(postData: Post) {
             >
               <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
             </Button>
-            <div className="text-sm">{postData.likes}</div>
+            <div className="text-sm">{postData.likes.length}</div>
           </div>
           <div className="flex flex-row items-center mt-4 gap-1">
             <Button
@@ -95,7 +98,7 @@ export default function PostComponent(postData: Post) {
             >
               <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
             </Button>
-            <div className="text-sm">{postData.likes}</div>
+            <div className="text-sm">{postData.replies.length}</div>
           </div>
         </div>
       </CardContent>
