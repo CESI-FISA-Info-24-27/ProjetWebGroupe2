@@ -3,7 +3,6 @@ import express from "express";
 import {
   getAllUsers,
   getUserById,
-  getUserForPost,
   getUserForProfilePage,
   registerUser,
   loginUser,
@@ -18,7 +17,6 @@ const router = express.Router();
 router.get("/", protectAdmin, getAllUsers);
 router.get("/admin/:id", protectAdmin, getUserById);
 router.get("/forMyProfile", protectOwn, getUserForOwnProfile);
-router.get("/forPostUser/:id", getUserForPost);
 router.get("/forProfilePageUser/:id", getUserForProfilePage);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
