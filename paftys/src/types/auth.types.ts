@@ -10,16 +10,25 @@ export interface SignupPayload {
 }
 
 export interface AuthResponse {
-  user: {
+  success: boolean;
+  data: {
     id: string;
     email: string;
-    username?: string;
+    userName: string;
+    role: string;
+    state: string;
+    token: string;
   };
-  token: string;
 }
 
 export interface AuthState {
-  user: AuthResponse["user"] | null;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+    role: string;
+    state: string;
+  } | null;
   token: string | null;
   loading: boolean;
   error: string | null;

@@ -1,52 +1,74 @@
-// ./reducers/authSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type {
   LoginPayload,
   SignupPayload,
-  AuthResponse,
   AuthState,
 } from "@/types/auth.types";
+import Cookies from "js-cookie";
+
+// Base de l’API
+const API_BASE_URL = "http://10.134.128.75:5000/api/users";
+
+const tokenFromCookies = Cookies.get("token");
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  token: tokenFromCookies || null,
   loading: false,
   error: null,
 };
 
-// Async login
-export const login = createAsyncThunk<AuthResponse, LoginPayload>(
-  "auth/login",
-  async (credentials, thunkAPI) => {
-    try {
-      const response = await axios.post<AuthResponse>(
-        "/api/login",
-        credentials
-      );
-      return response.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Erreur inconnue"
-      );
-    }
-  }
-);
+// 🔁 LOGIN
+export const login = createAsyncThunk<
+  { user: AuthState["user"]; token: string },
+  LoginPayload
+>("auth/login", async (credentials, thunkAPI) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+    const data = response.data.data;
 
-// Async signup
-export const signup = createAsyncThunk<AuthResponse, SignupPayload>(
-  "auth/signup",
-  async (userData, thunkAPI) => {
-    try {
-      const response = await axios.post<AuthResponse>("/api/signup", userData);
-      return response.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Erreur inconnue"
-      );
-    }
+    return {
+      user: {
+        id: data.id,
+        email: data.email,
+        username: data.userName,
+        role: data.role,
+        state: data.state,
+      },
+      token: data.token,
+    };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Erreur de connexion"
+    );
   }
-);
+});
+
+export const signup = createAsyncThunk<
+  { user: AuthState["user"]; token: string },
+  SignupPayload
+>("auth/signup", async (userData, thunkAPI) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/signup`, userData);
+    const data = response.data.data;
+
+    return {
+      user: {
+        id: data.id,
+        email: data.email,
+        username: data.userName,
+        role: data.role,
+        state: data.state,
+      },
+      token: data.token,
+    };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Erreur d'inscription"
+    );
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -59,6 +81,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // LOGIN
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -67,11 +90,13 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        Cookies.set("token", action.payload.token);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
+      // SIGNUP
       .addCase(signup.pending, (state) => {
         state.loading = true;
         state.error = null;
