@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-
+import ProfileComponent from "./ProfileComponent";
 const recommendedUsers = [
   {
     id: "1",
@@ -32,29 +32,19 @@ const trendingTags = [
 export default function SubNavBar() {
   return (
     <div className="w-[20%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex flex-col gap-6 text-white fixed top-0 right-0 overflow-y-auto">
-      <div>
+      <div className="flex flex-col">
         <h2 className="text-xl font-semibold mb-2">Comptes recommandés</h2>
-        {recommendedUsers.map((user) => (
-          <div
-            key={user.id}
-            className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#27272A] transition-colors"
-          >
-            <img
-              src={user.profilePicture}
-              alt={user.username}
-              className="w-12 h-12 rounded-full object-cover"
+        <div className="flex flex-col gap-4">
+          {recommendedUsers.map((user) => (
+            <ProfileComponent
+              key={user.id}
+              image={user.profilePicture}
+              userName={user.username}
+              biography={user.bio}
+              condensed={false}
             />
-            <div className="flex flex-col">
-              <NavLink
-                to={`/profile/${user.username}`}
-                className="font-medium text-white hover:underline"
-              >
-                @{user.username}
-              </NavLink>
-              <p className="text-sm text-gray-400">{user.bio}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div>
@@ -63,7 +53,10 @@ export default function SubNavBar() {
           {trendingTags.map((tag, index) => (
             <li key={tag.id} className="text-gray-300">
               <span className="font-bold text-white mr-2">{index + 1}.</span>
-              {tag.name} <span className="text-sm text-gray-500">({tag.nbPost} posts)</span>
+              {tag.name}{" "}
+              <span className="text-sm text-gray-500">
+                ({tag.nbPost} posts)
+              </span>
             </li>
           ))}
         </ul>
