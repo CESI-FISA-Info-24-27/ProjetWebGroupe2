@@ -7,7 +7,6 @@ import SubNavBar from "@/components/SubNavBar";
 
 export default function HomeComponent() {
   const posts = useAppSelector((state) => state.post.posts);
-  const loading = useAppSelector((state) => state.post.loading);
 
   const parsedPosts = posts.map((post) => ({
     ...post,
@@ -17,17 +16,17 @@ export default function HomeComponent() {
   }));
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-4">
-      <div className="flex">
-        <SubNavBar />
+    <div className="flex flex-row ">
+      <div className="flex flex-col mt-4 justify-center items-center w-screen h-full gap-4">
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
             <PostComponent key={post._id} {...post} />
           ))}
-        {(loading || isEmptyHelper(parsedPosts)) && (
-          <LoadingComponent message="Chargement des posts..." />
+        {isEmptyHelper(parsedPosts) && (
+          <LoadingComponent message={"Chargement des posts..."} />
         )}
       </div>
+      <SubNavBar />
     </div>
   );
 }
