@@ -35,7 +35,7 @@ export const login = createAsyncThunk<
       user: {
         id: data.id,
         email: data.email,
-        username: data.userName,
+        userName: data.userName,
         role: data.role,
         state: data.state,
         biography: data.biography,
@@ -69,9 +69,15 @@ export const signup = createAsyncThunk<
       user: {
         id: data.id,
         email: data.email,
-        username: data.userName,
+        userName: data.userName,
         role: data.role,
         state: data.state,
+        biography: data.biography,
+        profilePicture: data.profilePicture,
+        conversations: data.conversations,
+        notifications: data.notifications,
+        firendList: data.firendList,
+        posts: data.posts,
       },
       token: data.token,
     };
