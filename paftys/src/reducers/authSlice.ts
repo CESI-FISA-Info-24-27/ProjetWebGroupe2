@@ -6,10 +6,10 @@ import type {
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
-const dotenv = import.meta.env;
 
-const API_BASE_URL = dotenv.VITE_DB_URI + "/api/users";
+const API_BASE_URL = import.meta.env.VITE_DB_URI + "/api/users";
 
+// Récupère le token s'il est en cookie
 const tokenFromCookies = Cookies.get("token");
 
 const initialState: AuthState = {
@@ -27,6 +27,9 @@ export const login = createAsyncThunk<
   try {
     const response = await axios.post(`${API_BASE_URL}/login`, credentials);
     const data = response.data.data;
+
+    // Sauvegarde du token dans le cookie
+    Cookies.set("token", data.token);
 
     return {
       user: {
@@ -51,6 +54,7 @@ export const login = createAsyncThunk<
   }
 });
 
+// 🔁 SIGNUP
 export const signup = createAsyncThunk<
   { user: AuthState["user"]; token: string },
   SignupPayload
@@ -58,6 +62,9 @@ export const signup = createAsyncThunk<
   try {
     const response = await axios.post(`${API_BASE_URL}/register`, userData);
     const data = response.data.data;
+
+    Cookies.set("token", data.token);
+
     return {
       user: {
         id: data.id,
@@ -81,6 +88,8 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.user = null;
+      state.token = null;
+      Cookies.remove("token");
     },
   },
   extraReducers: (builder) => {
@@ -93,6 +102,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -106,6 +116,7 @@ const authSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
