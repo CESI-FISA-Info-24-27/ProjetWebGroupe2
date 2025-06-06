@@ -1,13 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type Post from "@/models/Post";
 import { useState } from "react";
+import ProfileComponent from "./ProfileComponent";
 
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
@@ -19,45 +14,12 @@ export default function PostComponent(postData: Post) {
     <Card className="w-fit gap-2">
       <CardHeader className="flex flex-row justify-between px-4">
         <div className="flex flex-row items-center gap-2 cursor-pointer">
-          <HoverCard>
-            <HoverCardTrigger>
-              <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarImage
-                    src={postData.userData.profilePicture}
-                    alt={`@${postData.userData.userName}`}
-                  />
-                  <AvatarFallback>
-                    {postData.userData.userName[0]?.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <CardTitle className="username-underline">
-                  @{postData.userData.userName}
-                </CardTitle>
-              </div>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-64">
-              <div className="flex flex-col items-start gap-2">
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage
-                      src={postData.userData.profilePicture}
-                      alt={`@${postData.userData.userName}`}
-                    />
-                    <AvatarFallback>
-                      {postData.userData.userName[0]?.toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="font-semibold text-sm">
-                    @{postData.userData.userName}
-                  </p>
-                </div>
-                <p className="text-sm text-gray-100">
-                  {postData.userData.biography}
-                </p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+          <ProfileComponent
+            image={postData.userData.profilePicture}
+            userName={postData.userData.userName}
+            biography={postData.userData.biography}
+            condensed={true}
+          />
         </div>
         <span className="text-sm text-gray-500">
           Posté le {postData.createdAt.toLocaleDateString()} à{" "}
