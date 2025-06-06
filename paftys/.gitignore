@@ -19,8 +19,16 @@ package-lock.json
 !.vscode/extensions.json
 .idea
 .DS_Store
-*.suo
+*.suo4
+
+
+
+
+
+
+
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.vite/*
