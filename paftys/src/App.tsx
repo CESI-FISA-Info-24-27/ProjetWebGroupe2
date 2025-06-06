@@ -14,20 +14,23 @@ const App = () => {
 
   return (
     <ThemeProvider defaultTheme="dark">
-      {!hideSidebar && <Navbar />}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/login" element={<AuthPage />} />
-        <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
-        <Route path="/myProfile" element={<MyProfilePage />} />
-      </Routes>
+      <></>
+      <div className="flex flex-row h-full w-full">
+        {!hideSidebar && <Navbar />}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
+          <Route path="/myProfile" element={<MyProfilePage />} />
+        </Routes>
+      </div>
     </ThemeProvider>
   );
 };
