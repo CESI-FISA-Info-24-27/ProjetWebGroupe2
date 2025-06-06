@@ -18,17 +18,17 @@ export default function HomeComponent() {
     : [];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-4">
-      <div className="flex">
-      <SubNavBar />
+    <div className="flex flex-row ">
+      <div className="flex flex-col mt-4 justify-center items-center w-screen h-full gap-4">
         {!isEmptyHelper(parsedPosts) &&
-        parsedPosts.map((post: Post) => (
-          <PostComponent key={post._id} {...post} />
-        ))}
-      {isEmptyHelper(parsedPosts) && (
-        <LoadingComponent message={"Chargement des posts..."} />
-      )}
+          parsedPosts.map((post: Post) => (
+            <PostComponent key={post._id} {...post} />
+          ))}
+        {isEmptyHelper(parsedPosts) && (
+          <LoadingComponent message={"Chargement des posts..."} />
+        )}
       </div>
+      <SubNavBar />
     </div>
   );
 }
