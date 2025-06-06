@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type Post from "@/models/Post";
+const dotenv = import.meta.env;
 
 // State
 interface PostState {
@@ -20,7 +21,9 @@ export const fetchPosts = createAsyncThunk<Post[]>(
   "post/fetchPosts",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("http://localhost:5555/api/posts");
+      const res = await axios.get(dotenv.VITE_DB_URI + "/api/posts");
+      console.log("Fetched Posts:", res.data.data);
+
       return res.data.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(

@@ -6,9 +6,9 @@ import type {
   AuthState,
 } from "@/types/auth.types";
 import Cookies from "js-cookie";
+const dotenv = import.meta.env;
 
-// Base de l’API
-const API_BASE_URL = "http://localhost:5555/api/users";
+const API_BASE_URL = dotenv.VITE_DB_URI + "/api/users";
 
 const tokenFromCookies = Cookies.get("token");
 

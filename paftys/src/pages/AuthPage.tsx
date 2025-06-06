@@ -1,5 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react";
-
+import logo from "@/assets/p_logo_paftys.svg";
 import { LoginForm } from "@/components/ui/login-form";
 
 export default function AuthPage({ form }: { form?: React.ReactNode }) {
@@ -8,9 +7,11 @@ export default function AuthPage({ form }: { form?: React.ReactNode }) {
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="/" className="flex items-center gap-2 font-medium">
-            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
+            <img
+              src={logo}
+              alt="Logo"
+              className="w-10 h-10 rounded-full object-cover"
+            />
             Paftys
           </a>
         </div>

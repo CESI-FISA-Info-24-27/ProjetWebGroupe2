@@ -1,12 +1,19 @@
 import PostComponent from "@/components/PostComponent";
-import type { Post } from "@/reducers/postSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { fetchPosts, type Post } from "@/reducers/postSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/LoadingComponent";
 import SubNavBar from "@/components/SubNavBar";
+import { useEffect } from "react";
 
 export default function HomeComponent() {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
+
   const posts = useAppSelector((state) => state.post.posts);
+  console.log("Posts from Redux Store:", posts);
 
   const parsedPosts = posts.map((post) => ({
     ...post,
@@ -14,6 +21,8 @@ export default function HomeComponent() {
     updatedAt: new Date(post.updatedAt),
     date: post.date ? new Date(post.date) : new Date(),
   }));
+
+  console.log("Parsed Posts:", parsedPosts);
 
   return (
     <div className="flex flex-row ">
