@@ -22,15 +22,11 @@ const recommendedUsers = [
 ];
 
 const trendingTags = [
-  {
-    id:"1",
-    name:"#JavaScript",
-    nbPost:"22"
-  },
-  "#ReactJS",
-  "#TypeScript",
-  "#Web3",
-  "#TailwindCSS",
+  { id: "1", name: "#JavaScript", nbPost: "22" },
+  { id: "2", name: "#ReactJS", nbPost: "17" },
+  { id: "3", name: "#TypeScript", nbPost: "9" },
+  { id: "4", name: "#Web3", nbPost: "14" },
+  { id: "5", name: "#TailwindCSS", nbPost: "11" },
 ];
 
 export default function SubNavBar() {
@@ -65,9 +61,9 @@ export default function SubNavBar() {
         <h2 className="text-xl font-semibold mb-2">Tags en trend</h2>
         <ul className="flex flex-col gap-2">
           {trendingTags.map((tag, index) => (
-            <li key={tag} className="text-gray-300">
+            <li key={tag.id} className="text-gray-300">
               <span className="font-bold text-white mr-2">{index + 1}.</span>
-              {tag}
+              {tag.name} <span className="text-sm text-gray-500">({tag.nbPost} posts)</span>
             </li>
           ))}
         </ul>
