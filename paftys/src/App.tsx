@@ -4,6 +4,7 @@ import AuthPage from "./pages/AuthPage";
 import { SignupForm } from "./components/ui/signup-form";
 import { ThemeProvider } from "./components/ThemeProvider.tsx";
 import Navbar from "./components/NavbarComponent.tsx";
+import ProtectedRoute from "./components/ProtectedRoute";
 import MyProfilePage from "./pages/MyProfilePage.tsx";
 
 const App = () => {
@@ -13,18 +14,20 @@ const App = () => {
 
   return (
     <ThemeProvider defaultTheme="dark">
-      <div className="flex w-full">
-      <div className="w-[20%]">
-        {!hideSidebar && <Navbar />}
-      </div>
+      {!hideSidebar && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
         <Route path="/myProfile" element={<MyProfilePage />} />
       </Routes>
-      </div>
-
     </ThemeProvider>
   );
 };
