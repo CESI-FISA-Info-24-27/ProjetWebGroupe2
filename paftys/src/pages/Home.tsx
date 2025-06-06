@@ -23,11 +23,13 @@ export default function HomeComponent() {
   }));
 
   return (
-    <div className="flex flex-row ">
-      <div className="flex flex-col mt-4 justify-center items-center w-screen h-full gap-4">
+    <div className="flex flex-row h-screen w-full justify-between">
+      <div className="flex flex-col items-center w-[70%] h-full gap-4 overflow-y-auto">
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
-            <PostComponent key={post._id} {...post} />
+            <div className="mt-4">
+              <PostComponent key={post._id} {...post} />
+            </div>
           ))}
         {isEmptyHelper(parsedPosts) && (
           <LoadingComponent message={"Chargement des posts..."} />
