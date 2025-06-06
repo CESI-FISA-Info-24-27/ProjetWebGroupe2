@@ -13,10 +13,7 @@ const App = () => {
 
   return (
     <ThemeProvider defaultTheme="dark">
-      <div className="flex w-full">
-      <div className="w-[20%]">
-        {!hideSidebar && <Navbar />}
-      </div>
+      {!hideSidebar && <Navbar />}
       <Routes>
         <Route
           path="/"
@@ -29,8 +26,6 @@ const App = () => {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
       </Routes>
-      </div>
-
     </ThemeProvider>
   );
 };
