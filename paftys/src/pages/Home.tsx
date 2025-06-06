@@ -14,7 +14,6 @@ export default function HomeComponent() {
   }, []);
 
   const posts = useAppSelector((state) => state.post.posts);
-  console.log("Posts from Redux Store:", posts);
 
   const parsedPosts = posts.map((post) => ({
     ...post,
@@ -22,8 +21,6 @@ export default function HomeComponent() {
     updatedAt: new Date(post.updatedAt),
     date: post.date ? new Date(post.date) : new Date(),
   }));
-
-  console.log("Parsed Posts:", parsedPosts);
 
   return (
     <div className="flex flex-row ">

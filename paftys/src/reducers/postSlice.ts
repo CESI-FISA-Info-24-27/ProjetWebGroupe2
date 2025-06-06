@@ -22,7 +22,6 @@ export const fetchPosts = createAsyncThunk<Post[]>(
   async (_, thunkAPI) => {
     try {
       const res = await axios.get(dotenv.VITE_DB_URI + "/api/posts");
-      console.log("Fetched Posts:", res.data.data);
 
       return res.data.data;
     } catch (err: any) {

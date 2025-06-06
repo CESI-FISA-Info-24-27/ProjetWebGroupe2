@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import type {
   LoginPayload,
   SignupPayload,
   AuthState,
 } from "@/types/auth.types";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import Cookies from "js-cookie";
 const dotenv = import.meta.env;
 
@@ -56,9 +56,8 @@ export const signup = createAsyncThunk<
   SignupPayload
 >("auth/signup", async (userData, thunkAPI) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/signup`, userData);
+    const response = await axios.post(`${API_BASE_URL}/register`, userData);
     const data = response.data.data;
-
     return {
       user: {
         id: data.id,
@@ -82,7 +81,6 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.user = null;
-      state.token = null;
     },
   },
   extraReducers: (builder) => {
@@ -95,8 +93,6 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
-        Cookies.set("token", action.payload.token);
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -110,7 +106,6 @@ const authSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;

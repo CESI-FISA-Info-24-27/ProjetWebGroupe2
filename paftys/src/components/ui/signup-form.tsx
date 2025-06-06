@@ -24,7 +24,7 @@ export function SignupForm({
     e.preventDefault();
     if (password !== confirm) return alert("Passwords do not match");
     const result = await dispatch(
-      signup({ email, password, username: userName })
+      signup({ email, password, userName })
     );
     if (signup.fulfilled.match(result)) {
       navigate("/"); // Redirection si succès

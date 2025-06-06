@@ -22,8 +22,6 @@ export function LoginForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = await dispatch(login({ email, password }));
-    console.log("Login result:", result);
-    console.log("Token after login:", store.getState().auth.token);
 
     if (login.fulfilled.match(result)) {
       navigate("/");
