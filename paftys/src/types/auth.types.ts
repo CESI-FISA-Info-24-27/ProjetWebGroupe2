@@ -31,7 +31,13 @@ export interface AuthState {
   user: {
     id: string;
     email: string;
-    username: string;
+    userName: string;
+    biography: string;
+    profilePicture: string;
+    conversations: string[];
+    notifications: string[];
+    firendList: string[];
+    posts: string[];
     role: string;
     state: string;
   } | null;

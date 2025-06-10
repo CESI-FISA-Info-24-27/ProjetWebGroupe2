@@ -50,7 +50,7 @@ export async function getPostsByUser(req, res) {
 export async function createPost(req, res) {
   try {
     const newPost = new Post({
-      userId: req.user._id,
+      userData: req.user._id,
       content: req.body.content,
       tags: req.body.tags || [],
     });
