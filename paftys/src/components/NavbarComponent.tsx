@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function RightSidebar() {
   return (
     <>
-      <div className="hidden md:block md:w-[20%]">
+      <div className="hidden md:block md:w-[20%] h-screen">
         <div className="flex h-full w-full flex-col bg-[#18181B] border-r border-gray-700 items-center justify-start gap-8 pt-4">
           <NavLink to="/" className="w-full flex justify-center">
             <img
@@ -20,7 +20,7 @@ export default function RightSidebar() {
               </div>
             </div>
           </NavLink>
-          <NavLink to="/login" className="w-full">
+          <NavLink to="/messages" className="w-full">
             <div className="flex pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-chat-left leading-none align-middle"></i>
