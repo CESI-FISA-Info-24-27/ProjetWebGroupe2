@@ -5,6 +5,7 @@ import {
   getAllPosts,
   getPostById,
   getPostsByUser,
+  toggleLike,
   updatePost,
   updatePostAsAdmin,
 } from "../controllers/post.controller.js";
@@ -19,5 +20,5 @@ router.post("/", protectOwn, createPost);
 router.put("/:id", protectOwn, updatePost);
 router.put("/admin/:id", protectAdmin, updatePostAsAdmin);
 router.delete("/:id", protectOwn, deletePost);
-
+router.post("/toggleLike", protectOwn, toggleLike);
 export default router;

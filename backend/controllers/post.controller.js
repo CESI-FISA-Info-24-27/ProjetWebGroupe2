@@ -132,3 +132,38 @@ export async function deletePost(req, res) {
       .json({ success: false, message: "Error deleting post", error });
   }
 }
+
+export async function toggleLike(req, res) {
+  try {
+    const { postId } = req.body;
+    const userId = req.user._id.toString();
+
+    const post = await Post.findById(postId);
+
+    const likes = post.likes.map((id) => id.toString());
+    const alreadyLiked = likes.includes(userId);
+
+    let liked;
+    if (!alreadyLiked) {
+      post.likes.push(userId);
+      liked = true;
+    } else {
+      post.likes = post.likes.filter((id) => id.toString() !== userId);
+      liked = false;
+    }
+    await post.save();
+
+    res.status(200).json({
+      success: true,
+      data: {
+        postId: post._id,
+        likes: post.likes,
+        message: liked ? "Post liked" : "Like removed",
+      },
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error liking post", error });
+  }
+}
