@@ -7,6 +7,7 @@ import Navbar from "./components/NavbarComponent.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyProfilePage from "./pages/MyProfilePage.tsx";
 import NotFoundPage from "./components/NotFoundComponent.tsx";
+import MessagesPage from "./pages/MessagesPage.tsx";
 const App = () => {
   const location = useLocation();
   const hideSidebar =
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/signup" element={<AuthPage form={<SignupForm />} />} />
           <Route path="/myProfile" element={<MyProfilePage />} />
           <Route path="/404" element={<NotFoundPage />} />
+          <Route path="/messages" element={<MessagesPage />} />
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </div>
