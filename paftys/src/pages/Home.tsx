@@ -17,7 +17,7 @@ export default function HomeComponent() {
 
   const parsedPosts = posts.map((post) => ({
     ...post,
-    createdAt: new Date(),
+    createdAt: new Date(post.createdAt),
     updatedAt: new Date(post.updatedAt),
     date: post.date ? new Date(post.date) : new Date(),
   }));
