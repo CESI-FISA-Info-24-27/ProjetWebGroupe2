@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ff88bc98-5595-4933-b483-87928c27f3fd",
+		"_postman_id": "d81f0118-d90d-486e-93ec-1076cbe6deda",
 		"name": "Paftys",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "45476189",
-		"_collection_link": "https://ben-5046889.postman.co/workspace/Ben's-Workspace~951c3574-2a19-452d-8406-358257729333/collection/45476189-ff88bc98-5595-4933-b483-87928c27f3fd?action=share&source=collection_link&creator=45476189"
+		"_exporter_id": "33475589"
 	},
 	"item": [
 		{
@@ -136,31 +135,6 @@
 								"api",
 								"users",
 								"forProfilePageUser",
-								"683db02c0c4f6599618fa6da"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET USER for post",
-					"request": {
-						"auth": {
-							"type": "basic"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:5000/api/users/forPostUser/683db02c0c4f6599618fa6da",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"api",
-								"users",
-								"forPostUser",
 								"683db02c0c4f6599618fa6da"
 							]
 						}
@@ -514,6 +488,46 @@
 								"api",
 								"posts",
 								"683ddb1856521476a772238d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Like a post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2RiMDJjMGM0ZjY1OTk2MThmYTZkYSIsImlhdCI6MTc0OTU0MzY4MiwiZXhwIjoxNzUyMTM1NjgyfQ.nvfHEDiNLSehuClgiVhslNywpurAM9Zebf4CBOykLLg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"postId\": \"68414a743469b0cd3a4e43f4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts/toggleLike",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"toggleLike"
 							]
 						}
 					},
