@@ -1,6 +1,6 @@
-import MessagesList from "@/components/MessagesListComponent";
-import SubNavBar from "@/components/SubNavBar";
-import DialogueMessageComponent from "@/components/DialogueMessageComponent";
+import MessagesList from "@/components/messages/MessagesListComponent";
+import RightSideBar from "@/components/home/RightSideBarComponent";
+import DialogueMessageComponent from "@/components/messages/DialogueMessageComponent";
 export default function MessagesPage() {
   return (
     <>
@@ -9,7 +9,7 @@ export default function MessagesPage() {
           <MessagesList></MessagesList>
           <DialogueMessageComponent></DialogueMessageComponent>
         </div>
-        <SubNavBar />
+        <RightSideBar />
       </div>
     </>
   );

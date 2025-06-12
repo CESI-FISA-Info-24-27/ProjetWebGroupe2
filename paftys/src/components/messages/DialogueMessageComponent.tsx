@@ -1,5 +1,5 @@
 import { Textarea } from "@/components/ui/textarea";
-import ProfileComponent from "./ProfileComponent";
+import ProfileComponent from "../shared/ProfileComponent";
 import SingularMessageComponent from "./SingularMessageComponent";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 

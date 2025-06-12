@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
   children: JSX.Element;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRouteComponent = ({ children }: ProtectedRouteProps) => {
   const { loading } = useAppSelector((state) => state.auth);
   const token = Cookies.get("token");
 
@@ -23,4 +23,4 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   return children;
 };
 
-export default ProtectedRoute;
+export default ProtectedRouteComponent;

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import UserPosts from "@/components/UserPosts";
+import UserPostsComponent from "@/components/profile/UserPostsComponent";
 import { useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 
@@ -32,7 +32,7 @@ export default function MyProfilePage() {
             : "Aucune biographie."}
         </p>
       </Card>
-      <UserPosts />
+      <UserPostsComponent />
     </div>
   ) : (
     <div className="flex items-center justify-center min-h-screen">
