@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import ProfileComponent from "./ProfileComponent";
+import ProfileComponent from "../shared/ProfileComponent";
 const recommendedUsers = [
   {
     id: "1",
@@ -29,7 +29,7 @@ const trendingTags = [
   { id: "5", name: "#TailwindCSS", nbPost: "11" },
 ];
 
-export default function SubNavBar() {
+export default function RightSideBar() {
   return (
     <div className="w-[30%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex flex-col gap-6 text-white overflow-y-auto">
       <div className="flex flex-col">

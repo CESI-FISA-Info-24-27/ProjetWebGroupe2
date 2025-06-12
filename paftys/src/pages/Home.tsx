@@ -1,10 +1,10 @@
-import PostComponent from "@/components/PostComponent";
+import PostComponent from "@/components/shared/PostComponent";
 import { fetchPosts } from "@/reducers/postSlice";
 import type Post from "@/models/Post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
-import LoadingComponent from "@/components/LoadingComponent";
-import SubNavBar from "@/components/SubNavBar";
+import LoadingComponent from "@/components/shared/LoadingComponent";
+import RightSideBar from "@/components/home/RightSideBarComponent";
 import { useEffect } from "react";
 
 export default function HomeComponent() {
@@ -35,7 +35,7 @@ export default function HomeComponent() {
           <LoadingComponent message={"Chargement des posts..."} />
         )}
       </div>
-      <SubNavBar />
+      <RightSideBar />
     </div>
   );
 }
