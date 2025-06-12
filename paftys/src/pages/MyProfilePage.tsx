@@ -11,17 +11,25 @@ export default function MyProfilePage() {
       <Card className="w-full mx-auto p-6 flex flex-col items-center rounded-xl shadow-md">
         <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
           <img
-            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+            src={
+              user?.profilePicture
+                ? user.profilePicture
+                : "https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+            }
             alt="Photo de profil"
             className="w-32 h-32 lg:w-40 lg:h-40 rounded-full object-cover mb-4 border-2 border-gray-200"
-            />
+          />
           <h2 className="text-2xl font-semibold mb-2 text-center">
             {user ? user.userName : "Nom d'utilisateur"}
           </h2>
           <Button className="cursor-pointer">Modifier le profil</Button>
         </div>
         <p className="text-base text-white text-center m-0">
-          {user ? (user.biography ? user.biography :  "Aucune biographie.") : "Aucune biographie."}
+          {user
+            ? user.biography
+              ? user.biography
+              : "Aucune biographie."
+            : "Aucune biographie."}
         </p>
       </Card>
       <UserPosts />
