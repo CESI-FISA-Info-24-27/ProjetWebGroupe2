@@ -28,42 +28,50 @@ export default function ProfileComponent({
   );
 
   const usernameAndBio = condensed ? (
-    <CardTitle className="username-underline truncate">@{userName}</CardTitle>
+    <NavLink to={`/profile/${userName}`}>
+      <CardTitle className="username-underline truncate">@{userName}</CardTitle>
+    </NavLink>
   ) : (
-    <div className="flex flex-col w-30 md:w-45 lg:w-60">
-      <CardTitle className="username-underline w-fit">@{userName}</CardTitle>
+    <div className="flex flex-col w-full break-words">
+      <NavLink to={`/profile/${userName}`}>
+        <CardTitle className="username-underline w-min">@{userName}</CardTitle>
+      </NavLink>
       <div className="text-sm text-gray-500 break-words">{biography}</div>
     </div>
   );
 
   const content = (
     <div className="flex items-center gap-2">
-      {avatar}
+      <NavLink to={`/profile/${userName}`}>{avatar}</NavLink>
       {usernameAndBio}
     </div>
   );
 
   return (
-    <NavLink to={`/profile/${userName}`}>
+    <>
       {condensed ? (
-        <HoverCard>
-          <HoverCardTrigger>{content}</HoverCardTrigger>
-          <HoverCardContent className="w-64">
-            <div className="flex flex-col items-start gap-2">
-              <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarImage src={image} alt={`@${userName}`} />
-                  <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <p className="font-semibold text-sm">@{userName}</p>
+        <>
+          <HoverCard>
+            <HoverCardTrigger>{content}</HoverCardTrigger>
+            <HoverCardContent className="w-64">
+              <div className="flex flex-col items-start gap-2">
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarImage src={image} alt={`@${userName}`} />
+                    <AvatarFallback>
+                      {userName[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="font-semibold text-sm">@{userName}</p>
+                </div>
+                <p className="text-sm text-gray-100 break-words">{biography}</p>
               </div>
-              <p className="text-sm text-gray-100">{biography}</p>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
+            </HoverCardContent>
+          </HoverCard>
+        </>
       ) : (
         content
       )}
-    </NavLink>
+    </>
   );
 }

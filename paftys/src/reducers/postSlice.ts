@@ -9,13 +9,22 @@ interface PostState {
   posts: Post[];
   loading: boolean;
   error: string | null;
+  postLikersByPostId: { [postId: string]: UserForPost[] };
 }
 
 const initialState: PostState = {
   posts: [],
   loading: false,
   error: null,
+  postLikersByPostId: {},
 };
+
+export interface UserForPost {
+  _id: string;
+  userName: string;
+  biography: string;
+  profilePicture: string;
+}
 
 // Thunk pour charger tous les posts
 export const fetchPosts = createAsyncThunk<Post[]>(
@@ -110,8 +119,39 @@ const postSlice = createSlice({
       .addCase(toggleLikePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchPostLikers.fulfilled, (state, action) => {
+        const { postId, users } = action.payload;
+        state.postLikersByPostId[postId] = users;
       });
   },
+});
+
+export const fetchPostLikers = createAsyncThunk<
+  { postId: string; users: UserForPost[] },
+  { postId: string; userIds: string[] }
+>("post/fetchPostLikers", async ({ postId, userIds }, thunkAPI) => {
+  try {
+    const token = Cookies.get("token");
+    if (!token) throw new Error("Token manquant");
+
+    const responses = await Promise.all(
+      userIds.map((id) =>
+        axios.get(`${dotenv.VITE_DB_URI}/api/users/forProfilePageUser/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      )
+    );
+
+    const users = responses.map((res) => res.data.data);
+    return { postId, users };
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Erreur lors du chargement des likers"
+    );
+  }
 });
 
 export default postSlice.reducer;

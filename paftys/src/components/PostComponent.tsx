@@ -5,10 +5,29 @@ import { useState } from "react";
 import ProfileComponent from "./ProfileComponent";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { toggleLikePost } from "@/reducers/postSlice";
-
+import {
+  HoverCardTrigger,
+  HoverCardContent,
+  HoverCard,
+} from "@/components/ui/hover-card";
+import { ScrollArea } from "./ui/scroll-area";
+import { Avatar } from "./ui/avatar";
+import { useEffect } from "react";
+import { fetchPostLikers } from "@/reducers/postSlice";
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(
+      fetchPostLikers({ postId: postData._id, userIds: postData.likes })
+    );
+  }, [postData.likes]);
+
+  const postLikers = useAppSelector(
+    (state) => state.post.postLikersByPostId[postData._id] || []
+  );
+
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
 
   const hasLiked = postData.likes.includes(userId);
@@ -31,7 +50,7 @@ export default function PostComponent(postData: Post) {
   return (
     <Card className="w-fit gap-2">
       <CardHeader className="flex flex-row justify-between px-4">
-        <div className="flex flex-row items-center gap-2 cursor-pointer">
+        <div className="flex flex-row items-center gap-2">
           <ProfileComponent
             image={postData.userData.profilePicture}
             userName={postData.userData.userName}
@@ -63,18 +82,58 @@ export default function PostComponent(postData: Post) {
         </p>
         <div className="flex flex-row items-center gap-6">
           <div className="flex flex-row items-center mt-4 gap-1">
-            <Button
-              type="button"
-              onClick={handleLike}
-              variant="ghost"
-              className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
-            >
-              {hasLiked ? (
-                <i className="bi bi-heart-fill text-purple-700 text-xl leading-none align-middle"></i>
-              ) : (
-                <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
-              )}
-            </Button>
+            <HoverCard>
+              <HoverCardTrigger>
+                {" "}
+                <Button
+                  type="button"
+                  onClick={handleLike}
+                  variant="ghost"
+                  className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+                >
+                  {hasLiked ? (
+                    <i className="bi bi-heart-fill text-purple-700 text-xl leading-none align-middle"></i>
+                  ) : (
+                    <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
+                  )}
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="flex flex-col gap-4">
+                {postLikers.length === 0 ? (
+                  <>
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-center">
+                        Personne n'a encore liké ce post.
+                      </p>
+                      <div className="bi bi-emoji-frown text-5xl"></div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <p className="self-center">
+                      {postData.likes.length} Likes{" "}
+                    </p>
+                    <ScrollArea>
+                      <div className="max-h-60">
+                        <div className="flex flex-col gap-4 w-full">
+                          {postLikers.map((user) => (
+                            <ProfileComponent
+                              key={user._id}
+                              image={user.profilePicture}
+                              userName={user.userName}
+                              biography={user.biography}
+                              condensed={false}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </ScrollArea>
+                  </>
+                )}
+              </HoverCardContent>
+            </HoverCard>
+
             <div className="text-sm">{postData.likes.length}</div>
           </div>
           <div className="flex flex-row items-center mt-4 gap-1">
