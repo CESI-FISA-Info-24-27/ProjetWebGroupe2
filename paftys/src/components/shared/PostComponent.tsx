@@ -11,7 +11,6 @@ import {
   HoverCard,
 } from "@/components/ui/hover-card";
 import { ScrollArea } from "../ui/scroll-area";
-import { Avatar } from "../ui/avatar";
 import { useEffect } from "react";
 import { fetchPostLikers } from "@/reducers/postSlice";
 export default function PostComponent(postData: Post) {

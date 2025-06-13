@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import ProfileComponent from "../shared/ProfileComponent";
 const recommendedUsers = [
   {

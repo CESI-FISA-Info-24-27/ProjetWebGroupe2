@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { login } from "@/reducers/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import store from "@/redux/store";
 
 export function LoginForm({
   className,
@@ -69,7 +68,11 @@ export function LoginForm({
           />
         </div>
 
-        <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={loading}
+        >
           {loading ? "Connexion..." : "Se connecter"}
         </Button>
       </div>
