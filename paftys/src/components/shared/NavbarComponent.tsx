@@ -12,7 +12,12 @@ export default function RightSidebar() {
               className="w-14 h-14 rounded-full object-cover cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]"
             />
           </NavLink>
-          <NavLink to="/" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              (isActive ? "bg-purple-700" : "") + " w-full"
+            }
+          >
             <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-house leading-none align-middle"></i>
@@ -20,7 +25,12 @@ export default function RightSidebar() {
               </div>
             </div>
           </NavLink>
-          <NavLink to="/login" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+          <NavLink
+            to="/messages"
+            className={({ isActive }) =>
+              (isActive ? "bg-purple-700" : "") + " w-full"
+            }
+          >
             <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-chat-left leading-none align-middle"></i>
@@ -28,7 +38,12 @@ export default function RightSidebar() {
               </div>
             </div>
           </NavLink>
-          <NavLink to="/notifications" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+          <NavLink
+            to="/notifications"
+            className={({ isActive }) =>
+              (isActive ? "bg-purple-700" : "") + " w-full"
+            }
+          >
             <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-bell leading-none align-middle"></i>
@@ -36,7 +51,12 @@ export default function RightSidebar() {
               </div>
             </div>
           </NavLink>
-          <NavLink to="/myProfile" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+          <NavLink
+            to="/myProfile"
+            className={({ isActive }) =>
+              (isActive ? "bg-purple-700" : "") + " w-full"
+            }
+          >
             <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-person leading-none align-middle"></i>
