@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom";
 export default function RightSidebar() {
   return (
     <>
-      <div className="hidden md:block md:w-[20%]">
-        <div className="flex h-full w-full flex-col bg-[#18181B] border-r border-gray-700 items-center justify-start gap-7 pt-4">
+      <div className="hidden md:block">
+        <div className="flex mr-6 h-full w-full flex-col bg-[#18181B] border-r border-gray-700 items-center justify-start gap-7 pt-4">
           <NavLink to="/" className="w-full flex justify-center">
             <img
               src={logo}
