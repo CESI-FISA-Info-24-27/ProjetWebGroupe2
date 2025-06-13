@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom";
 export default function RightSidebar() {
   return (
     <>
-      <div className="hidden md:block md:w-[20%] h-screen">
-        <div className="flex h-full w-full flex-col bg-[#18181B] border-r border-gray-700 items-center justify-start gap-8 pt-4">
+      <div className="hidden md:block md:w-[20%]">
+        <div className="flex h-full w-full flex-col bg-[#18181B] border-r border-gray-700 items-center justify-start gap-7 pt-4">
           <NavLink to="/" className="w-full flex justify-center">
             <img
               src={logo}
@@ -12,32 +12,32 @@ export default function RightSidebar() {
               className="w-14 h-14 rounded-full object-cover cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]"
             />
           </NavLink>
-          <NavLink to="/" className="w-full">
-            <div className="flex pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+          <NavLink to="/" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+            <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-house leading-none align-middle"></i>
                 Accueil
               </div>
             </div>
           </NavLink>
-          <NavLink to="/messages" className="w-full">
-            <div className="flex pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+          <NavLink to="/login" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+            <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-chat-left leading-none align-middle"></i>
                 Messages
               </div>
             </div>
           </NavLink>
-          <NavLink to="/notifications" className="w-full">
-            <div className="flex pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+          <NavLink to="/notifications" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+            <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-bell leading-none align-middle"></i>
                 Notifications
               </div>
             </div>
           </NavLink>
-          <NavLink to="/myProfile" className="w-full">
-            <div className="flex pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+          <NavLink to="/myProfile" className={({isActive}) => (isActive ? "bg-purple-700" : "") + " w-full"}>
+            <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
               <div className="flex items-center gap-4">
                 <i className="bi bi-person leading-none align-middle"></i>
                 Mon profil
