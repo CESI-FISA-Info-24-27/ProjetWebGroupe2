@@ -73,7 +73,32 @@ export const toggleLikePost = createAsyncThunk<Post, { postId: string }>(
     }
   }
 );
+export const createPost = createAsyncThunk<Post, Partial<Post>>(
+  "post/createPost",
+  async (newPostData, thunkAPI) => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) throw new Error("Token manquant");
 
+      const res = await axios.post(
+        `${dotenv.VITE_DB_URI}/api/posts`,
+        newPostData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors de la création du post"
+      );
+    }
+  }
+);
+ 
 // Slice
 const postSlice = createSlice({
   name: "post",
@@ -116,13 +141,25 @@ const postSlice = createSlice({
           state.posts = [...state.posts, updatedPost];
         }
       })
+      .addCase(fetchPostLikers.fulfilled, (state, action) => {
+        const { postId, users } = action.payload;
+        state.postLikersByPostId[postId] = users;
+      })
       .addCase(toggleLikePost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(fetchPostLikers.fulfilled, (state, action) => {
-        const { postId, users } = action.payload;
-        state.postLikersByPostId[postId] = users;
+      .addCase(createPost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = [action.payload, ...state.posts]; // Ajoute le nouveau post en haut
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

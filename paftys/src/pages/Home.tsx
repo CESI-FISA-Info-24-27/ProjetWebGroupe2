@@ -6,6 +6,7 @@ import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import RightSideBar from "@/components/home/RightSideBarComponent";
 import { useEffect } from "react";
+import CreatePost from "../components/home/CreatePost";
 
 export default function HomeComponent() {
   const dispatch = useAppDispatch();
@@ -23,19 +24,20 @@ export default function HomeComponent() {
   }));
 
   return (
-    <div className="flex flex-row h-screen w-full justify-between">
-      <div className="flex flex-col items-center w-[70%] h-full overflow-y-auto">
-        {!isEmptyHelper(parsedPosts) &&
-          parsedPosts.map((post: Post) => (
-            <div className="mt-4">
-              <PostComponent key={post._id} {...post} />
-            </div>
-          ))}
-        {isEmptyHelper(parsedPosts) && (
-          <LoadingComponent message={"Chargement des posts..."} />
-        )}
-      </div>
-      <RightSideBar />
-    </div>
+      <div className="flex flex-row h-screen w-full justify-between">
+        <div className="flex flex-col items-center w-[70%] h-full overflow-y-auto">
+      <CreatePost />
+          {!isEmptyHelper(parsedPosts) &&
+            parsedPosts.map((post: Post) => (
+              <div className="mt-4">
+                <PostComponent key={post._id} {...post} />
+              </div>
+            ))}
+          {isEmptyHelper(parsedPosts) && (
+            <LoadingComponent message={"Chargement des posts..."} />
+          )}
+        </div>
+          <RightSideBar />
+        </div>
   );
 }

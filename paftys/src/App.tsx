@@ -8,6 +8,7 @@ import ProtectedRouteComponent from "./components/app/ProtectedRouteComponent.ts
 import MyProfilePage from "./pages/MyProfilePage.tsx";
 import NotFoundPage from "./components/404/NotFoundComponent.tsx";
 import MessagesPage from "./pages/MessagesPage.tsx";
+
 const App = () => {
   const location = useLocation();
   const hideSidebar =
