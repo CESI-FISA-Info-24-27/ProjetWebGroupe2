@@ -24,7 +24,7 @@ export default function UserProfilePage() {
   }, [dispatch, user?.id]);
 
   return !isEmptyHelper(user) ? (
-    <div className="flex flex-col items-center min-h-screen p-4 max-w-[100%] w-full">
+    <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full">
       <Card className="w-full lg:w-[70%] mx-auto p-6 flex flex-col items-center rounded-xl shadow-md mb-4">
         <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
           <img
