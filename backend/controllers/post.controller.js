@@ -49,10 +49,19 @@ export async function getPostsByUser(req, res) {
 
 export async function createPost(req, res) {
   try {
+    const content = req.body.content;
+    const tags = Array.from(
+      new Set(
+        (content.text.match(/#\w+/g) || []).map((tag) =>
+          tag.substring(1).toLowerCase()
+        )
+      )
+    );
+
     const newPost = new Post({
       userData: req.user._id,
-      content: req.body.content,
-      tags: req.body.tags || [],
+      content,
+      tags,
     });
     const savedPost = await newPost.save();
     res.status(201).json({ success: true, data: savedPost });
@@ -65,11 +74,20 @@ export async function createPost(req, res) {
 
 export async function updatePost(req, res) {
   try {
+    const content = req.body.content;
+    const tags = Array.from(
+      new Set(
+        (content.text.match(/#\w+/g) || []).map((tag) =>
+          tag.substring(1).toLowerCase()
+        )
+      )
+    );
+
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
       {
-        content: req.body.content,
-        tags: req.body.tags,
+        content,
+        tags,
         likes: req.body.likes,
         replies: req.body.replies,
         reports: req.body.reports,
@@ -91,11 +109,20 @@ export async function updatePost(req, res) {
 
 export async function updatePostAsAdmin(req, res) {
   try {
+    const content = req.body.content;
+    const tags = Array.from(
+      new Set(
+        (content.text.match(/#\w+/g) || []).map((tag) =>
+          tag.substring(1).toLowerCase()
+        )
+      )
+    );
+
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
       {
-        content: req.body.content,
-        tags: req.body.tags,
+        content,
+        tags,
         likes: req.body.likes,
         replies: req.body.replies,
         reports: req.body.reports,
@@ -165,5 +192,33 @@ export async function toggleLike(req, res) {
     res
       .status(500)
       .json({ success: false, message: "Error liking post", error });
+  }
+}
+export async function getTrendingTags(req, res) {
+  try {
+    const tags = await Post.aggregate([
+      { $unwind: "$tags" },
+      {
+        $group: {
+          _id: "$tags",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+          _id: 1,
+        },
+      },
+      { $limit: 20 },
+    ]);
+
+    res.status(200).json({ success: true, data: tags });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching trending tags",
+      error,
+    });
   }
 }

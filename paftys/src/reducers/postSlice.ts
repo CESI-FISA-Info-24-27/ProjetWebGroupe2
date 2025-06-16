@@ -74,11 +74,10 @@ export const toggleLikePost = createAsyncThunk<Post, { postId: string }>(
   }
 );
 
-export const fetchPostsByUserId = createAsyncThunk<Post[], {userId: string}>(
+export const fetchPostsByUserId = createAsyncThunk<Post[], { userId: string }>(
   "post/fetchPostsByUserId",
-  async ({userId}, thunkAPI) => {
+  async ({ userId }, thunkAPI) => {
     try {
-
       const res = await axios.get(
         `${dotenv.VITE_DB_URI}/api/posts/user/${userId}`
       );
@@ -90,14 +89,13 @@ export const fetchPostsByUserId = createAsyncThunk<Post[], {userId: string}>(
       );
     }
   }
-)
+);
 
 // Slice
 const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -153,7 +151,7 @@ const postSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
-    }
+  },
 });
 
 export const fetchPostLikers = createAsyncThunk<

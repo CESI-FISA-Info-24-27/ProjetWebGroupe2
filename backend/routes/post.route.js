@@ -8,11 +8,13 @@ import {
   toggleLike,
   updatePost,
   updatePostAsAdmin,
+  getTrendingTags,
 } from "../controllers/post.controller.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
+router.get("/tags", getTrendingTags);
 router.get("/", getAllPosts);
 router.get("/:id", getPostById);
 router.get("/user/:userId", getPostsByUser);

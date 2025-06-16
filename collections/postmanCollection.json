@@ -54,7 +54,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2RiMDJjMGM0ZjY1OTk2MThmYTZkYSIsImlhdCI6MTc0OTcxNTQ5MCwiZXhwIjoxNzUyMzA3NDkwfQ.MVFOVjKTW2kQvrGeNIqfoHj0o5evC9XsGGvOTwVhuMU",
 									"type": "string"
 								}
 							]
@@ -117,7 +117,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2RiMDJjMGM0ZjY1OTk2MThmYTZkYSIsImlhdCI6MTc0OTcxNTQ5MCwiZXhwIjoxNzUyMzA3NDkwfQ.MVFOVjKTW2kQvrGeNIqfoHj0o5evC9XsGGvOTwVhuMU",
 									"type": "string"
 								}
 							]
@@ -382,7 +382,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg4MzU0MiwiZXhwIjoxNzUxNDc1NTQyfQ.Obva2dE6oFkicBu9czpC2RuCPzMSajmsTc37vgVFK5E",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2RiMDJjMGM0ZjY1OTk2MThmYTZkYSIsImlhdCI6MTc1MDA4MDQ0MywiZXhwIjoxNzUyNjcyNDQzfQ.8RipCTEhibRSJk5tvl7a-7KYKWkP2I4U6u_SgavzT1s",
 									"type": "string"
 								}
 							]
@@ -391,7 +391,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\": \"683d95a1b5cfc4719da593d9\",\r\n    \"content\": {\r\n        \"text\": \"La c bon !\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"userId\": \"683d95a1b5cfc4719da593d9\",\r\n    \"content\": {\r\n        \"text\": \"I like carrots ! #carrots #carrots #vegetables #SuPeRPosT\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,6 +528,50 @@
 								"api",
 								"posts",
 								"toggleLike"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get trending tags",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5NWExYjVjZmM0NzE5ZGE1OTNkOSIsImlhdCI6MTc0ODg2NjQ2NSwiZXhwIjoxNzQ4OTUyODY1fQ.IE0f2ygMFGt0Ba7fSi1fs92FfVWhJWFt4HDc6xpXd3o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"limit\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/posts/tags/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"posts",
+								"tags",
+								""
 							]
 						}
 					},

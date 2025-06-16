@@ -29,12 +29,12 @@ export default function ProfileComponent({
 
   const usernameAndBio = condensed ? (
     <NavLink to={`/profile/${userName}`}>
-      <CardTitle className="username-underline truncate">@{userName}</CardTitle>
+      <CardTitle className="custom-underline truncate">@{userName}</CardTitle>
     </NavLink>
   ) : (
     <div className="flex flex-col w-full break-words">
       <NavLink to={`/profile/${userName}`}>
-        <CardTitle className="username-underline w-fit">@{userName}</CardTitle>
+        <CardTitle className="custom-underline w-fit">@{userName}</CardTitle>
       </NavLink>
       <div className="text-sm text-gray-500 break-words">{biography}</div>
     </div>
