@@ -46,6 +46,40 @@ export default function PostComponent(postData: Post) {
     dispatch(toggleLikePost({ postId: postData._id }));
   };
 
+  function renderTextWithHashtags(text: string) {
+    const regex = /#(\w+)/g;
+    const parts = [];
+    let lastIndex = 0;
+
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const [fullMatch, tag] = match;
+      const startIndex = match.index;
+
+      if (startIndex > lastIndex) {
+        parts.push(text.slice(lastIndex, startIndex));
+      }
+
+      parts.push(
+        <a
+          key={startIndex}
+          href={`/tags/${tag}`}
+          className="text-purple-700 cursor-pointer hover:underline"
+        >
+          {fullMatch}
+        </a>
+      );
+
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts;
+  }
+
   return (
     <Card className="w-full gap-2">
       <CardHeader className="flex flex-row justify-between px-4">
@@ -67,18 +101,24 @@ export default function PostComponent(postData: Post) {
       </CardHeader>
       <CardContent className="px-4">
         <p>
-          {shouldTruncate && !expanded
-            ? postData.content.text.slice(0, 240) + "..."
-            : postData.content.text}{" "}
+          {renderTextWithHashtags(
+            shouldTruncate && !expanded
+              ? postData.content.text.slice(0, 240) + "..."
+              : postData.content.text
+          )}
           {shouldTruncate && (
-            <a
-              onClick={toggleExpanded}
-              className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
-            >
-              {expanded ? "Voir moins" : "Lire la suite"}
-            </a>
+            <>
+              {" "}
+              <a
+                onClick={toggleExpanded}
+                className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
+                {expanded ? "Voir moins" : "Lire la suite"}
+              </a>
+            </>
           )}
         </p>
+
         <div className="flex flex-row items-center gap-6">
           <div className="flex flex-row items-center mt-4 gap-1">
             <HoverCard>

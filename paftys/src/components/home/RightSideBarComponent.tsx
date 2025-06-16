@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTrendingTags } from "@/reducers/tagsSlice";
+import type { AppDispatch, RootState } from "@/redux/store";
 import ProfileComponent from "../shared/ProfileComponent";
+import isEmptyHelper from "@/utils/isEmptyHelper";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { NavLink } from "react-router-dom";
+// ...existing code...
+
 const recommendedUsers = [
   {
     id: "1",
@@ -29,6 +38,13 @@ const trendingTags = [
 ];
 
 export default function RightSideBar() {
+  const dispatch = useAppDispatch();
+  const trendingTags = useAppSelector((state) => state.tags.trendingTags);
+
+  useEffect(() => {
+    dispatch(fetchTrendingTags());
+  }, [dispatch, trendingTags]);
+
   return (
     <div className=" hidden md:flex w-[30%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex-col gap-6 text-white overflow-y-auto">
       <div className="flex flex-col">
@@ -49,15 +65,25 @@ export default function RightSideBar() {
       <div>
         <h2 className="text-xl font-semibold mb-2">Tags en trend</h2>
         <ul className="flex flex-col gap-2">
-          {trendingTags.map((tag, index) => (
-            <li key={tag.id} className="text-gray-300">
-              <span className="font-bold text-white mr-2">{index + 1}.</span>
-              {tag.name}{" "}
-              <span className="text-sm text-gray-500">
-                ({tag.nbPost} posts)
-              </span>
-            </li>
-          ))}
+          {!isEmptyHelper(trendingTags) &&
+            trendingTags.map((tag, index) => (
+              <li key={tag._id} className="text-gray-300">
+                <div className="flex items-center">
+                  <span className="font-bold text-white mr-2">
+                    {index + 1}.
+                  </span>
+                  <NavLink to={`/tags/${tag._id}`}>
+                    <div className="text-purple-700 cursor-pointer hover:underline">
+                      {"#" + tag._id}
+                    </div>
+                  </NavLink>
+
+                  <span className="ml-2 text-gray-500">
+                    ({tag.count} posts)
+                  </span>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
