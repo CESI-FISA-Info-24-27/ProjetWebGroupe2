@@ -32,6 +32,20 @@ export const fetchUsers = createAsyncThunk<User[], string>(
   }
 );
 
+export const fetchUserById = createAsyncThunk<User, {userName: string}> (
+  "user/fetchUserById",
+  async ({userName}, thunkAPI) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/users/forProfilePageUserName/${userName}`);
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors du chargement de l'utilisateur"
+      );
+    }
+  }
+)
+
 // Slice Redux Toolkit
 const userSlice = createSlice({
   name: "user",
@@ -48,6 +62,18 @@ const userSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchUserById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = [action.payload];
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

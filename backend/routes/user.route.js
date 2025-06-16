@@ -9,6 +9,7 @@ import {
   updateUser,
   updateUserAsAdmin,
   getUserForOwnProfile,
+  getUserWithNameForProfilePage,
 } from "../controllers/user.controller.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
 
@@ -18,6 +19,7 @@ router.get("/", protectAdmin, getAllUsers);
 router.get("/admin/:id", protectAdmin, getUserById);
 router.get("/forMyProfile", protectOwn, getUserForOwnProfile);
 router.get("/forProfilePageUser/:id", getUserForProfilePage);
+router.get("/forProfilePageUserName/:userName", getUserWithNameForProfilePage);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.put("/updateMe", protectOwn, updateUser);

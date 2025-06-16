@@ -17,6 +17,11 @@ export default function UserPostsComponent() {
         parsedPosts.map((post: any) => (
           <PostComponent key={post._id} {...post} />
         ))}
+      {isEmptyHelper(parsedPosts) && (
+        <div className="text-center">
+          Aucun post trouvé pour cet utilisateur.
+        </div>
+      )}
     </Card>
   );
 }

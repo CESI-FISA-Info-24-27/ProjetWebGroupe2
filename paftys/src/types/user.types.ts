@@ -2,7 +2,7 @@ export type UserRole = "admin" | "moderator" | "user";
 export type UserState = "normal" | "banned" | "suspended";
 
 export interface User {
-  _id: string;
+  id: string;
   userName: string;
   email: string;
   password: string;

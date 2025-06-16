@@ -112,6 +112,37 @@ export async function getUserForProfilePage(req, res) {
   }
 }
 
+export async function getUserWithNameForProfilePage(req, res) {
+  try {
+    const user = await User.findOne({ userName: req.params.userName });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    res.status(200).json({
+      success: true,
+      data: {
+        id: user._id,
+        userName: user.userName,
+        biography: user.biography,
+        profilePicture: user.profilePicture,
+        firendList: user.firendList,
+        posts: user.posts,
+        state: user.state,
+      },
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error fetching user for profile page",
+        error: error.message,
+      });
+  }
+}
+
 export async function registerUser(req, res) {
   const { userName, email, password } = req.body;
   if (!userName || !email || !password) {
