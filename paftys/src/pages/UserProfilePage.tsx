@@ -1,14 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import UserPostsComponent from "@/components/profile/UserPostsComponent";
+import { Card } from "@/components/ui/card";
+import { fetchPostsByUserId } from "@/reducers/postSlice";
+import { fetchUserById } from "@/reducers/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
-import { fetchPostsByUserId } from "@/reducers/postSlice";
+import { useEffect } from "react";
 
-export default function MyProfilePage() {
-  const user = useAppSelector((state) => state.auth.user);
+export default function UserProfilePage() {
+  const userName = window.location.pathname.split("/").pop();
   const dispatch = useAppDispatch();
-  dispatch(fetchPostsByUserId({userId: user?.id || ""}));
+  const user = useAppSelector((state) => state.user.users[0]);
+
+  useEffect(() => {
+    if (userName) {
+      dispatch(fetchUserById({ userName }));
+    }
+  }, [dispatch, userName]);
+
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchPostsByUserId({ userId: user.id }));
+    }
+  }, [dispatch, user?.id]);
 
   return !isEmptyHelper(user) ? (
     <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full">
@@ -26,7 +39,6 @@ export default function MyProfilePage() {
           <h2 className="text-2xl font-semibold mb-2 text-center">
             {user ? user.userName : "Utilisateur inconnu"}
           </h2>
-          <Button className="cursor-pointer">Modifier le profil</Button>
         </div>
         <p className="text-base text-white text-center m-0">
           {user

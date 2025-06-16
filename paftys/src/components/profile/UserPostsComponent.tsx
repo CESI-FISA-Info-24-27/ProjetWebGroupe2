@@ -12,11 +12,16 @@ export default function UserPostsComponent() {
     date: post.date ? new Date(post.date) : new Date(),
   }));
   return (
-    <Card className="w-full mx-auto p-6 flex flex-col items-center rounded-xl shadow-md">
+    <Card className="w-full lg:w-[70%] overflow-y-auto custom-scrollbar max-h-full mx-auto p-6 flex flex-col items-center rounded-xl shadow-md">
       {!isEmptyHelper(parsedPosts) &&
         parsedPosts.map((post: any) => (
           <PostComponent key={post._id} {...post} />
         ))}
+      {isEmptyHelper(parsedPosts) && (
+        <div className="text-center">
+          Aucun post trouvé pour cet utilisateur.
+        </div>
+      )}
     </Card>
   );
 }

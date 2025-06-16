@@ -27,7 +27,7 @@ export default function HomeComponent() {
       <div className="flex flex-col items-center w-[70%] h-full overflow-y-auto custom-scrollbar">
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
-            <div className="mt-4">
+            <div className="mt-4 w-[90%] lg:w-[70%]">
               <PostComponent key={post._id} {...post} />
             </div>
           ))}
