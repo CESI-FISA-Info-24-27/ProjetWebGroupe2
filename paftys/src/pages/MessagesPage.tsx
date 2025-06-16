@@ -6,7 +6,7 @@ export default function MessagesPage() {
       <div className="flex justify-start w-full items-center">
         <div className="mx-10 my-[10px] flex bg-[#151517] rounded-l-2xl rounded-r-2xl ">
           <MessagesList></MessagesList>
-          <div className="w-max">
+          <div className="w-full">
             <DialogueMessageComponent></DialogueMessageComponent>
           </div>
         </div>
