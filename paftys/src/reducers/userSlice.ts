@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { User } from "@/types/user.types";
 
+const API_BASE_URL = import.meta.env.VITE_DB_URI + "/api/users";
+
 // État du slice
 interface UserState {
   users: User[];
@@ -19,7 +21,7 @@ export const fetchUsers = createAsyncThunk<User[], string>(
   "user/fetchUsers",
   async (token, thunkAPI) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users", {
+      const res = await axios.get(API_BASE_URL, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data.data;
@@ -32,19 +34,22 @@ export const fetchUsers = createAsyncThunk<User[], string>(
   }
 );
 
-export const fetchUserById = createAsyncThunk<User, {userName: string}> (
+export const fetchUserById = createAsyncThunk<User, { userName: string }>(
   "user/fetchUserById",
-  async ({userName}, thunkAPI) => {
+  async ({ userName }, thunkAPI) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/users/forProfilePageUserName/${userName}`);
+      const res = await axios.get(
+        `${API_BASE_URL}/forProfilePageUserName/${userName}`
+      );
       return res.data.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Erreur lors du chargement de l'utilisateur"
+        err.response?.data?.message ||
+          "Erreur lors du chargement de l'utilisateur"
       );
     }
   }
-)
+);
 
 // Slice Redux Toolkit
 const userSlice = createSlice({
