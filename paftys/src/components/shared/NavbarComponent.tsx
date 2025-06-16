@@ -2,6 +2,7 @@ import logo from "@/assets/p_logo_paftys.svg";
 import { logout } from "@/reducers/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
+import { ModeToggle } from "./ModeToggleComponent";
 
 export default function RightSidebar() {
   const dispatch = useAppDispatch();
@@ -78,7 +79,7 @@ export default function RightSidebar() {
           </div>
 
           {/* Bas de la navbar : bouton Déconnexion */}
-          <div className="w-full px-10">
+          <div className="w-full flex flex-row items-center justify-between px-4">
             <button
               onClick={handleLogout}
               className="flex items-center gap-4 text-red-500  cursor-pointer hover:scale-102 text-xl py-2 w-full rounded-md"
@@ -86,6 +87,7 @@ export default function RightSidebar() {
               <i className="bi bi-box-arrow-right leading-none align-middle"></i>
               Déconnexion
             </button>
+            <ModeToggle />
           </div>
         </div>
       </div>
