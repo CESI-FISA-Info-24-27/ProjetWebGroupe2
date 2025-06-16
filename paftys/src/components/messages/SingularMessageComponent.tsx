@@ -16,7 +16,7 @@ export default function SingularMessageComponent({
       <div
         className={`max-w-xs px-4 py-2 rounded-2xl text-white break-words ${
           IsUserSender
-            ? "bg-blue-600 rounded-br-none"
+            ? "bg-purple-700 rounded-br-none"
             : "bg-gray-700 rounded-bl-none"
         }`}
       >

@@ -134,3 +134,11 @@
   background-size: 100% 1.5px;
   background-position: 0 105%;
 }
+
+@layer utilities {
+  .custom-scrollbar {
+    @apply scrollbar-thin scrollbar-thumb-[#2e2e2e] scrollbar-track-transparent hover:scrollbar-thumb-[#3a3a3a] transition-all;
+  }
+}
+
+@plugin 'tailwind-scrollbar';
