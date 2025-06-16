@@ -35,7 +35,7 @@ export async function getPostById(req, res) {
 
 export async function getPostsByUser(req, res) {
   try {
-    const posts = await Post.find({ userId: req.params.userId }).populate(
+    const posts = await Post.find({ userData: req.params.userId }).populate(
       "userData",
       "userName profilePicture biography"
     );

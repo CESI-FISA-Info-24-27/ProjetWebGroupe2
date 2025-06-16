@@ -74,12 +74,29 @@ export const toggleLikePost = createAsyncThunk<Post, { postId: string }>(
   }
 );
 
+export const fetchPostsByUserId = createAsyncThunk<Post[], {userId: string}>(
+  "post/fetchPostsByUserId",
+  async ({userId}, thunkAPI) => {
+    try {
+
+      const res = await axios.get(
+        `${dotenv.VITE_DB_URI}/api/posts/user/${userId}`
+      );
+
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors du chargement des posts"
+      );
+    }
+  }
+)
+
 // Slice
 const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    // Tu peux ajouter addPost, updatePost, deletePost ici plus tard
   },
   extraReducers: (builder) => {
     builder
@@ -123,8 +140,20 @@ const postSlice = createSlice({
       .addCase(fetchPostLikers.fulfilled, (state, action) => {
         const { postId, users } = action.payload;
         state.postLikersByPostId[postId] = users;
+      })
+      .addCase(fetchPostsByUserId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPostsByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(fetchPostsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
-  },
+    }
 });
 
 export const fetchPostLikers = createAsyncThunk<

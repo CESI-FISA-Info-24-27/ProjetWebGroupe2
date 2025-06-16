@@ -47,7 +47,7 @@ export default function PostComponent(postData: Post) {
   };
 
   return (
-    <Card className="w-fit gap-2">
+    <Card className="w-full gap-2">
       <CardHeader className="flex flex-row justify-between px-4">
         <div className="flex flex-row items-center gap-2">
           <ProfileComponent
@@ -65,7 +65,7 @@ export default function PostComponent(postData: Post) {
           })}
         </span>
       </CardHeader>
-      <CardContent className="w-[600px] px-4">
+      <CardContent className="px-4">
         <p>
           {shouldTruncate && !expanded
             ? postData.content.text.slice(0, 240) + "..."
