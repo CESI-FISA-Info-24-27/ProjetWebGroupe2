@@ -24,7 +24,7 @@ export default function HomeComponent() {
 
   return (
     <div className="flex flex-row h-screen w-full justify-between">
-      <div className="flex flex-col items-center w-[70%] h-full overflow-y-auto">
+      <div className="flex flex-col items-center w-[70%] h-full overflow-y-auto custom-scrollbar">
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
             <div className="mt-4">
