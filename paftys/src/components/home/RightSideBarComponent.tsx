@@ -30,7 +30,7 @@ const trendingTags = [
 
 export default function RightSideBar() {
   return (
-    <div className="w-[30%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex flex-col gap-6 text-white overflow-y-auto">
+    <div className=" hidden md:flex w-[30%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex-col gap-6 text-white overflow-y-auto">
       <div className="flex flex-col">
         <h2 className="text-xl font-semibold mb-2">Comptes recommandés</h2>
         <div className="flex flex-col gap-4">
