@@ -11,6 +11,11 @@ export default function RightSidebar() {
     window.location.href = "/login";
   };
 
+  const linkClass = (isActive: boolean) =>
+    `w-full transition-all duration-300 ease-in-out ${
+      isActive ? "text-purple-700 translate-x-2" : "hover:translate-x-1"
+    }`;
+
   return (
     <>
       <div className="hidden md:block">
@@ -24,13 +29,8 @@ export default function RightSidebar() {
                 className="w-14 h-14 rounded-full object-cover cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]"
               />
             </NavLink>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                (isActive ? "bg-purple-700" : "") + " w-full"
-              }
-            >
-              <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+            <NavLink to="/" className={({ isActive }) => linkClass(isActive)}>
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
                 <div className="flex items-center gap-4">
                   <i className="bi bi-house leading-none align-middle"></i>
                   Accueil
@@ -39,11 +39,9 @@ export default function RightSidebar() {
             </NavLink>
             <NavLink
               to="/messages"
-              className={({ isActive }) =>
-                (isActive ? "bg-purple-700" : "") + " w-full"
-              }
+              className={({ isActive }) => linkClass(isActive)}
             >
-              <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
                 <div className="flex items-center gap-4">
                   <i className="bi bi-chat-left leading-none align-middle"></i>
                   Messages
@@ -52,11 +50,9 @@ export default function RightSidebar() {
             </NavLink>
             <NavLink
               to="/notifications"
-              className={({ isActive }) =>
-                (isActive ? "bg-purple-700" : "") + " w-full"
-              }
+              className={({ isActive }) => linkClass(isActive)}
             >
-              <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
                 <div className="flex items-center gap-4">
                   <i className="bi bi-bell leading-none align-middle"></i>
                   Notifications
@@ -65,11 +61,9 @@ export default function RightSidebar() {
             </NavLink>
             <NavLink
               to="/myProfile"
-              className={({ isActive }) =>
-                (isActive ? "bg-purple-700" : "") + " w-full"
-              }
+              className={({ isActive }) => linkClass(isActive)}
             >
-              <div className="flex p-2 pl-10 text-2xl cursor-pointer hover:scale-102 transition-transform duration-200 pr-4">
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
                 <div className="flex items-center gap-4">
                   <i className="bi bi-person leading-none align-middle"></i>
                   Mon profil
@@ -94,17 +88,45 @@ export default function RightSidebar() {
 
       {/* Barre de navigation mobile */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#18181B] border-t border-gray-700 flex justify-around items-center py-2 md:hidden">
-        <NavLink to="/">
-          <i className="bi bi-house text-2xl text-white"></i>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `text-2xl transition-transform duration-300 ${
+              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+            }`
+          }
+        >
+          <i className="bi bi-house"></i>
         </NavLink>
-        <NavLink to="/login">
-          <i className="bi bi-chat-left text-2xl text-white"></i>
+        <NavLink
+          to="/messages"
+          className={({ isActive }) =>
+            `text-2xl transition-transform duration-300 ${
+              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+            }`
+          }
+        >
+          <i className="bi bi-chat-left"></i>
         </NavLink>
-        <NavLink to="/notifications">
-          <i className="bi bi-bell text-2xl text-white"></i>
+        <NavLink
+          to="/notifications"
+          className={({ isActive }) =>
+            `text-2xl transition-transform duration-300 ${
+              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+            }`
+          }
+        >
+          <i className="bi bi-bell"></i>
         </NavLink>
-        <NavLink to="/myProfile">
-          <i className="bi bi-person text-2xl text-white"></i>
+        <NavLink
+          to="/myProfile"
+          className={({ isActive }) =>
+            `text-2xl transition-transform duration-300 ${
+              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+            }`
+          }
+        >
+          <i className="bi bi-person"></i>
         </NavLink>
       </div>
     </>
