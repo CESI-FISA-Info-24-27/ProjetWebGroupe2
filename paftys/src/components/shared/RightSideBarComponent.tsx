@@ -29,14 +29,6 @@ const recommendedUsers = [
   },
 ];
 
-const trendingTags = [
-  { id: "1", name: "#JavaScript", nbPost: "22" },
-  { id: "2", name: "#ReactJS", nbPost: "17" },
-  { id: "3", name: "#TypeScript", nbPost: "9" },
-  { id: "4", name: "#Web3", nbPost: "14" },
-  { id: "5", name: "#TailwindCSS", nbPost: "11" },
-];
-
 export default function RightSideBar() {
   const dispatch = useAppDispatch();
   const trendingTags = useAppSelector((state) => state.tags.trendingTags);
@@ -66,7 +58,7 @@ export default function RightSideBar() {
         <h2 className="text-xl font-semibold mb-2">Tags en trend</h2>
         <ul className="flex flex-col gap-2">
           {!isEmptyHelper(trendingTags) &&
-            trendingTags.map((tag, index) => (
+            trendingTags.slice(0, 5).map((tag, index) => (
               <li key={tag._id} className="text-gray-300">
                 <div className="flex items-center">
                   <span className="font-bold text-white mr-2">
