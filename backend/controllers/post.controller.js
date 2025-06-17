@@ -194,6 +194,7 @@ export async function toggleLike(req, res) {
       .json({ success: false, message: "Error liking post", error });
   }
 }
+
 export async function getTrendingTags(req, res) {
   try {
     const tags = await Post.aggregate([
@@ -218,6 +219,25 @@ export async function getTrendingTags(req, res) {
     res.status(500).json({
       success: false,
       message: "Error fetching trending tags",
+      error,
+    });
+  }
+}
+
+export async function getPostByTag(req, res) {
+  try {
+    const tag = req.params.tag.toLowerCase();
+
+    const posts = await Post.find({ tags: tag }).populate(
+      "userData",
+      "userName profilePicture biography"
+    );
+
+    res.status(200).json({ success: true, data: posts });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching posts by tag",
       error,
     });
   }

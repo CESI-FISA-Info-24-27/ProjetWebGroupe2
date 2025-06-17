@@ -4,7 +4,7 @@ import type Post from "@/models/Post";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/shared/LoadingComponent";
-import RightSideBar from "@/components/home/RightSideBarComponent";
+import RightSideBar from "@/components/shared/RightSideBarComponent";
 import { useEffect } from "react";
 
 export default function HomeComponent() {

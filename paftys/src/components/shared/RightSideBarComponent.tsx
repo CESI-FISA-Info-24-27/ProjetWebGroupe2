@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTrendingTags } from "@/reducers/tagsSlice";
 import type { AppDispatch, RootState } from "@/redux/store";
-import ProfileComponent from "../shared/ProfileComponent";
+import ProfileComponent from "./ProfileComponent";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
