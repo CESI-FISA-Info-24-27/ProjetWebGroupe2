@@ -5,6 +5,7 @@ import {
   getAllPosts,
   getPostById,
   getPostsByUser,
+  getRepliesByPostId,
   toggleLike,
   updatePost,
   updatePostAsAdmin,
@@ -18,6 +19,7 @@ const router = express.Router();
 router.get("/tags", getTrendingTags);
 router.get("/", getAllPosts);
 router.get("/:id", getPostById);
+router.get("/replies/:id", getRepliesByPostId);
 router.get("/user/:userId", getPostsByUser);
 router.post("/", protectOwn, createPost);
 router.put("/:id", protectOwn, updatePost);
