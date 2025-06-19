@@ -74,6 +74,22 @@ export const toggleLikePost = createAsyncThunk<Post, { postId: string }>(
   }
 );
 
+export const fetchPostById = createAsyncThunk<Post, { postId: string }>(
+  "post/fetchPostById",
+  async ({ postId }, thunkAPI) => {
+    try {
+      const res = await axios.get(
+        `${dotenv.VITE_DB_URI}/api/posts/replies/${postId}`
+      );
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors du chargement du post"
+      );
+    }
+  }
+);
+
 export const fetchPostsByUserId = createAsyncThunk<Post[], { userId: string }>(
   "post/fetchPostsByUserId",
   async ({ userId }, thunkAPI) => {
@@ -148,6 +164,18 @@ const postSlice = createSlice({
         state.posts = action.payload;
       })
       .addCase(fetchPostsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchPostById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload as unknown as Post[];
+      })
+      .addCase(fetchPostById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

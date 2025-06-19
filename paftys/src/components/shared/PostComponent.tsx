@@ -13,6 +13,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
 import { fetchPostLikers } from "@/reducers/postSlice";
+import { Link } from "react-router-dom";
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
@@ -22,7 +23,7 @@ export default function PostComponent(postData: Post) {
       fetchPostLikers({ postId: postData._id, userIds: postData.likes })
     );
   }, [postData.likes]);
-
+  
   const postLikers = useAppSelector(
     (state) => state.post.postLikersByPostId[postData._id] || []
   );
@@ -176,13 +177,12 @@ export default function PostComponent(postData: Post) {
             <div className="text-sm">{postData.likes.length}</div>
           </div>
           <div className="flex flex-row items-center mt-4 gap-1">
-            <Button
-              type="button"
-              variant="ghost"
+            <Link
+              to={`/post/${postData._id}`}
               className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
             >
               <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
-            </Button>
+            </Link>
             <div className="text-sm">{postData.replies.length}</div>
           </div>
         </div>

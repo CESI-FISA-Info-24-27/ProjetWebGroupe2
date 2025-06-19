@@ -9,6 +9,7 @@ import MyProfilePage from "./pages/MyProfilePage.tsx";
 import NotFoundPage from "./components/404/NotFoundComponent.tsx";
 import MessagesPage from "./pages/MessagesPage.tsx";
 import UserProfilePage from "./pages/UserProfilePage.tsx";
+import { PostPage } from "./pages/PostPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
 const App = () => {
   const location = useLocation();
@@ -62,6 +63,14 @@ const App = () => {
             element={
               <ProtectedRouteComponent>
                 <TagPage />
+              </ProtectedRouteComponent>
+            }
+          />
+          <Route
+            path="/post/:postId"
+            element={
+              <ProtectedRouteComponent>
+                <PostPage />
               </ProtectedRouteComponent>
             }
           />

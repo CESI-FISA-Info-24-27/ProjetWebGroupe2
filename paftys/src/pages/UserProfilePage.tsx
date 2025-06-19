@@ -1,4 +1,5 @@
 import UserPostsComponent from "@/components/profile/UserPostsComponent";
+import LoadingComponent from "@/components/shared/LoadingComponent";
 import { Card } from "@/components/ui/card";
 import { fetchPostsByUserId } from "@/reducers/postSlice";
 import { fetchUserById } from "@/reducers/userSlice";
@@ -52,7 +53,7 @@ export default function UserProfilePage() {
     </div>
   ) : (
     <div className="flex items-center justify-center min-h-screen">
-      <p className="text-gray-500">Chargement...</p>
+      <LoadingComponent message={"Chargement du profil..."} />
     </div>
   );
 }

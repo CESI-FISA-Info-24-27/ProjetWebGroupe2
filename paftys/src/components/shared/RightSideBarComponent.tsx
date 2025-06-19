@@ -35,7 +35,7 @@ export default function RightSideBar() {
 
   useEffect(() => {
     dispatch(fetchTrendingTags());
-  }, [dispatch, trendingTags]);
+  }, []);
 
   return (
     <div className=" hidden md:flex w-[30%] h-full bg-[#18181B] border-l border-gray-700 p-4 flex-col gap-6 text-white overflow-y-auto">
