@@ -1,16 +1,21 @@
-export default function MessageDisplayComponent() {
+interface Props {
+  username: string;
+  profilePic: string;
+  preview: string;
+}
+
+export default function MessageDisplayComponent({
+  username,
+  profilePic,
+  preview,
+}: Props) {
   return (
-    <>
-      <div className="flex gap-4 w-[300px] bg-[#1f1f23] p-4 rounded-2xl">
-        <img
-          src="https://randomuser.me/api/portraits/men/21.jpg"
-          className="h-15 w-15 rounded-full"
-        ></img>
-        <div className="flex flex-col">
-          <p className="text-xl">John Doe</p>
-          <p className="text-gray-500">Récemment il se passe ...</p>
-        </div>
+    <div className="flex gap-4 w-[300px] bg-[#1f1f23] p-4 rounded-2xl">
+      <img src={profilePic} className="h-15 w-15 rounded-full" />
+      <div className="flex flex-col overflow-hidden">
+        <p className="text-xl truncate">{username}</p>
+        <p className="text-gray-500 truncate">{preview}</p>
       </div>
-    </>
+    </div>
   );
 }
