@@ -12,13 +12,15 @@ import {
   getTrendingTags,
   getPostByTag,
   getPostsPaginated,
+  getNumberPosts,
 } from "../controllers/post.controller.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/tags", getTrendingTags);
 router.get("/", getAllPosts);
+router.get("/tags", getTrendingTags);
+router.get("/number", getNumberPosts);
 router.get("/page/:page", getPostsPaginated);
 router.get("/:id", getPostById);
 router.get("/replies/:id", getRepliesByPostId);

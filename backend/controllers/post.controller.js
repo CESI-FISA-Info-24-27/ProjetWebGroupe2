@@ -14,6 +14,17 @@ export async function getAllPosts(req, res) {
   }
 }
 
+export async function getNumberPosts(req, res) {
+  try {
+    const count = await Post.countDocuments({ repliesTo: null });
+    res.status(200).json({ success: true, data: { count } });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error counting posts", error });
+  }
+}
+
 export async function getPostsPaginated(req, res) {
   try {
     const page = parseInt(req.params.page) || 1;

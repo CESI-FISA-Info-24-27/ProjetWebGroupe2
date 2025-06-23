@@ -7,13 +7,31 @@ import LoadingComponent from "@/components/shared/LoadingComponent";
 import RightSideBar from "@/components/shared/RightSideBarComponent";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function HomeComponent() {
   const [page, setPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchPosts({ page }));
   }, [page]);
+
+  useEffect(() => {
+    const getNumberOfPosts = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_DB_URI}/api/posts/number`);
+        console.log(response);
+        
+        if (response.data) {
+          setTotalPosts(response.data.data.count);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération du nombre de posts :", error);
+      }
+    }
+    getNumberOfPosts();
+  }, []);
 
   const posts = useAppSelector((state) => state.post.posts);
 
@@ -52,7 +70,7 @@ export default function HomeComponent() {
             Page précédente
           </Button>
           )}
-          {!isEmptyHelper(posts) && (
+          {!isEmptyHelper(posts) && totalPosts/15 > page && (
             <Button
             className="cursor-pointer"
             onClick={() => {
