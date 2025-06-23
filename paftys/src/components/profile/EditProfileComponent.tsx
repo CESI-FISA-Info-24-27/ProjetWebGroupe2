@@ -12,7 +12,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Textarea } from "../ui/textarea";
-import { updateUserProfile } from "@/reducers/userSlice";
+import { updateUserProfile } from "@/reducers/authSlice";
 
 type User = {
   id: string;

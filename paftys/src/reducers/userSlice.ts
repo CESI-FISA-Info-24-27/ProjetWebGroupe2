@@ -51,28 +51,6 @@ export const fetchUserById = createAsyncThunk<User, { userName: string }>(
   }
 );
 
-export const updateUserProfile = createAsyncThunk(
-  "user/updateMe",
-  async (formData: FormData, thunkAPI) => {
-    try {
-      const token = (thunkAPI.getState() as any).auth.token;
-
-      const response = await axios.put(`${API_BASE_URL}/updateMe`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      return response.data.data;
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Erreur de mise à jour du profil"
-      );
-    }
-  }
-);
-
 // Slice Redux Toolkit
 const userSlice = createSlice({
   name: "user",
@@ -101,29 +79,6 @@ const userSlice = createSlice({
         state.users = [action.payload];
       })
       .addCase(fetchUserById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(updateUserProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateUserProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        if (state.users.length > 0) {
-          const index = state.users.findIndex(
-            (u) => u.id === action.payload.id
-          );
-          if (index !== -1) {
-            state.users[index] = action.payload;
-          } else {
-            state.users.push(action.payload);
-          }
-        } else {
-          state.users = [action.payload];
-        }
-      })
-      .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
