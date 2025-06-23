@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { deleteOldProfilePicture } from "../config/multer.js";
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -16,13 +17,11 @@ export async function getAllUsers(req, res) {
     const users = await User.find();
     res.status(200).json({ success: true, data: users });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching users",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching users",
+      error: error.message,
+    });
   }
 }
 
@@ -37,13 +36,11 @@ export async function getUserById(req, res) {
     const { password, ...userWithoutPassword } = user.toObject();
     res.status(200).json({ success: true, data: userWithoutPassword });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching user",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user",
+      error: error.message,
+    });
   }
 }
 
@@ -65,19 +62,17 @@ export async function getUserForOwnProfile(req, res) {
         profilePicture: user.profilePicture,
         conversations: user.conversations,
         notifications: user.notifications,
-        firendList: user.firendList,
+        friendList: user.friendList,
         posts: user.posts,
         state: user.state,
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching own profile",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching own profile",
+      error: error.message,
+    });
   }
 }
 
@@ -96,19 +91,17 @@ export async function getUserForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        firendList: user.firendList,
+        friendList: user.friendList,
         posts: user.posts,
         state: user.state,
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching user for profile page",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user for profile page",
+      error: error.message,
+    });
   }
 }
 
@@ -127,19 +120,17 @@ export async function getUserWithNameForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        firendList: user.firendList,
+        friendList: user.friendList,
         posts: user.posts,
         state: user.state,
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error fetching user for profile page",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user for profile page",
+      error: error.message,
+    });
   }
 }
 
@@ -178,20 +169,18 @@ export async function registerUser(req, res) {
         profilePicture: newUser.profilePicture,
         conversations: newUser.conversations,
         notifications: newUser.notifications,
-        firendList: newUser.firendList,
+        friendList: newUser.friendList,
         posts: newUser.posts,
         state: newUser.state,
         token: generateToken(newUser._id),
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error registering user",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error registering user",
+      error: error.message,
+    });
   }
 }
 
@@ -210,7 +199,7 @@ export async function loginUser(req, res) {
           profilePicture: user.profilePicture,
           conversations: user.conversations,
           notifications: user.notifications,
-          firendList: user.firendList,
+          friendList: user.friendList,
           posts: user.posts,
           state: user.state,
           token: generateToken(user._id),
@@ -218,96 +207,132 @@ export async function loginUser(req, res) {
       });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error logging in",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error logging in",
+      error: error.message,
+    });
   }
 }
 
+// Updated updateUser function with file upload support
 export async function updateUser(req, res) {
-  const {
-    userName,
-    email,
-    biography,
-    profilePicture,
-    friendList,
-    posts,
-    conversations,
-  } = req.body;
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      {
-        userName,
-        email,
-        biography,
-        profilePicture,
-        friendList,
-        posts,
-        conversations,
-      },
-      { new: true }
-    );
+    const { userName, email, biography, friendList, posts, conversations } =
+      req.body;
+    const userId = req.user.id;
+
+    // Get current user to check for existing profile picture
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const updateData = {
+      userName,
+      email,
+      biography,
+      friendList,
+      posts,
+      conversations,
+    };
+
+    // If a new profile picture was uploaded
+    if (req.file) {
+      // Delete old profile picture if it exists
+      if (currentUser.profilePicture) {
+        deleteOldProfilePicture(currentUser.profilePicture);
+      }
+
+      // Set new profile picture with full URL
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      updateData.profilePicture = `${baseUrl}/uploads/profiles/${req.file.filename}`;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    });
+
     if (!updatedUser) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ success: true, data: updatedUser });
+
+    // Return user data without password
+    const { password, ...userWithoutPassword } = updatedUser.toObject();
+    res.status(200).json({ success: true, data: userWithoutPassword });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error updating user",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error updating user",
+      error: error.message,
+    });
   }
 }
 
+// Updated updateUserAsAdmin function with file upload support
 export async function updateUserAsAdmin(req, res) {
-  const {
-    userName,
-    biography,
-    profilePicture,
-    role,
-    friendList,
-    conversations,
-    posts,
-    state,
-  } = req.body;
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        userName,
-        biography,
-        profilePicture,
-        role,
-        friendList,
-        conversations,
-        posts,
-        state,
-      },
-      { new: true }
-    );
+    const {
+      userName,
+      biography,
+      role,
+      friendList,
+      conversations,
+      posts,
+      state,
+    } = req.body;
+    const targetUserId = req.params.id;
+
+    // Get current user to check for existing profile picture
+    const currentUser = await User.findById(targetUserId);
+    if (!currentUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    const updateData = {
+      userName,
+      biography,
+      role,
+      friendList,
+      conversations,
+      posts,
+      state,
+    };
+
+    // If a new profile picture was uploaded
+    if (req.file) {
+      // Delete old profile picture if it exists
+      if (currentUser.profilePicture) {
+        deleteOldProfilePicture(currentUser.profilePicture);
+      }
+
+      // Set new profile picture with full URL
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      updateData.profilePicture = `${baseUrl}/uploads/profiles/${req.file.filename}`;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(targetUserId, updateData, {
+      new: true,
+    });
+
     if (!updatedUser) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+
     res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Error updating user",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Error updating user",
+      error: error.message,
+    });
   }
 }
