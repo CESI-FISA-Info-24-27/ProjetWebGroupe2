@@ -14,6 +14,27 @@ export async function getAllPosts(req, res) {
   }
 }
 
+export async function getPostsPaginated(req, res) {
+  try {
+    const page = parseInt(req.params.page) || 1;
+    const limit = 15;
+    const posts = await Post.find({ repliesTo: null })
+      .populate("userData", "userName profilePicture biography")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    const totalPosts = await Post.countDocuments();
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching posts", error });
+  }
+}
+
 export async function getPostById(req, res) {
   try {
     const post = await Post.findById(req.params.id).populate(
