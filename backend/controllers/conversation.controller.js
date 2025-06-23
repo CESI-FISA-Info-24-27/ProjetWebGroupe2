@@ -115,6 +115,9 @@ export async function addMessageToConversation(req, res) {
       });
     }
 
+    console.log("Adding message to conversation:", req.body.content);
+    console.log("user ID:", req.user._id);
+
     const newMessage = {
       sender: req.user._id,
       content: req.body.content,
@@ -123,6 +126,7 @@ export async function addMessageToConversation(req, res) {
 
     conversation.messages.push(newMessage);
     await conversation.save();
+    await conversation.populate("participants", "userName profilePicture");
 
     res.status(200).json({ success: true, data: conversation });
   } catch (error) {

@@ -1,6 +1,8 @@
-import { useAppSelector } from "@/redux/hooks";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addMessage } from "@/reducers/conversationSlice";
 import ProfileComponent from "../shared/ProfileComponent";
-import SingularMessageComponent from "../SingularMessageComponent";
+import SingularMessageComponent from "./SingularMessageComponent";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
@@ -9,7 +11,33 @@ export default function DialogueMessageComponent({
 }: {
   conversation: any;
 }) {
+  const dispatch = useAppDispatch();
   const currentUserId = useAppSelector((state) => state.auth.user?.id);
+  const [messageText, setMessageText] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversation?.messages?.length]);
+
+  const other = useMemo(() => {
+    return conversation?.participants?.find(
+      (p: any) => typeof p === "object" && p._id !== currentUserId
+    );
+  }, [conversation?.participants, currentUserId]);
+
+  const handleSendMessage = () => {
+    if (!messageText.trim() || !conversation?._id) return;
+
+    dispatch(
+      addMessage({
+        id: conversation._id,
+        content: { text: messageText },
+      })
+    );
+
+    setMessageText("");
+  };
 
   if (!conversation) {
     return (
@@ -19,8 +47,8 @@ export default function DialogueMessageComponent({
     );
   }
 
-  const other = conversation.participants.find(
-    (p: any) => typeof p === "object" && p._id !== conversation.currentUserId
+  const sortedMessages = [...conversation.messages].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
   );
 
   return (
@@ -39,14 +67,20 @@ export default function DialogueMessageComponent({
         </div>
       </div>
 
-      <div className="flex-1 flex-col-reverse overflow-y-auto p-4 gap-1 flex custom-scrollbar">
-        {conversation.messages.map((msg: any, idx: number) => (
+      <div className="flex-1 flex-col overflow-y-auto p-4 gap-1 flex custom-scrollbar">
+        {sortedMessages.map((msg, idx) => (
           <SingularMessageComponent
-            key={idx}
+            key={msg._id || idx}
             MessageContent={msg.content?.text || "[Message vide]"}
-            IsUserSender={msg.senderId === currentUserId}
+            IsUserSender={
+              msg.sender === currentUserId ||
+              (typeof msg.sender === "object" &&
+                msg.sender._id === currentUserId)
+            }
           />
         ))}
+
+        <div ref={bottomRef} />
       </div>
 
       <div className="border-t border-gray-700 h-38 flex flex-col justify-center">
@@ -55,10 +89,22 @@ export default function DialogueMessageComponent({
             <Textarea
               className="resize-none h-30"
               placeholder="Entrez votre message ici..."
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
             />
           </div>
           <div className="flex flex-col gap-2 w-24 mr-2">
-            <Button className="cursor-pointer" title="Envoyer le message">
+            <Button
+              className="cursor-pointer"
+              title="Envoyer le message"
+              onClick={handleSendMessage}
+            >
               <i className="bi bi-send text-xl"></i>
             </Button>
             <Button className="cursor-pointer" title="Joindre un fichier">

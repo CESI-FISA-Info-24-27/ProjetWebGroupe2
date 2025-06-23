@@ -19,13 +19,12 @@ export default function MessagesListComponent({
 
   useEffect(() => {
     dispatch(fetchConversations());
-  }, [dispatch]);
+  }, []);
 
   const handleNewConversation = () => {
     console.log("Nouvelle conversation");
   };
 
-  // Nouvelle fonction pour récupérer l'autre utilisateur
   const parseOtherUserData = (conv: any) => {
     const other = conv.participants.find(
       (p: any) => typeof p === "object" && p._id !== userId
