@@ -88,6 +88,28 @@ export const signup = createAsyncThunk<
   }
 });
 
+export const updateUserProfile = createAsyncThunk(
+  "user/updateMe",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      const token = (thunkAPI.getState() as any).auth.token;
+
+      const response = await axios.put(`${API_BASE_URL}/updateMe`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur de mise à jour du profil"
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -125,6 +147,21 @@ const authSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(signup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
