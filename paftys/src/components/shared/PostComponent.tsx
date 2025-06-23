@@ -14,9 +14,16 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
 import { fetchPostLikers } from "@/reducers/postSlice";
 import { Link } from "react-router-dom";
-export default function PostComponent(postData: Post) {
+import ReportForm from "../shared/ReportForm";
+
+export default function PostComponent({ postData }: { postData: Post }) {
+  const EMPTY_ARRAY: any[] = [];
+
+
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState("");
 
   useEffect(() => {
     dispatch(
@@ -25,11 +32,10 @@ export default function PostComponent(postData: Post) {
   }, [postData.likes]);
   
   const postLikers = useAppSelector(
-    (state) => state.post.postLikersByPostId[postData._id] || []
+    (state) => state.post.postLikersByPostId[postData._id] || EMPTY_ARRAY
   );
 
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
-
   const hasLiked = postData.likes.includes(userId);
 
   if (!postData.content || !postData.content.text) return null;
@@ -40,6 +46,21 @@ export default function PostComponent(postData: Post) {
 
   const toggleExpanded = () => setExpanded((prev) => !prev);
   const shouldTruncate = postData.content.text.length > 240;
+
+const handleReport = () => {
+  setShowReportModal(true);
+};
+
+const submitReport = () => {
+  if (!reportReason.trim()) return;
+
+  // Ici tu pourrais dispatch un report ou faire un appel API
+  console.log(`Signalement du post ${postData._id} avec raison :`, reportReason);
+
+  // Réinitialiser
+  setReportReason("");
+  setShowReportModal(false);
+};
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -81,112 +102,135 @@ export default function PostComponent(postData: Post) {
     return parts;
   }
 
-  return (
-    <Card className="w-full gap-2">
-      <CardHeader className="flex flex-row justify-between px-4">
-        <div className="flex flex-row items-center gap-2">
-          <ProfileComponent
-            image={postData.userData.profilePicture}
-            userName={postData.userData.userName}
-            biography={postData.userData.biography}
-            condensed={true}
-          />
-        </div>
-        <span className="text-sm text-gray-500">
-          Posté le {createdAt.toLocaleDateString()} à{" "}
-          {createdAt.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      </CardHeader>
-      <CardContent className="px-4">
-        <p>
-          {renderTextWithHashtags(
-            shouldTruncate && !expanded
-              ? postData.content.text.slice(0, 240) + "..."
-              : postData.content.text
-          )}
-          {shouldTruncate && (
-            <>
-              {" "}
-              <a
-                onClick={toggleExpanded}
-                className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
-              >
-                {expanded ? "Voir moins" : "Lire la suite"}
-              </a>
-            </>
-          )}
-        </p>
 
-        <div className="flex flex-row items-center gap-6">
-          <div className="flex flex-row items-center mt-4 gap-1">
-            <HoverCard>
-              <HoverCardTrigger>
+return (
+    <>
+      <Card className="w-full gap-2">
+        <CardHeader className="flex flex-row justify-between px-4">
+          <div className="flex flex-row items-center gap-2">
+            <ProfileComponent
+              image={postData.userData.profilePicture}
+              userName={postData.userData.userName}
+              biography={postData.userData.biography}
+              condensed={true}
+            />
+          </div>
+          <span className="text-sm text-gray-500">
+            Posté le {createdAt.toLocaleDateString()} à{" "}
+            {createdAt.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        </CardHeader>
+        <CardContent className="px-4">
+          <p>
+            {renderTextWithHashtags(
+              shouldTruncate && !expanded
+                ? postData.content.text.slice(0, 240) + "..."
+                : postData.content.text
+            )}
+            {shouldTruncate && (
+              <>
                 {" "}
-                <Button
-                  type="button"
-                  onClick={handleLike}
-                  variant="ghost"
-                  className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+                <a
+                  onClick={toggleExpanded}
+                  className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
                 >
-                  {hasLiked ? (
-                    <i className="bi bi-heart-fill text-purple-700 text-xl leading-none align-middle"></i>
-                  ) : (
-                    <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
-                  )}
-                </Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-4">
-                {postLikers.length === 0 ? (
-                  <>
+                  {expanded ? "Voir moins" : "Lire la suite"}
+                </a>
+              </>
+            )}
+          </p>
+
+          <div className="flex flex-row items-center gap-6">
+            <div className="flex flex-row items-center mt-4 gap-1">
+              <HoverCard>
+                <HoverCardTrigger>
+                  <Button
+                    type="button"
+                    onClick={handleLike}
+                    variant="ghost"
+                    className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+                  >
+                    {hasLiked ? (
+                      <i className="bi bi-heart-fill text-purple-700 text-xl leading-none align-middle"></i>
+                    ) : (
+                      <i className="bi bi-heart text-purple-700 text-xl leading-none align-middle"></i>
+                    )}
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="flex flex-col gap-4">
+                  {postLikers.length === 0 ? (
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center">
                         Personne n'a encore liké ce post.
                       </p>
                       <div className="bi bi-emoji-frown text-5xl"></div>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <p className="self-center">
-                      {postData.likes.length} Likes{" "}
-                    </p>
-                    <ScrollArea>
-                      <div className="max-h-60">
-                        <div className="flex flex-col gap-4 w-full">
-                          {postLikers.map((user) => (
-                            <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
-                              condensed={false}
-                            />
-                          ))}
+                  ) : (
+                    <>
+                      <p className="self-center">
+                        {postData.likes.length} Likes{" "}
+                      </p>
+                      <ScrollArea>
+                        <div className="max-h-60">
+                          <div className="flex flex-col gap-4 w-full">
+                            {postLikers.map((user) => (
+                              <ProfileComponent
+                                key={user._id}
+                                image={user.profilePicture}
+                                userName={user.userName}
+                                biography={user.biography}
+                                condensed={false}
+                              />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </ScrollArea>
-                  </>
-                )}
-              </HoverCardContent>
-            </HoverCard>
+                      </ScrollArea>
+                    </>
+                  )}
+                </HoverCardContent>
+              </HoverCard>
 
-            <div className="text-sm">{postData.likes.length}</div>
-          </div>
-          <div className="flex flex-row items-center mt-4 gap-1">
-            <Link
-              to={`/post/${postData._id}`}
+              <div className="text-sm">{postData.likes.length}</div>
+            </div>
+
+            <div className="flex flex-row items-center mt-4 gap-1">
+              <Link
+                to={`/post/${postData._id}`}
+                className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+              >
+                <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
+              </Link>
+              <div className="text-sm">{postData.replies.length}</div>
+            </div>
+
+            <Button
+              type="button"
+              onClick={handleReport}
+              variant="ghost"
               className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
             >
-              <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
-            </Link>
-            <div className="text-sm">{postData.replies.length}</div>
+              <i className="bi bi-flag text-xl leading-none align-middle"></i>
+            </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      {showReportModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <ReportForm
+            postId={postData._id}
+            onCancel={() => setShowReportModal(false)}
+            onSubmit={(reason, postId) => {
+              console.log(`Signalement du post ${postId} : ${reason}`);
+              setShowReportModal(false);
+              setReportReason("");
+            }}
+          />
         </div>
-      </CardContent>
-    </Card>
+      )}
+    </>
   );
 }
