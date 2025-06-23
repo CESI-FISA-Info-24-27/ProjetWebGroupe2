@@ -22,11 +22,7 @@ export default function AuthPage({ form }: { form?: React.ReactNode }) {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
-        <img  
-          src={fullLogo}
-          alt="logo"
-          className="h-full w-full scale-75"
-          />
+        <img src={fullLogo} alt="logo" className="h-full w-full scale-75" />
       </div>
     </div>
   );

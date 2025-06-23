@@ -135,6 +135,14 @@
   background-position: 0 105%;
 }
 
+.hover-transition {
+  transition: transform 0.3s;
+}
+
+.hover-transition:hover {
+  transform: translateY(-2px);
+}
+
 @layer utilities {
   .custom-scrollbar {
     @apply scrollbar-thin scrollbar-thumb-[#2e2e2e] scrollbar-track-transparent hover:scrollbar-thumb-[#3a3a3a] transition-all;

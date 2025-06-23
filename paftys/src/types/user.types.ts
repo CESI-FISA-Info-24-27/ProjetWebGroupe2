@@ -9,7 +9,7 @@ export interface User {
   biography: string;
   profilePicture: string;
   role: UserRole;
-  firendList: string[];
+  friendList: string[];
   conversations: string[];
   posts: string[];
   notifications: string[];
