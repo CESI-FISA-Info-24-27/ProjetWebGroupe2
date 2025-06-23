@@ -3,14 +3,19 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchConversations } from "@/reducers/conversationSlice";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MessageDisplayComponent from "./MessageDisplayComponent";
-import { Plus } from "lucide-react"; // icône sympa
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
-export default function MessagesListComponent() {
+export default function MessagesListComponent({
+  onSelectConversation,
+}: {
+  onSelectConversation: (conv: any) => void;
+}) {
   const dispatch = useAppDispatch();
   const { conversations, loading } = useAppSelector(
     (state) => state.conversation
   );
+  const userId = useAppSelector((state) => state.auth.user?.id);
 
   useEffect(() => {
     dispatch(fetchConversations());
@@ -18,27 +23,37 @@ export default function MessagesListComponent() {
 
   const handleNewConversation = () => {
     console.log("Nouvelle conversation");
-    // Tu peux ouvrir une modale ou naviguer vers une autre page ici
   };
 
-  const userId = useAppSelector((state) => state.auth.user?.id);
+  // Nouvelle fonction pour récupérer l'autre utilisateur
+  const parseOtherUserData = (conv: any) => {
+    const other = conv.participants.find(
+      (p: any) => typeof p === "object" && p._id !== userId
+    );
+    return {
+      userName: other?.userName || "Utilisateur inconnu",
+      profilePicture:
+        other?.profilePicture ||
+        "https://randomuser.me/api/portraits/men/21.jpg",
+    };
+  };
 
-  const convUsernames = (conv) => {
-    return conv.participants
-      .filter((p) => typeof p === "object" && p._id !== userId)
-      .map((p) => p.userName)
-      .join(", ");
+  const getLastMessage = (conv: any) => {
+    if (!conv.messages || conv.messages.length === 0) return "Aucun message";
+    const content = conv.messages[conv.messages.length - 1]?.content;
+    return typeof content === "object" && content.text
+      ? content.text
+      : "Aucun message";
   };
 
   return (
     <ScrollArea className="border-r rounded-l-2xl border-gray-700 h-[calc(100vh-20px)]">
       <div className="flex flex-col bg-[#151517] gap-4 py-2 px-4">
-        {/* Bouton + */}
         <div className="flex justify-end">
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:text-purple-500"
+            className="text-white hover:text-purple-500 cursor-pointer"
             onClick={handleNewConversation}
             title="Nouvelle conversation"
           >
@@ -46,21 +61,20 @@ export default function MessagesListComponent() {
           </Button>
         </div>
 
-        {/* Liste des conversations */}
         {loading && <p className="text-white">Chargement...</p>}
         {!loading &&
           conversations.map((conv) => {
-            const lastMessage = "Aucun message";
+            const otherUser = parseOtherUserData(conv);
             return (
               <div
                 key={conv._id}
                 className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]"
-                onClick={() => console.log("Select conversation:", conv._id)}
+                onClick={() => onSelectConversation(conv)}
               >
                 <MessageDisplayComponent
-                  username={convUsernames(conv)} // temporaire
-                  profilePic="https://randomuser.me/api/portraits/men/21.jpg"
-                  preview={lastMessage}
+                  username={otherUser.userName}
+                  profilePic={otherUser.profilePicture}
+                  preview={getLastMessage(conv)}
                 />
               </div>
             );

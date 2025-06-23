@@ -23,7 +23,7 @@ export async function getConversationsByUser(req, res) {
   try {
     const conversations = await Conversation.find({
       participants: req.user._id,
-    }).populate("participants", "userName");
+    }).populate("participants", "userName profilePicture");
 
     if (!conversations) {
       return res
