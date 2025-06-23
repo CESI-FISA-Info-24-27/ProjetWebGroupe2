@@ -5,13 +5,15 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import RightSideBar from "@/components/shared/RightSideBarComponent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function HomeComponent() {
+  const [page, setPage] = useState(1);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, []);
+    dispatch(fetchPosts({ page }));
+  }, [page]);
 
   const posts = useAppSelector((state) => state.post.posts);
 
@@ -31,9 +33,39 @@ export default function HomeComponent() {
               <PostComponent {...post} />
             </div>
           ))}
-        {isEmptyHelper(parsedPosts) && (
+        {isEmptyHelper(parsedPosts) && (page === 1 ? (
           <LoadingComponent message={"Chargement des posts..."} />
-        )}
+        ) : (
+          <p>
+            Vous avez atteint la fin des posts.
+          </p>
+        ))}
+        <div className="flex mb-5 justify-center mt-4 gap-3">
+          { page > 1 && (
+          <Button className="cursor-pointer" onClick={() => {
+            setPage((prev) => Math.max(1, prev - 1));
+            const container = document.querySelector('.custom-scrollbar');
+            if (container) {
+              container.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}>
+            Page précédente
+          </Button>
+          )}
+          {!isEmptyHelper(posts) && (
+            <Button
+            className="cursor-pointer"
+            onClick={() => {
+              setPage((prev) => prev + 1);
+              const container = document.querySelector('.custom-scrollbar');
+              if (container) {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}>
+            Page suivante
+          </Button>
+          )}
+          </div>
       </div>
       <RightSideBar />
     </div>

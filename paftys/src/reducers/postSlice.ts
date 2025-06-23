@@ -27,11 +27,11 @@ export interface UserForPost {
 }
 
 // Thunk pour charger tous les posts
-export const fetchPosts = createAsyncThunk<Post[]>(
+export const fetchPosts = createAsyncThunk<Post[], { page: number}>(
   "post/fetchPosts",
-  async (_, thunkAPI) => {
+  async ({ page }, thunkAPI) => {
     try {
-      const res = await axios.get(dotenv.VITE_DB_URI + "/api/posts");
+      const res = await axios.get(dotenv.VITE_DB_URI + "/api/posts/page/" + page);
 
       return res.data.data;
     } catch (err: any) {
