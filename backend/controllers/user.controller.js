@@ -333,12 +333,13 @@ export async function subscribeToUser(req, res) {
     const { userIdToSubscribe } = req.body;
 
     if (!userIdToSubscribe) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User ID to subscribe is required" });
+      return res.status(400).json({
+        success: false,
+        message: "User ID to subscribe is required",
+      });
     }
 
-    if (currentUserId._id === userIdToSubscribe._id) {
+    if (currentUserId.toString() === userIdToSubscribe.toString()) {
       return res.status(400).json({
         success: false,
         message: "You cannot subscribe to yourself",
@@ -349,22 +350,37 @@ export async function subscribeToUser(req, res) {
     const userToSubscribe = await User.findById(userIdToSubscribe);
 
     if (!currentUser || !userToSubscribe) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    if (currentUser.subscriptions.includes(userIdToSubscribe)) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "You are already subscribed to this user",
+        message: "User not found",
       });
     }
 
-    if (!currentUser.subscriptions.includes(userIdToSubscribe)) {
-      currentUser.subscriptions.push(userIdToSubscribe);
-      userToSubscribe.subscribers.push(currentUserId);
+    const isSubscribed = currentUser.subscriptions.some(
+      (id) => id.toString() === userIdToSubscribe.toString()
+    );
+
+    if (isSubscribed) {
+      currentUser.subscriptions = currentUser.subscriptions.filter(
+        (id) => id.toString() !== userIdToSubscribe.toString()
+      );
+      userToSubscribe.subscribers = userToSubscribe.subscribers.filter(
+        (id) => id.toString() !== currentUserId.toString()
+      );
+
+      await currentUser.save();
+      await userToSubscribe.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Unsubscribed successfully",
+        myInfo: getUserInfo(currentUser),
+        subscribedUserInfo: getUserInfo(userToSubscribe),
+      });
     }
+
+    currentUser.subscriptions.push(userIdToSubscribe);
+    userToSubscribe.subscribers.push(currentUserId);
 
     await currentUser.save();
     await userToSubscribe.save();
@@ -372,28 +388,8 @@ export async function subscribeToUser(req, res) {
     res.status(200).json({
       success: true,
       message: "Subscription successful",
-      myInfo: {
-        id: currentUser._id,
-        userName: currentUser.userName,
-        email: currentUser.email,
-        biography: currentUser.biography,
-        profilePicture: currentUser.profilePicture,
-        subscriptions: currentUser.subscriptions,
-        subscribers: currentUser.subscribers,
-        posts: currentUser.posts,
-        state: currentUser.state,
-      },
-      subscribedUserInfo: {
-        id: userToSubscribe._id,
-        userName: userToSubscribe.userName,
-        email: userToSubscribe.email,
-        biography: userToSubscribe.biography,
-        profilePicture: userToSubscribe.profilePicture,
-        subscriptions: userToSubscribe.subscriptions,
-        subscribers: userToSubscribe.subscribers,
-        posts: userToSubscribe.posts,
-        state: userToSubscribe.state,
-      },
+      myInfo: getUserInfo(currentUser),
+      subscribedUserInfo: getUserInfo(userToSubscribe),
     });
   } catch (error) {
     res.status(500).json({
@@ -402,4 +398,18 @@ export async function subscribeToUser(req, res) {
       error: error.message,
     });
   }
+}
+
+function getUserInfo(user) {
+  return {
+    id: user._id,
+    userName: user.userName,
+    email: user.email,
+    biography: user.biography,
+    profilePicture: user.profilePicture,
+    subscriptions: user.subscriptions,
+    subscribers: user.subscribers,
+    posts: user.posts,
+    state: user.state,
+  };
 }
