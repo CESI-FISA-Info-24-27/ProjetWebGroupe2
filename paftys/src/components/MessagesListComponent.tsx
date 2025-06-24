@@ -1,7 +1,12 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MessageDisplayComponent from "./MessageDisplayComponent";
+import { useAppSelector } from "@/redux/hooks";
 export default function MessagesList(messages: any) {
   messages = Array(30).fill("");
+
+  const user = useAppSelector((state) => state.auth.user);
+  const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5555";
+  const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
   return (
     <>
       <ScrollArea className="h-[600px] border-r border-gray-700 p-4">
