@@ -14,10 +14,12 @@ import {
 import { uploadProfilePicture } from "../config/multer.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
 import { subscribeToUser } from "../controllers/user.controller.js";
+import { verifyEmail } from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.get("/", protectAdmin, getAllUsers);
 router.get("/admin/:id", protectAdmin, getUserById);
+router.post("/verify-email", verifyEmail);
 router.get("/forMyProfile", protectOwn, getUserForOwnProfile);
 router.get("/forProfilePageUser/:id", getUserForProfilePage);
 router.get("/forProfilePageUserName/:userName", getUserWithNameForProfilePage);

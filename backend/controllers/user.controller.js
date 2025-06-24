@@ -2,10 +2,77 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { deleteOldProfilePicture } from "../config/multer.js";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+
+const emailTokens = new Map();
+
+async function sendVerificationEmail(user) {
+  const token = crypto.randomBytes(32).toString("hex");
+  emailTokens.set(token, {
+    userId: user._id.toString(),
+    expires: Date.now() + 3600000, // 1h
+  });
+
+  const link = `http://localhost:5173/verify-email?token=${token}`;
+
+  const transporter = nodemailer.createTransport({
+    host: "sandbox.smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "2864c0d7a6a89d",
+      pass: "50d1e06963b94a",
+    },
+  });
+
+  await transporter.sendMail({
+    to: user.email,
+    subject: "Vérifie ton adresse e-mail",
+    html: `<p>Clique ici pour vérifier ton adresse : <a href="${link}">${link}</a></p>`,
+  });
+}
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
+}
+
+export async function verifyEmail(req, res) {
+  const { token } = req.body;
+
+  const data = emailTokens.get(token);
+
+  if (!data || data.expires < Date.now()) {
+    return res.status(400).json({
+      success: false,
+      message: "Lien invalide ou expiré",
+    });
+  }
+
+  try {
+    const user = await User.findById(data.userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Utilisateur introuvable",
+      });
+    }
+
+    user.isVerified = true;
+    await user.save();
+    emailTokens.delete(token);
+
+    res.status(200).json({
+      success: true,
+      message: "Adresse e-mail vérifiée avec succès",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la vérification de l'e-mail",
+      error: error.message,
+    });
+  }
 }
 
 function generateToken(id) {
@@ -144,26 +211,35 @@ export async function registerUser(req, res) {
       .status(400)
       .json({ success: false, message: "All fields are required" });
   }
-  const existingUser = await User.find({ email });
-  if (existingUser.length > 0) {
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
     return res
       .status(400)
       .json({ success: false, message: "User already exists" });
   }
+
   try {
     const hashedPassword = await hashPassword(password);
     const newUser = await User.create({
       userName,
       email,
       password: hashedPassword,
+      isVerified: false,
     });
+
     if (!newUser) {
       return res
         .status(400)
         .json({ success: false, message: "User registration failed" });
     }
+
+    await sendVerificationEmail(newUser);
+
     res.status(201).json({
       success: true,
+      message:
+        "Registration successful. Please check your email to verify your account.",
       data: {
         id: newUser._id,
         email: newUser.email,
@@ -190,23 +266,44 @@ export async function loginUser(req, res) {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return res.status(200).json({
-        success: true,
-        data: {
-          id: user._id,
-          email: user.email,
-          userName: user.userName,
-          biography: user.biography,
-          profilePicture: user.profilePicture,
-          conversations: user.conversations,
-          notifications: user.notifications,
-          posts: user.posts,
-          state: user.state,
-          token: generateToken(user._id),
-        },
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Email or password is incorrect",
       });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Email or password is incorrect",
+      });
+    }
+
+    if (!user.isVerified) {
+      return res.status(401).json({
+        success: false,
+        message:
+          "Veuillez vérifier votre adresse e-mail avant de vous connecter.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        id: user._id,
+        email: user.email,
+        userName: user.userName,
+        biography: user.biography,
+        profilePicture: user.profilePicture,
+        conversations: user.conversations,
+        notifications: user.notifications,
+        posts: user.posts,
+        state: user.state,
+        token: generateToken(user._id),
+      },
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
