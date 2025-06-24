@@ -67,7 +67,7 @@ export default function MessagesListComponent({
             return (
               <div
                 key={conv._id}
-                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg"
+                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg bg-sidebar"
                 onClick={() => onSelectConversation(conv)}
               >
                 <MessageDisplayComponent
