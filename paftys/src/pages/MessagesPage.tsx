@@ -17,7 +17,7 @@ export default function MessagesPage() {
   return (
     <div className="flex justify-start w-full items-center bg-background text-foreground transition-colors">
       <div className="mx-10 my-[10px] flex bg-sidebar text-sidebar-foreground rounded-l-2xl rounded-r-2xl w-full">
-        <MessagesListComponent
+        <PrivateMessagesListComponent
           onSelectConversation={(conv) => setSelectedConversationId(conv._id)}
         />
         <div className="w-full">
