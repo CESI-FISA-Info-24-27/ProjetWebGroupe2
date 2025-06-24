@@ -1,11 +1,13 @@
 import logo from "@/assets/p_logo_paftys.svg";
 import { logout } from "@/reducers/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
 import { ModeToggle } from "./ModeToggleComponent";
+import isEmptyHelper from "@/utils/isEmptyHelper";
 
 export default function RightSidebar() {
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = "/login";
@@ -67,6 +69,18 @@ export default function RightSidebar() {
                 <div className="flex items-center gap-4">
                   <i className="bi bi-person leading-none align-middle"></i>
                   Mon profil
+                </div>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/admin"
+              hidden={isEmptyHelper(user) || (user?.role !== "admin" && user?.role !== "moderator")}
+              className={({ isActive }) => linkClass(isActive)}
+            >
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
+                <div className="flex items-center gap-4">
+                  <i className="bi bi-gear leading-none align-middle"></i>
+                  Modération
                 </div>
               </div>
             </NavLink>

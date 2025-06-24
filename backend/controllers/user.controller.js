@@ -269,6 +269,7 @@ export async function registerUser(req, res) {
         conversations: newUser.conversations,
         notifications: newUser.notifications,
         posts: newUser.posts,
+        role: newUser.role,
         state: newUser.state,
         token: generateToken(newUser._id),
       },
