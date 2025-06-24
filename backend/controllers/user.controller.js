@@ -62,7 +62,8 @@ export async function getUserForOwnProfile(req, res) {
         profilePicture: user.profilePicture,
         conversations: user.conversations,
         notifications: user.notifications,
-        friendList: user.friendList,
+        subcribers: user.subscribers,
+        subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
       },
@@ -91,7 +92,8 @@ export async function getUserForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        friendList: user.friendList,
+        subcribers: user.subscribers,
+        subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
       },
@@ -120,7 +122,8 @@ export async function getUserWithNameForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        friendList: user.friendList,
+        subcribers: user.subscribers,
+        subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
       },
@@ -169,7 +172,6 @@ export async function registerUser(req, res) {
         profilePicture: newUser.profilePicture,
         conversations: newUser.conversations,
         notifications: newUser.notifications,
-        friendList: newUser.friendList,
         posts: newUser.posts,
         state: newUser.state,
         token: generateToken(newUser._id),
@@ -199,7 +201,6 @@ export async function loginUser(req, res) {
           profilePicture: user.profilePicture,
           conversations: user.conversations,
           notifications: user.notifications,
-          friendList: user.friendList,
           posts: user.posts,
           state: user.state,
           token: generateToken(user._id),
@@ -218,8 +219,7 @@ export async function loginUser(req, res) {
 // Updated updateUser function with file upload support
 export async function updateUser(req, res) {
   try {
-    const { userName, email, biography, friendList, posts, conversations } =
-      req.body;
+    const { userName, email, biography, posts, conversations } = req.body;
     const userId = req.user.id;
 
     // Get current user to check for existing profile picture
@@ -234,7 +234,6 @@ export async function updateUser(req, res) {
       userName,
       email,
       biography,
-      friendList,
       posts,
       conversations,
     };
@@ -276,15 +275,7 @@ export async function updateUser(req, res) {
 // Updated updateUserAsAdmin function with file upload support
 export async function updateUserAsAdmin(req, res) {
   try {
-    const {
-      userName,
-      biography,
-      role,
-      friendList,
-      conversations,
-      posts,
-      state,
-    } = req.body;
+    const { userName, biography, role, conversations, posts, state } = req.body;
     const targetUserId = req.params.id;
 
     // Get current user to check for existing profile picture
@@ -299,7 +290,6 @@ export async function updateUserAsAdmin(req, res) {
       userName,
       biography,
       role,
-      friendList,
       conversations,
       posts,
       state,
@@ -332,6 +322,83 @@ export async function updateUserAsAdmin(req, res) {
     res.status(500).json({
       success: false,
       message: "Error updating user",
+      error: error.message,
+    });
+  }
+}
+
+export async function subscribeToUser(req, res) {
+  try {
+    const currentUserId = req.user._id;
+    const { userIdToSubscribe } = req.body;
+
+    if (!userIdToSubscribe) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID to subscribe is required" });
+    }
+
+    if (currentUserId._id === userIdToSubscribe._id) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot subscribe to yourself",
+      });
+    }
+
+    const currentUser = await User.findById(currentUserId);
+    const userToSubscribe = await User.findById(userIdToSubscribe);
+
+    if (!currentUser || !userToSubscribe) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    if (currentUser.subscriptions.includes(userIdToSubscribe)) {
+      return res.status(400).json({
+        success: false,
+        message: "You are already subscribed to this user",
+      });
+    }
+
+    if (!currentUser.subscriptions.includes(userIdToSubscribe)) {
+      currentUser.subscriptions.push(userIdToSubscribe);
+      userToSubscribe.subscribers.push(currentUserId);
+    }
+
+    await currentUser.save();
+    await userToSubscribe.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Subscription successful",
+      myInfo: {
+        id: currentUser._id,
+        userName: currentUser.userName,
+        email: currentUser.email,
+        biography: currentUser.biography,
+        profilePicture: currentUser.profilePicture,
+        subscriptions: currentUser.subscriptions,
+        subscribers: currentUser.subscribers,
+        posts: currentUser.posts,
+        state: currentUser.state,
+      },
+      subscribedUserInfo: {
+        id: userToSubscribe._id,
+        userName: userToSubscribe.userName,
+        email: userToSubscribe.email,
+        biography: userToSubscribe.biography,
+        profilePicture: userToSubscribe.profilePicture,
+        subscriptions: userToSubscribe.subscriptions,
+        subscribers: userToSubscribe.subscribers,
+        posts: userToSubscribe.posts,
+        state: userToSubscribe.state,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error subscribing to user",
       error: error.message,
     });
   }

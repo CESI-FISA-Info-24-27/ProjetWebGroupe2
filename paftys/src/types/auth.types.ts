@@ -22,7 +22,6 @@ export interface AuthResponse {
     profilePicture: string;
     conversations: string[];
     notifications: string[];
-    friendList: string[];
     posts: string[];
   };
 }
@@ -36,7 +35,6 @@ export interface AuthState {
     profilePicture: string;
     conversations: string[];
     notifications: string[];
-    friendList: string[];
     posts: string[];
     role: string;
     state: string;

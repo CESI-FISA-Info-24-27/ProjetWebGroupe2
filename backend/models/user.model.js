@@ -29,7 +29,13 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "moderator", "admin"],
       default: "user",
     },
-    friendList: [
+    subscriptions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    subscribers: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

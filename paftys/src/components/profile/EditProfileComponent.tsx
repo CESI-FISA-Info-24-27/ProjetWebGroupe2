@@ -22,7 +22,6 @@ type User = {
   profilePicture: string;
   conversations: string[];
   notifications: string[];
-  friendList: string[];
   posts: string[];
   role: string;
   state: string;
