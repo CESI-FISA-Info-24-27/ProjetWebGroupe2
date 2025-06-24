@@ -20,9 +20,20 @@ export default function ProfileComponent({
   biography,
   condensed = false,
 }: UserComponentProps) {
+  const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5555";
+
+  const getProfilePictureUrl = (image: string, baseUrl: string) => {
+    if (!image) return "https://randomuser.me/api/portraits/lego/1.jpg";
+    if (image.startsWith("http") || image.startsWith("blob:")) return image;
+    return `${baseUrl}/uploads/profiles/${image}`;
+  };
+
   const avatar = (
     <Avatar className={condensed ? "" : "w-14 h-14"}>
-      <AvatarImage src={image} alt={`@${userName}`} />
+      <AvatarImage
+        src={getProfilePictureUrl(image, baseUrl)}
+        alt={`@${userName}`}
+      />
       <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
     </Avatar>
   );
@@ -50,25 +61,24 @@ export default function ProfileComponent({
   return (
     <>
       {condensed ? (
-        <>
-          <HoverCard>
-            <HoverCardTrigger>{content}</HoverCardTrigger>
-            <HoverCardContent className="w-64">
-              <div className="flex flex-col items-start gap-2">
-                <div className="flex items-center gap-3">
-                  <Avatar>
-                    <AvatarImage src={image} alt={`@${userName}`} />
-                    <AvatarFallback>
-                      {userName[0]?.toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <p className="font-semibold text-sm">@{userName}</p>
-                </div>
-                <p className="text-sm text-gray-100 break-words">{biography}</p>
+        <HoverCard>
+          <HoverCardTrigger>{content}</HoverCardTrigger>
+          <HoverCardContent className="w-64">
+            <div className="flex flex-col items-start gap-2">
+              <div className="flex items-center gap-3">
+                <Avatar>
+                  <AvatarImage
+                    src={getProfilePictureUrl(image, baseUrl)}
+                    alt={`@${userName}`}
+                  />
+                  <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <p className="font-semibold text-sm">@{userName}</p>
               </div>
-            </HoverCardContent>
-          </HoverCard>
-        </>
+              <p className="text-sm text-gray-100 break-words">{biography}</p>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       ) : (
         content
       )}

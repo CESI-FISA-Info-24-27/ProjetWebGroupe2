@@ -247,7 +247,7 @@ export async function updateUser(req, res) {
 
       // Set new profile picture with full URL
       const baseUrl = `${req.protocol}://${req.get("host")}`;
-      updateData.profilePicture = `${baseUrl}/uploads/profiles/${req.file.filename}`;
+      updateData.profilePicture = req.file.filename;
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {

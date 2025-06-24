@@ -23,7 +23,7 @@ export default function PostComponent(postData: Post) {
       fetchPostLikers({ postId: postData._id, userIds: postData.likes })
     );
   }, [postData.likes]);
-  
+
   const postLikers = useAppSelector(
     (state) => state.post.postLikersByPostId[postData._id] || []
   );
