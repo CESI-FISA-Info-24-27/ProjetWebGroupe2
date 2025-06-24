@@ -41,8 +41,8 @@ export default function DialogueMessageComponent({
 
   if (!conversation) {
     return (
-      <div className="w-[60vw] h-[calc(100vh-20px)] bg-[#151517] rounded-r-2xl flex items-center justify-center">
-        <p className="text-white">Sélectionnez une conversation</p>
+      <div className="w-[60vw] h-[calc(100vh-20px)] bg-sidebar text-sidebar-foreground rounded-r-2xl flex items-center justify-center transition-colors">
+        <p>Sélectionnez une conversation</p>
       </div>
     );
   }
@@ -52,8 +52,8 @@ export default function DialogueMessageComponent({
   );
 
   return (
-    <div className="w-[60vw] rounded-r-2xl justify-between h-[calc(100vh-20px)] bg-[#151517] flex flex-col">
-      <div className="border-b border-gray-700">
+    <div className="w-[60vw] rounded-r-2xl justify-between h-[calc(100vh-20px)] bg-sidebar text-sidebar-foreground flex flex-col transition-colors">
+      <div className="border-b border-sidebar-border">
         <div className="m-2">
           <ProfileComponent
             image={
@@ -83,7 +83,7 @@ export default function DialogueMessageComponent({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-gray-700 h-38 flex flex-col justify-center">
+      <div className="border-t border-sidebar-border h-38 flex flex-col justify-center">
         <div className="flex items-center">
           <div className="w-9/10 p-2">
             <Textarea
