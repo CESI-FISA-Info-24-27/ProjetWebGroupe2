@@ -20,7 +20,7 @@ export default function ProfileComponent({
   biography,
   condensed = false,
 }: UserComponentProps) {
-  const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5555";
+  const baseUrl = import.meta.env.VITE_DB_URI;
 
   const getProfilePictureUrl = (image: string, baseUrl: string) => {
     if (!image) return "https://randomuser.me/api/portraits/lego/1.jpg";

@@ -12,7 +12,7 @@ export default function UserProfilePage() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.users[0]);
 
-  const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5555";
+  const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
 
   useEffect(() => {

@@ -20,7 +20,7 @@ export default function MyProfilePage() {
   const dispatch = useAppDispatch();
   dispatch(fetchPostsByUserId({ userId: user?.id || "" }));
 
-  const baseUrl = import.meta.env.VITE_BASE_URL || "http://localhost:5555";
+  const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
 
   return !isEmptyHelper(user) ? (
