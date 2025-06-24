@@ -15,6 +15,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import { useAppSelector } from "./redux/hooks.ts";
 import { Toaster } from "sonner"; // <-- Add this import
 
+import AdminPage from "./pages/AdminPage.tsx";
 const App = () => {
   const location = useLocation();
   const hideSidebar =
@@ -82,6 +83,14 @@ const App = () => {
             element={
               <ProtectedRouteComponent>
                 <PostPage />
+              </ProtectedRouteComponent>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRouteComponent>
+                <AdminPage />
               </ProtectedRouteComponent>
             }
           />
