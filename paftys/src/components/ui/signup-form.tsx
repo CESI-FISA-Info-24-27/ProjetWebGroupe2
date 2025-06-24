@@ -5,14 +5,13 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { signup } from "@/reducers/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { loading, error } = useAppSelector((state) => state.auth);
 
   const [userName, setUserName] = useState("");
@@ -20,14 +19,17 @@ export function SignupForm({
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
+  const [successMessage, setSuccessMessage] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirm) return alert("Les mots de passe sont différents");
-    const result = await dispatch(
-      signup({ email, password, userName })
-    );
+
+    const result = await dispatch(signup({ email, password, userName }));
     if (signup.fulfilled.match(result)) {
-      navigate("/"); // Redirection si succès
+      setSuccessMessage(
+        "🎉 Compte créé ! Vérifiez votre e-mail pour valider votre inscription."
+      );
     }
   };
 
@@ -43,6 +45,10 @@ export function SignupForm({
           Entrez vos informations afin de vous inscrire.
         </p>
       </div>
+
+      {successMessage && (
+        <p className="text-green-600 text-sm text-center">{successMessage}</p>
+      )}
 
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 

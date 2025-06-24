@@ -11,11 +11,13 @@ import MessagesPage from "./pages/MessagesPage.tsx";
 import UserProfilePage from "./pages/UserProfilePage.tsx";
 import { PostPage } from "./pages/PostPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
+import VerifyEmail from "./pages/VerifyEmail";
 const App = () => {
   const location = useLocation();
   const hideSidebar =
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
+    location.pathname === "/verify-email" ||
     location.pathname === "/404";
 
   return (
@@ -24,6 +26,7 @@ const App = () => {
       <div className="flex flex-row h-full w-full">
         {!hideSidebar && <Navbar />}
         <Routes>
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route
             path="/"
             element={

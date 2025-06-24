@@ -63,6 +63,10 @@ const userSchema = new mongoose.Schema(
       enum: ["normal", "banned", "supsended"],
       default: "normal",
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
