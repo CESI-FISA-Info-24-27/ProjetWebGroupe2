@@ -67,19 +67,23 @@ export async function getPostById(req, res) {
 
 export async function getRepliesByPostId(req, res) {
   try {
-    const post = await Post.findById(req.params.id).populate("userData", "userName profilePicture biography");
+    const post = await Post.findById(req.params.id).populate(
+      "userData",
+      "userName profilePicture biography"
+    );
     if (!post) {
       return res
         .status(404)
         .json({ success: false, message: "Post not found" });
     }
-    const replies = await Post.find({ repliesTo: req.params.id }).populate("userData", "userName profilePicture biography");
+    const replies = await Post.find({ repliesTo: req.params.id }).populate(
+      "userData",
+      "userName profilePicture biography"
+    );
     if (!replies || replies.length === 0) {
-      return res
-        .status(200)
-        .json({ success: true, data: [post] });
+      return res.status(200).json({ success: true, data: [post] });
     }
-    res.status(200).json({ success: true, data: [post, ...replies]}); 
+    res.status(200).json({ success: true, data: [post, ...replies] });
   } catch (error) {
     res
       .status(500)
@@ -116,7 +120,7 @@ export async function createPost(req, res) {
       userData: req.user._id,
       content: req.body.content,
       repliesTo: req.body.repliesTo || null,
-      tags: req.body.tags || [],
+      tags: tags,
     });
     const savedPost = await newPost.save();
     res.status(201).json({ success: true, data: savedPost });

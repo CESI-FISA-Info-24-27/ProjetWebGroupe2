@@ -10,6 +10,7 @@ import RightSideBar from "@/components/shared/RightSideBarComponent";
 
 // 👇️ importer Sonner
 import { toast, Toaster } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function TagPage() {
   const location = useLocation();
@@ -68,7 +69,16 @@ export default function TagPage() {
             ))}
 
           {isEmptyHelper(parsedPosts) && (
-            <LoadingComponent message={"Chargement des posts..."} />
+            <div className="flex flex-col items-center justify-center h-full">
+              <p className="text-gray-500 mt-4 text-2xl">
+                Aucun post trouvé pour ce tag.
+              </p>
+              <NavLink to="/" className="text-blue-500 hover:underline mt-2">
+                <Button className="cursor-pointer">
+                  Retourner à l'accueil
+                </Button>
+              </NavLink>
+            </div>
           )}
         </div>
 
