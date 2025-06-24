@@ -46,13 +46,13 @@ export default function MessagesListComponent({
   };
 
   return (
-    <ScrollArea className="border-r rounded-l-2xl border-gray-700 h-[calc(100vh-20px)]">
-      <div className="flex flex-col bg-[#151517] gap-4 py-2 px-4">
+    <ScrollArea className="border-r rounded-l-2xl border-sidebar-border h-[calc(100vh-20px)]">
+      <div className="flex flex-col bg-sidebar text-sidebar-foreground gap-4 py-2 px-4 transition-colors">
         <div className="flex justify-end">
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:text-purple-500 cursor-pointer"
+            className="text-foreground hover:text-purple-500 cursor-pointer"
             onClick={handleNewConversation}
             title="Nouvelle conversation"
           >
@@ -60,14 +60,14 @@ export default function MessagesListComponent({
           </Button>
         </div>
 
-        {loading && <p className="text-white">Chargement...</p>}
+        {loading && <p className="text-foreground">Chargement...</p>}
         {!loading &&
           conversations.map((conv) => {
             const otherUser = parseOtherUserData(conv);
             return (
               <div
                 key={conv._id}
-                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px]"
+                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg"
                 onClick={() => onSelectConversation(conv)}
               >
                 <MessageDisplayComponent

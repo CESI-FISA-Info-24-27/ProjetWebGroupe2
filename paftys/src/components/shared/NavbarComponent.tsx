@@ -19,7 +19,7 @@ export default function RightSidebar() {
   return (
     <>
       <div className="hidden md:block">
-        <div className="flex mr-6 h-full w-full flex-col justify-between bg-[#18181B] border-r border-gray-700 items-center pt-4 pb-6">
+        <div className="flex mr-6 h-full w-full flex-col justify-between bg-sidebar text-sidebar-foreground border-r border-sidebar-border items-center pt-4 pb-6">
           {/* Haut de la navbar */}
           <div className="flex flex-col items-center gap-7 w-full">
             <NavLink to="/" className="w-full flex justify-center">
@@ -76,7 +76,7 @@ export default function RightSidebar() {
           <div className="w-full flex flex-row items-center justify-between px-4">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-4 text-red-500  cursor-pointer hover:scale-102 text-xl py-2 w-full rounded-md"
+              className="flex items-center gap-4 text-red-500 cursor-pointer hover:scale-102 text-xl py-2 w-full rounded-md"
             >
               <i className="bi bi-box-arrow-right leading-none align-middle"></i>
               Déconnexion
@@ -87,12 +87,12 @@ export default function RightSidebar() {
       </div>
 
       {/* Barre de navigation mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#18181B] border-t border-gray-700 flex justify-around items-center py-2 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-sidebar text-sidebar-foreground border-t border-sidebar-border flex justify-around items-center py-2 md:hidden">
         <NavLink
           to="/"
           className={({ isActive }) =>
             `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+              isActive ? "text-purple-700 -translate-y-1" : ""
             }`
           }
         >
@@ -102,7 +102,7 @@ export default function RightSidebar() {
           to="/messages"
           className={({ isActive }) =>
             `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+              isActive ? "text-purple-700 -translate-y-1" : ""
             }`
           }
         >
@@ -112,7 +112,7 @@ export default function RightSidebar() {
           to="/notifications"
           className={({ isActive }) =>
             `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+              isActive ? "text-purple-700 -translate-y-1" : ""
             }`
           }
         >
@@ -122,7 +122,7 @@ export default function RightSidebar() {
           to="/myProfile"
           className={({ isActive }) =>
             `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : "text-white"
+              isActive ? "text-purple-700 -translate-y-1" : ""
             }`
           }
         >
