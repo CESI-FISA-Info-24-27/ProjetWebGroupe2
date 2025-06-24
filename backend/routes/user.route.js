@@ -13,7 +13,7 @@ import {
 } from "../controllers/user.controller.js";
 import { uploadProfilePicture } from "../config/multer.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
-
+import { subscribeToUser } from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.get("/", protectAdmin, getAllUsers);
@@ -24,6 +24,7 @@ router.get("/forProfilePageUserName/:userName", getUserWithNameForProfilePage);
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.post("/subscribe", protectOwn, subscribeToUser);
 
 // Profile update route with file upload support
 router.put(

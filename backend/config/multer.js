@@ -52,10 +52,7 @@ export const deleteOldProfilePicture = (profilePictureUrl) => {
       if (fs.existsSync(fullPath)) {
         try {
           fs.unlinkSync(fullPath);
-          console.log("Old profile picture deleted:", relativePath);
-        } catch (error) {
-          console.error("Error deleting old profile picture:", error);
-        }
+        } catch (error) {}
       }
     }
   }
