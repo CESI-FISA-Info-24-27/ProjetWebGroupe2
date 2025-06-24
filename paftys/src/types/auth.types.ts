@@ -1,3 +1,5 @@
+import type { User } from "./user.types";
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -38,6 +40,8 @@ export interface AuthState {
     posts: string[];
     role: string;
     state: string;
+    subscribers: any[];
+    subscriptions: any[];
   } | null;
   token: string | null;
   loading: boolean;
