@@ -23,6 +23,7 @@ import {
 import ProfileComponent from "@/components/shared/ProfileComponent";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import defaultProfile from "@/assets/default.png";
+import { useEffect, useState } from "react";
 
 export default function MyProfilePage() {
   const user = useAppSelector((state) => state.auth.user);
@@ -31,6 +32,17 @@ export default function MyProfilePage() {
 
   const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
+
+  // Add local state for subscribers and subscriptions
+  const [subscribers, setSubscribers] = useState<any[]>([]);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      setSubscribers(user.subscribers || []);
+      setSubscriptions(user.subscriptions || []);
+    }
+  }, [user]);
 
   return !isEmptyHelper(user) ? (
     <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full">
@@ -50,9 +62,9 @@ export default function MyProfilePage() {
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
-                  {user?.subscribers && user.subscribers.length > 0 ? (
+                  {subscribers && subscribers.length > 0 ? (
                     <span className="text-purple-500">
-                      {user.subscribers.length} Abonnés
+                      {subscribers.length} Abonnés
                     </span>
                   ) : (
                     <span className="text-gray-500">0 Abonnés</span>
@@ -60,7 +72,7 @@ export default function MyProfilePage() {
                 </div>
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
-                {!user?.subscribers || user.subscribers.length === 0 ? (
+                {!subscribers || subscribers.length === 0 ? (
                   <>
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center">
@@ -71,19 +83,16 @@ export default function MyProfilePage() {
                   </>
                 ) : (
                   <>
-                    {" "}
-                    <p className="self-center">
-                      {user?.subscribers.length} Abonnés{" "}
-                    </p>
+                    <p className="self-center">{subscribers.length} Abonnés </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {user?.subscribers.map((user) => (
+                          {subscribers.map((sub) => (
                             <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
+                              key={sub._id}
+                              image={sub.profilePicture}
+                              userName={sub.userName}
+                              biography={sub.biography}
                               condensed={false}
                             />
                           ))}
@@ -97,9 +106,9 @@ export default function MyProfilePage() {
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
-                  {user?.subscriptions && user.subscriptions.length > 0 ? (
+                  {subscriptions && subscriptions.length > 0 ? (
                     <span className="text-purple-500">
-                      {user.subscriptions.length} Abbonnements
+                      {subscriptions.length} Abbonnements
                     </span>
                   ) : (
                     <span className="text-gray-500">0 Abbonnements</span>
@@ -107,7 +116,7 @@ export default function MyProfilePage() {
                 </div>
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
-                {!user?.subscriptions || user.subscriptions.length === 0 ? (
+                {!subscriptions || subscriptions.length === 0 ? (
                   <>
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center">
@@ -118,19 +127,18 @@ export default function MyProfilePage() {
                   </>
                 ) : (
                   <>
-                    {" "}
                     <p className="self-center">
-                      {user?.subscriptions.length} Abbonnements{" "}
+                      {subscriptions.length} Abbonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {user?.subscriptions.map((user) => (
+                          {subscriptions.map((sub) => (
                             <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
+                              key={sub._id}
+                              image={sub.profilePicture}
+                              userName={sub.userName}
+                              biography={sub.biography}
                               condensed={false}
                             />
                           ))}

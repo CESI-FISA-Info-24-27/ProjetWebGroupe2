@@ -224,7 +224,11 @@ export async function registerUser(req, res) {
       .json({ success: false, message: "All fields are required" });
   }
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email })
+    .populate("subscriptions", "userName biography profilePicture")
+    .populate("subscribers", "userName biography profilePicture")
+    .populate("posts", "title content createdAt");
+
   if (existingUser) {
     return res
       .status(400)

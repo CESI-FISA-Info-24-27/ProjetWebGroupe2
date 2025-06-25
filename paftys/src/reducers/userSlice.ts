@@ -114,9 +114,13 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
+      .addCase(toggleSubscription.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message || "Erreur lors du toggle abonnement.";
+      })
       .addCase(toggleSubscription.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("Toggle subscription response:", action.payload);
         const { myInfo, subscribedUserInfo } = action.payload;
         if (state.selectedUser) {
           if (state.selectedUser.id === myInfo._id) {
@@ -131,11 +135,6 @@ const userSlice = createSlice({
             };
           }
         }
-      })
-      .addCase(toggleSubscription.rejected, (state, action) => {
-        state.loading = false;
-        state.error =
-          action.error.message || "Erreur lors du toggle abonnement.";
       });
   },
 });
