@@ -14,6 +14,8 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
 import { fetchPostLikers } from "@/reducers/postSlice";
 import { Link } from "react-router-dom";
+import { updatePost } from "@/reducers/postSlice";
+
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
@@ -31,6 +33,10 @@ export default function PostComponent(postData: Post) {
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
 
   const hasLiked = postData.likes.includes(userId);
+  const isAuthor = postData.userData._id === userId;
+
+  const [editing, setEditing] = useState(false);
+  const [editedText, setEditedText] = useState(postData.content.text);
 
   if (!postData.content || !postData.content.text) return null;
   const createdAt =
@@ -92,33 +98,69 @@ export default function PostComponent(postData: Post) {
             condensed={true}
           />
         </div>
-        <span className="text-sm text-gray-500">
-          Posté le {createdAt.toLocaleDateString()} à{" "}
-          {createdAt.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-500">
+            Posté le {createdAt.toLocaleDateString()} à{" "}
+            {createdAt.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+          {isAuthor && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-2"
+              onClick={() => setEditing(true)}
+              title="Éditer le post"
+            >
+              <i className="bi bi-pencil-square text-lg"></i>
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="px-4">
-        <p>
-          {renderTextWithHashtags(
-            shouldTruncate && !expanded
-              ? postData.content.text.slice(0, 240) + "..."
-              : postData.content.text
-          )}
-          {shouldTruncate && (
-            <>
-              {" "}
-              <a
+        {editing ? (
+          <div className="flex flex-col gap-2">
+            <textarea
+              className="w-full border rounded p-2"
+              value={editedText}
+              onChange={(e) => setEditedText(e.target.value)}
+              rows={5}
+            />
+            <div className="flex gap-2">
+              <Button
+                onClick={async () => {
+                  await dispatch(
+                    updatePost({ postId: postData._id, text: editedText })
+                  );
+                  setEditing(false);
+                }}
+              >
+                Enregistrer
+              </Button>
+              <Button variant="ghost" onClick={() => setEditing(false)}>
+                Annuler
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p>
+            {renderTextWithHashtags(
+              shouldTruncate && !expanded
+                ? postData.content.text.slice(0, 240) + "..."
+                : postData.content.text
+            )}
+            {shouldTruncate && (
+              <span
                 onClick={toggleExpanded}
                 className="underline text-blue-500 hover:text-blue-700 cursor-pointer"
               >
                 {expanded ? "Voir moins" : "Lire la suite"}
-              </a>
-            </>
-          )}
-        </p>
+              </span>
+            )}
+          </p>
+        )}
 
         <div className="flex flex-row items-center gap-6">
           <div className="flex flex-row items-center mt-4 gap-1">

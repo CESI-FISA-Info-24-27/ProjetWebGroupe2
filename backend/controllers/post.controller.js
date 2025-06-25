@@ -130,39 +130,44 @@ export async function createPost(req, res) {
       .json({ success: false, message: "Error creating post", error });
   }
 }
-
 export async function updatePost(req, res) {
   try {
-    const content = req.body.content;
+    const { text } = req.body;
+
+    if (!text) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Texte manquant" });
+    }
+
     const tags = Array.from(
       new Set(
-        (content.text.match(/#\w+/g) || []).map((tag) =>
-          tag.substring(1).toLowerCase()
-        )
+        (text.match(/#\w+/g) || []).map((tag) => tag.substring(1).toLowerCase())
       )
     );
 
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
       {
-        content,
+        "content.text": text,
         tags,
-        likes: req.body.likes,
-        replies: req.body.replies,
-        reports: req.body.reports,
       },
       { new: true }
-    );
+    ).populate("userData");
+
     if (!updatedPost) {
       return res
         .status(404)
-        .json({ success: false, message: "Post not found" });
+        .json({ success: false, message: "Post introuvable" });
     }
+
     res.status(200).json({ success: true, data: updatedPost });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error updating post", error });
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la mise à jour",
+      error,
+    });
   }
 }
 
