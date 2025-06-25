@@ -121,6 +121,12 @@ const authSlice = createSlice({
       state.token = null;
       Cookies.remove("token");
     },
+    updateSubscriptions(state, action) {
+      if (state.user && action.payload) {
+        state.user.subscriptions = action.payload.subscriptions;
+        state.user.subscribers = action.payload.subscribers;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -170,5 +176,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, updateSubscriptions } = authSlice.actions;
 export default authSlice.reducer;

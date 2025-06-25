@@ -16,6 +16,7 @@ import isEmptyHelper from "@/utils/isEmptyHelper";
 import { useEffect, useState } from "react";
 import { toggleSubscription } from "@/reducers/userSlice";
 import { toast, Toaster } from "sonner";
+import { updateSubscriptions } from "@/reducers/authSlice";
 
 export default function UserProfilePage() {
   const userName = window.location.pathname.split("/").pop();
@@ -38,10 +39,22 @@ export default function UserProfilePage() {
     }
   }, [dispatch, user?.id]);
 
-  const handleSubscriptionToggle = () => {
+  const handleSubscriptionToggle = async () => {
     const isSubscribed = subscribers.some((sub) => sub._id === me?.id);
 
-    dispatch(toggleSubscription({ userId: user?.id ?? "" }));
+    const resultAction = await dispatch(
+      toggleSubscription({ userId: user?.id ?? "" })
+    );
+
+    if (toggleSubscription.fulfilled.match(resultAction)) {
+      const { myInfo } = resultAction.payload;
+      dispatch(
+        updateSubscriptions({
+          subscriptions: myInfo.subscriptions,
+          subscribers: myInfo.subscribers,
+        })
+      );
+    }
 
     if (isSubscribed) {
       toast.success(`Vous vous êtes désabonné de ${user?.userName}.`, {
@@ -53,7 +66,6 @@ export default function UserProfilePage() {
       });
     }
   };
-
   const [subscribers, setSubscribers] = useState<any[]>([]);
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
 
