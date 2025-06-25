@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/hover-card";
 import ProfileComponent from "@/components/shared/ProfileComponent";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import defaultProfile from "@/assets/default.png";
+
 export default function MyProfilePage() {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
@@ -39,10 +41,7 @@ export default function MyProfilePage() {
               {user ? user.userName : "Utilisateur inconnu"}
             </h2>
             <img
-              src={
-                profilePictureUrl ??
-                "https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-              }
+              src={user?.profilePicture ? profilePictureUrl : defaultProfile}
               alt="Photo de profil"
               className="w-32 h-32 lg:w-40 lg:h-40 rounded-full object-cover mb-4 border-2 border-gray-200"
             />

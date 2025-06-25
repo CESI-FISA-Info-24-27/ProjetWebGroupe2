@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "../ui/textarea";
 import { updateUserProfile } from "@/reducers/authSlice";
+import { toast, Toaster } from "sonner";
 
 type User = {
   id: string;
@@ -29,12 +30,14 @@ type User = {
 
 export default function EditProfileComponent({ user }: { user: User }) {
   const dispatch = useAppDispatch();
+  const baseUrl = import.meta.env.VITE_DB_URI;
 
   const [username, setUsername] = useState(user?.userName || "");
   const [biography, setBiography] = useState(user?.biography || "");
   const [profilePicturePreview, setProfilePicturePreview] = useState<string>(
-    user?.profilePicture || ""
+    `${baseUrl}/uploads/profiles/${user?.profilePicture}` || ""
   );
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,7 +57,6 @@ export default function EditProfileComponent({ user }: { user: User }) {
     if (file) {
       setSelectedImage(file);
 
-      // Create preview URL for display
       const previewUrl = URL.createObjectURL(file);
       setProfilePicturePreview(previewUrl);
     }
@@ -63,7 +65,6 @@ export default function EditProfileComponent({ user }: { user: User }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Create FormData for file upload
     const formData = new FormData();
     formData.append("userName", username);
     formData.append("biography", biography);
@@ -72,6 +73,9 @@ export default function EditProfileComponent({ user }: { user: User }) {
       formData.append("profilePicture", selectedImage);
     }
 
+    toast.success("Profil mis à jour avec succès !", {
+      position: "bottom-center",
+    });
     await dispatch(updateUserProfile(formData));
   };
 
@@ -87,112 +91,119 @@ export default function EditProfileComponent({ user }: { user: User }) {
   const resetBiography = () => setBiography(initialBiography);
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">
-          Modifier le profil de {user?.userName}
-        </h1>
-      </div>
-      <div className="flex gap-6">
-        <div className="flex flex-col gap-4 min-w-[250px] h-full">
-          <Label htmlFor="username">Nom d'utilisateur</Label>
-          <div className="flex justify-between items-center gap-1.5">
-            <Input
-              type="text"
-              id="username"
-              placeholder="Votre nom d'utilisateur"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <span
-              role="button"
-              tabIndex={0}
-              onClick={resetUsername}
-              className={cn(
-                "bi bi-arrow-clockwise text-2xl cursor-pointer",
-                { "text-gray-400 cursor-default": !isUsernameModified },
-                { "hover-transition": isUsernameModified }
-              )}
-              aria-disabled={!isUsernameModified}
-              title="Remettre le nom d'utilisateur initial"
-            />
-          </div>
-
-          <Label htmlFor="biography">Biographie</Label>
-          <div className="flex justify-between items-center gap-1.5">
-            <Textarea
-              className="resize-none max-w-full max-h-[10em]"
-              id="biography"
-              placeholder="Parlez un peu de vous"
-              value={biography}
-              onChange={(e) => setBiography(e.target.value)}
-              required
-            />
-            <span
-              role="button"
-              tabIndex={0}
-              onClick={resetBiography}
-              className={cn(
-                "bi bi-arrow-clockwise text-2xl cursor-pointer",
-                { "text-gray-400 cursor-default": !isBiographyModified },
-                { "hover-transition": isBiographyModified }
-              )}
-              aria-disabled={!isBiographyModified}
-              title="Remettre la biographie initiale"
-            />
-          </div>
+    <>
+      <Toaster richColors />
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="text-2xl font-bold">
+            Modifier le profil de {user?.userName}
+          </h1>
         </div>
-
-        <Card className="w-full max-w-sm flex h-min-content min-w-[300px]">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col gap-1">
-                <CardTitle>Photo de profil</CardTitle>
-                <CardDescription>Choisissez une nouvelle image</CardDescription>
-              </div>
-
+        <div className="flex gap-6">
+          <div className="flex flex-col gap-4 min-w-[250px] h-full">
+            <Label htmlFor="username">Nom d'utilisateur</Label>
+            <div className="flex justify-between items-center gap-1.5">
+              <Input
+                type="text"
+                id="username"
+                placeholder="Votre nom d'utilisateur"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
               <span
                 role="button"
                 tabIndex={0}
-                onClick={resetProfilePicture}
+                onClick={resetUsername}
                 className={cn(
                   "bi bi-arrow-clockwise text-2xl cursor-pointer",
-                  { "text-gray-400 cursor-default": !isProfilePictureModified },
-                  { "hover-transition": isProfilePictureModified }
+                  { "text-gray-400 cursor-default": !isUsernameModified },
+                  { "hover-transition": isUsernameModified }
                 )}
-                aria-disabled={!isProfilePictureModified}
-                title="Remettre la photo de profil initiale"
+                aria-disabled={!isUsernameModified}
+                title="Remettre le nom d'utilisateur initial"
               />
             </div>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4 items-center">
-            <img
-              src={profilePicturePreview}
-              width={120}
-              height={120}
-              alt="Aperçu photo de profil"
-              className="rounded-full"
-              style={{ aspectRatio: "1 / 1", objectFit: "cover" }}
-            />
-            <Input
-              id="profilePicture"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              ref={fileInputRef}
-            />
-          </CardContent>
-        </Card>
-      </div>
 
-      <Button
-        type="submit"
-        className="w-full cursor-pointer"
-        disabled={!isModified}
-      >
-        Enregistrer les modifications
-      </Button>
-    </form>
+            <Label htmlFor="biography">Biographie</Label>
+            <div className="flex justify-between items-center gap-1.5">
+              <Textarea
+                className="resize-none max-w-full max-h-[10em]"
+                id="biography"
+                placeholder="Parlez un peu de vous"
+                value={biography}
+                onChange={(e) => setBiography(e.target.value)}
+                required
+              />
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={resetBiography}
+                className={cn(
+                  "bi bi-arrow-clockwise text-2xl cursor-pointer",
+                  { "text-gray-400 cursor-default": !isBiographyModified },
+                  { "hover-transition": isBiographyModified }
+                )}
+                aria-disabled={!isBiographyModified}
+                title="Remettre la biographie initiale"
+              />
+            </div>
+          </div>
+
+          <Card className="w-full max-w-sm flex h-min-content min-w-[300px]">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-1">
+                  <CardTitle>Photo de profil</CardTitle>
+                  <CardDescription>
+                    Choisissez une nouvelle image
+                  </CardDescription>
+                </div>
+
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={resetProfilePicture}
+                  className={cn(
+                    "bi bi-arrow-clockwise text-2xl cursor-pointer",
+                    {
+                      "text-gray-400 cursor-default": !isProfilePictureModified,
+                    },
+                    { "hover-transition": isProfilePictureModified }
+                  )}
+                  aria-disabled={!isProfilePictureModified}
+                  title="Remettre la photo de profil initiale"
+                />
+              </div>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4 items-center">
+              <img
+                src={profilePicturePreview}
+                width={120}
+                height={120}
+                alt="Aperçu photo de profil"
+                className="rounded-full"
+                style={{ aspectRatio: "1 / 1", objectFit: "cover" }}
+              />
+              <Input
+                id="profilePicture"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInputRef}
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={!isModified}
+        >
+          Enregistrer les modifications
+        </Button>
+      </form>
+    </>
   );
 }

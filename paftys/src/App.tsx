@@ -12,6 +12,9 @@ import UserProfilePage from "./pages/UserProfilePage.tsx";
 import { PostPage } from "./pages/PostPage.tsx";
 import TagPage from "./pages/TagPage.tsx";
 import VerifyEmail from "./pages/VerifyEmail";
+import { useAppSelector } from "./redux/hooks.ts";
+import { Toaster } from "sonner"; // <-- Add this import
+
 const App = () => {
   const location = useLocation();
   const hideSidebar =
@@ -19,10 +22,11 @@ const App = () => {
     location.pathname === "/signup" ||
     location.pathname === "/verify-email" ||
     location.pathname === "/404";
+  const user = useAppSelector((state) => state.auth.user);
 
   return (
     <ThemeProviderComponent defaultTheme="dark">
-      <></>
+      <Toaster richColors />
       <div className="flex flex-row h-full w-full">
         {!hideSidebar && <Navbar />}
         <Routes>
@@ -57,7 +61,11 @@ const App = () => {
             path="/profile/*"
             element={
               <ProtectedRouteComponent>
-                <UserProfilePage />
+                {location.pathname === `/profile/${user?.userName}` ? (
+                  <Navigate to="/myProfile" replace />
+                ) : (
+                  <UserProfilePage />
+                )}
               </ProtectedRouteComponent>
             }
           />
