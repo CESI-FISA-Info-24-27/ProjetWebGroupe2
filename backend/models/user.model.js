@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
     ],
     state: {
       type: String,
-      enum: ["normal", "banned", "supsended"],
+      enum: ["normal", "banned", "suspended"],
       default: "normal",
     },
     isVerified: {
