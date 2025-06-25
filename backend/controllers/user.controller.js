@@ -237,10 +237,14 @@ export async function registerUser(req, res) {
 
   try {
     const hashedPassword = await hashPassword(password);
+    const defaultProfilePicture = "default.png";
+    const defaultBiography = "Bienvenue sur mon profil !";
     const newUser = await User.create({
       userName,
       email,
       password: hashedPassword,
+      biography: defaultBiography,
+      profilePicture: defaultProfilePicture,
       isVerified: false,
     });
 

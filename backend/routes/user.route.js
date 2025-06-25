@@ -23,7 +23,6 @@ router.post("/verify-email", verifyEmail);
 router.get("/forMyProfile", protectOwn, getUserForOwnProfile);
 router.get("/forProfilePageUser/:id", getUserForProfilePage);
 router.get("/forProfilePageUserName/:userName", getUserWithNameForProfilePage);
-
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/subscribe", protectOwn, subscribeToUser);
