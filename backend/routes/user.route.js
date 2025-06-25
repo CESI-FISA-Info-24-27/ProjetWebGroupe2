@@ -10,6 +10,8 @@ import {
   updateUserAsAdmin,
   getUserForOwnProfile,
   getUserWithNameForProfilePage,
+  toggleBannedUser,
+  toggleSuspendedUser,
 } from "../controllers/user.controller.js";
 import { uploadProfilePicture } from "../config/multer.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
@@ -34,6 +36,9 @@ router.put(
   uploadProfilePicture.single("profilePicture"),
   updateUser
 );
+
+router.put("/admin/toggleBan/:id", protectAdmin, toggleBannedUser);
+router.put("/admin/toggleSuspend/:id", protectAdmin, toggleSuspendedUser);
 
 // Admin update route with file upload support
 router.put(
