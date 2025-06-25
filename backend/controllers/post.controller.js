@@ -49,19 +49,32 @@ export async function getPostsByUser(req, res) {
 
 export async function createPost(req, res) {
   try {
+    const { content, tags = [], repliesTo } = req.body;
+
+    // Créer le nouveau post
     const newPost = new Post({
       userData: req.user._id,
-      content: req.body.content,
-      tags: req.body.tags || [],
+      content,
+      tags,
+      repliesTo: repliesTo || null,
     });
+
     const savedPost = await newPost.save();
+
+    if (repliesTo) {
+      await Post.findByIdAndUpdate(repliesTo, {
+        $push: { replies: savedPost._id },
+      });
+    }
+
+    await savedPost.populate("userData", "userName profilePicture biography");
+
     res.status(201).json({ success: true, data: savedPost });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error creating post", error });
+    res.status(500).json({ success: false, message: "Error creating post", error });
   }
 }
+
 
 export async function updatePost(req, res) {
   try {
@@ -152,7 +165,7 @@ export async function toggleLike(req, res) {
       liked = false;
     }
     await post.save();
-
+    
     res.status(200).json({
       success: true,
       data: {

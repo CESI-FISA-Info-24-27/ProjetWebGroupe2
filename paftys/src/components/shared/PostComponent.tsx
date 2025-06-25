@@ -4,7 +4,7 @@ import type Post from "@/models/Post";
 import { useState } from "react";
 import ProfileComponent from "./ProfileComponent";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { toggleLikePost } from "@/reducers/postSlice";
+import { toggleLikePost, fetchPostLikers, createPost  } from "@/reducers/postSlice";
 import {
   HoverCardTrigger,
   HoverCardContent,
@@ -12,10 +12,16 @@ import {
 } from "@/components/ui/hover-card";
 import { ScrollArea } from "../ui/scroll-area";
 import { useEffect } from "react";
-import { fetchPostLikers } from "@/reducers/postSlice";
+
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
+  
   const dispatch = useAppDispatch();
+  const EMPTY_ARRAY: any[] = [];
+  const posts = useAppSelector(state => state.post.posts);
+  const replies = posts.filter(p => p.repliesTo === postData._id);
+  const [replyContent, setReplyContent] = useState("");
+  const [showReplyForm, setShowReplyForm] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -24,7 +30,7 @@ export default function PostComponent(postData: Post) {
   }, [postData.likes]);
 
   const postLikers = useAppSelector(
-    (state) => state.post.postLikersByPostId[postData._id] || []
+    (state) => state.post.postLikersByPostId[postData._id] || EMPTY_ARRAY
   );
 
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
@@ -45,7 +51,15 @@ export default function PostComponent(postData: Post) {
     e.preventDefault();
     dispatch(toggleLikePost({ postId: postData._id }));
   };
-
+  const handleReplySubmit = () => {
+    if (!replyContent.trim()) return;
+    dispatch(createPost({
+      content: { text: replyContent },
+      repliesTo: postData._id,
+    }));
+    setReplyContent("");
+    setShowReplyForm(false);
+  };
   return (
     <Card className="w-fit gap-2">
       <CardHeader className="flex flex-row justify-between px-4">
@@ -79,7 +93,7 @@ export default function PostComponent(postData: Post) {
             </a>
           )}
         </p>
-        <div className="flex flex-row items-center gap-6">
+        <div className="flex items-center gap-6">
           <div className="flex flex-row items-center mt-4 gap-1">
             <HoverCard>
               <HoverCardTrigger>
@@ -116,15 +130,15 @@ export default function PostComponent(postData: Post) {
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {postLikers.map((user) => (
-                            <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
-                              condensed={false}
-                            />
-                          ))}
+                          {postLikers.map((user, index) => (
+                          <ProfileComponent
+                            key={user._id || index}
+                            image={user.profilePicture}
+                            userName={user.userName}
+                            biography={user.biography}
+                            condensed={false}
+                          />
+                        ))}
                         </div>
                       </div>
                     </ScrollArea>
@@ -135,18 +149,48 @@ export default function PostComponent(postData: Post) {
 
             <div className="text-sm">{postData.likes.length}</div>
           </div>
-          <div className="flex flex-row items-center mt-4 gap-1">
-            <Button
-              type="button"
-              variant="ghost"
-              className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
-            >
-              <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
-            </Button>
-            <div className="text-sm">{postData.replies.length}</div>
-          </div>
+          <div className="flex flex-col items-start mt-4 gap-2 w-full">
+  <div className="flex flex-row items-center gap-1">
+    <Button
+      type="button"
+      variant="ghost"
+      onClick={() => setShowReplyForm(prev => !prev)}
+      className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
+    >
+      <i className="bi bi-chat-left text-xl leading-none align-middle"></i>
+    </Button>
+    <div className="text-sm">{postData.replies.length}</div>
+  </div>
+
+  {showReplyForm && (
+    <div className="w-full bg-muted rounded-xl border p-4 shadow-sm">
+      <textarea
+        value={replyContent}
+        onChange={(e) => setReplyContent(e.target.value)}
+        placeholder="Écris ta réponse ici..."
+        className="w-full resize-none rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent transition duration-150"
+        rows={4}
+      />
+      <div className="flex justify-end mt-2">
+        <Button type="button" onClick={handleReplySubmit}>
+          Répondre
+        </Button>
+      </div>
+    </div>
+  )}
+</div>
+
+
         </div>
       </CardContent>
+      {replies.length > 0 && (
+        <div className="ml-6 mt-4 flex flex-col gap-4 border-l border-gray-200 pl-4">
+            {replies.map((reply) => (
+            <PostComponent key={reply._id} {...reply} />
+          ))}
+        </div>
+      )}
+
     </Card>
   );
 }

@@ -23,7 +23,12 @@ export default function ProfileComponent({
   const avatar = (
     <Avatar className={condensed ? "" : "w-14 h-14"}>
       <AvatarImage src={image} alt={`@${userName}`} />
-      <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
+      <AvatarFallback>
+        {typeof userName === "string" && userName.length > 0
+          ? userName[0].toUpperCase()
+          : "?"}
+      </AvatarFallback>
+
     </Avatar>
   );
 
@@ -59,10 +64,13 @@ export default function ProfileComponent({
                   <Avatar>
                     <AvatarImage src={image} alt={`@${userName}`} />
                     <AvatarFallback>
-                      {userName[0]?.toUpperCase()}
+                      {typeof userName === "string" && userName.length > 0
+                        ? userName[0].toUpperCase()
+                        : "?"}
                     </AvatarFallback>
+
                   </Avatar>
-                  <p className="font-semibold text-sm">@{userName}</p>
+                  <p className="font-semibold text-sm">@{userName || "Utilisateur"}</p>
                 </div>
                 <p className="text-sm text-gray-100 break-words">{biography}</p>
               </div>

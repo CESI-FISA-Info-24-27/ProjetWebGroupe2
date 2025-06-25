@@ -14,7 +14,7 @@ interface PostState {
 
 const initialState: PostState = {
   posts: [],
-  loading: false,
+  loading: false, 
   error: null,
   postLikersByPostId: {},
 };
@@ -153,14 +153,34 @@ const postSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(createPost.fulfilled, (state, action) => {
+            .addCase(createPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = [action.payload, ...state.posts]; // Ajoute le nouveau post en haut
+        const newPost = action.payload;
+
+        // Ajouter le nouveau post en tête de liste
+        state.posts = [newPost, ...state.posts];
+
+        // Si c'est une réponse, on ajoute son id dans replies du post parent
+        if (newPost.repliesTo) {
+          const parentIndex = state.posts.findIndex(
+            (p) => p._id === newPost.repliesTo
+          );
+          if (parentIndex !== -1) {
+            const parentPost = state.posts[parentIndex];
+            if (!parentPost.replies) {
+              parentPost.replies = [];
+            }
+            parentPost.replies.push(newPost._id);
+
+            // On remplace le post parent modifié (immutabilité)
+            state.posts[parentIndex] = { ...parentPost };
+          }
+        }
       })
       .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
   },
 });
 
