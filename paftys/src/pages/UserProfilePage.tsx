@@ -13,14 +13,15 @@ import { fetchPostsByUserId } from "@/reducers/postSlice";
 import { fetchUserById } from "@/reducers/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toggleSubscription } from "@/reducers/userSlice";
+import { toast, Toaster } from "sonner";
 
 export default function UserProfilePage() {
   const userName = window.location.pathname.split("/").pop();
   const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.auth.user);
-  const user = useAppSelector((state) => state.user.users[0]);
+  const user = useAppSelector((state) => state.user.selectedUser);
 
   const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
@@ -38,13 +39,34 @@ export default function UserProfilePage() {
   }, [dispatch, user?.id]);
 
   const handleSubscriptionToggle = () => {
-    if (!user || !me || user.id === me.id) return;
+    const isSubscribed = subscribers.some((sub) => sub._id === me?.id);
 
-    dispatch(toggleSubscription({ userId: user.id }));
+    dispatch(toggleSubscription({ userId: user?.id ?? "" }));
+
+    if (isSubscribed) {
+      toast.success(`Vous vous êtes désabonné de ${user?.userName}.`, {
+        position: "bottom-center",
+      });
+    } else {
+      toast.success(`Vous vous êtes abonné à ${user?.userName}.`, {
+        position: "bottom-center",
+      });
+    }
   };
+
+  const [subscribers, setSubscribers] = useState<any[]>([]);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      setSubscribers(user.subscribers || []);
+      setSubscriptions(user.subscriptions || []);
+    }
+  }, [user]);
 
   return !isEmptyHelper(user) ? (
     <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full">
+      <Toaster richColors />
       <Card className="w-full lg:w-[70%] mx-auto p-6 flex flex-col items-center rounded-xl shadow-md mb-4">
         <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
           <div className="flex flex-col items-center gap-4">
@@ -63,7 +85,7 @@ export default function UserProfilePage() {
               className="cursor-pointer"
               onClick={handleSubscriptionToggle}
             >
-              {me?.subscriptions?.some((u: any) => u._id === user?.id)
+              {subscribers.some((subscribers) => subscribers._id === me?.id)
                 ? "Se désabonner"
                 : "S'abonner"}
             </Button>
@@ -74,7 +96,7 @@ export default function UserProfilePage() {
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
                   {user?.subscribers && user.subscribers.length > 0 ? (
                     <span className="text-purple-500">
-                      {user.subscribers.length} Abonnés
+                      {subscribers.length} Abonnés
                     </span>
                   ) : (
                     <span className="text-gray-500">0 Abonnés</span>
@@ -82,7 +104,7 @@ export default function UserProfilePage() {
                 </div>
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
-                {!user?.subscribers || user.subscribers.length === 0 ? (
+                {!subscribers || subscribers.length === 0 ? (
                   <>
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center">
@@ -94,13 +116,11 @@ export default function UserProfilePage() {
                 ) : (
                   <>
                     {" "}
-                    <p className="self-center">
-                      {user?.subscribers.length} Abonnés{" "}
-                    </p>
+                    <p className="self-center">{subscribers.length} Abonnés </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {user?.subscribers.map((user) => (
+                          {subscribers.map((user) => (
                             <ProfileComponent
                               key={user._id}
                               image={user.profilePicture}
@@ -119,9 +139,9 @@ export default function UserProfilePage() {
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
-                  {user?.subscriptions && user.subscriptions.length > 0 ? (
+                  {subscriptions && subscriptions.length > 0 ? (
                     <span className="text-purple-500">
-                      {user.subscriptions.length} Abbonnements
+                      {subscriptions.length} Abbonnements
                     </span>
                   ) : (
                     <span className="text-gray-500">0 Abbonnements</span>
@@ -129,7 +149,7 @@ export default function UserProfilePage() {
                 </div>
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
-                {!user?.subscriptions || user.subscriptions.length === 0 ? (
+                {!subscriptions || subscriptions.length === 0 ? (
                   <>
                     <div className="flex flex-col items-center gap-2">
                       <p className="text-center">
@@ -142,12 +162,12 @@ export default function UserProfilePage() {
                   <>
                     {" "}
                     <p className="self-center">
-                      {user?.subscriptions.length} Abbonnements{" "}
+                      {subscriptions.length} Abbonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {user?.subscriptions.map((user) => (
+                          {subscriptions.map((user) => (
                             <ProfileComponent
                               key={user._id}
                               image={user.profilePicture}

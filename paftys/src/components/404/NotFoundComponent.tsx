@@ -5,7 +5,7 @@ export default function NotFoundPage() {
   return (
     <div className="bg-background text-foreground w-screen h-screen transition-colors">
       <div className="flex flex-col items-center justify-center h-full w-full">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
+        <h1 className="text-4xl font-bold mb-4">Erreur 404</h1>
         <div className="text-lg w-full max-w-lg text-center mb-4">
           On ne sait pas trop comment vous vous êtes retrouvés ici, mais la page
           que vous cherchez est inaccessible, ou a été supprimée.
@@ -15,7 +15,7 @@ export default function NotFoundPage() {
         </NavLink>
         <img
           src="https://media1.tenor.com/m/v5lxzTqe79AAAAAd/outer-wilds.gif"
-          className="scale-75"
+          className="scale-75 rounded-2xl"
           alt="404"
         />
       </div>

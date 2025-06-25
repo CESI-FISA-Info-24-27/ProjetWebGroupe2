@@ -16,8 +16,9 @@ export default function PrivateMessagesListComponent({
     (state) => state.conversation
   );
   const user = useAppSelector((state) => state.auth.user);
-  const baseUrl = import.meta.env.VITE_DB_URI || "http://localhost:5555";
-  const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
+  const baseUrl = import.meta.env.VITE_DB_URI;
+  const profilePictureUrl = `${baseUrl}/uploads/profiles/`;
+
   useEffect(() => {
     dispatch(fetchConversations());
   }, []);
@@ -32,7 +33,9 @@ export default function PrivateMessagesListComponent({
     );
     return {
       userName: other?.userName || "Utilisateur inconnu",
-      profilePicture: profilePictureUrl ?? user?.profilePicture,
+      profilePicture: `${profilePictureUrl}${
+        other?.profilePicture || "default.png"
+      }`,
     };
   };
 
