@@ -15,5 +15,7 @@ export interface User {
   state: UserState;
   createdAt: string;
   updatedAt: string;
+  subscribers: any[];
+  subscriptions: any[];
   __v: number;
 }

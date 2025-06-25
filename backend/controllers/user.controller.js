@@ -94,7 +94,10 @@ export async function getAllUsers(req, res) {
 
 export async function getUserById(req, res) {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id)
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture");
+
     if (!user) {
       return res
         .status(404)
@@ -113,7 +116,10 @@ export async function getUserById(req, res) {
 
 export async function getUserForOwnProfile(req, res) {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id)
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture");
+
     if (!user) {
       return res
         .status(404)
@@ -129,7 +135,7 @@ export async function getUserForOwnProfile(req, res) {
         profilePicture: user.profilePicture,
         conversations: user.conversations,
         notifications: user.notifications,
-        subcribers: user.subscribers,
+        subscribers: user.subscribers,
         subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
@@ -146,7 +152,10 @@ export async function getUserForOwnProfile(req, res) {
 
 export async function getUserForProfilePage(req, res) {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id)
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture");
+
     if (!user) {
       return res
         .status(404)
@@ -159,7 +168,7 @@ export async function getUserForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        subcribers: user.subscribers,
+        subscribers: user.subscribers,
         subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
@@ -176,7 +185,10 @@ export async function getUserForProfilePage(req, res) {
 
 export async function getUserWithNameForProfilePage(req, res) {
   try {
-    const user = await User.findOne({ userName: req.params.userName });
+    const user = await User.findOne({ userName: req.params.userName })
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture");
+
     if (!user) {
       return res
         .status(404)
@@ -189,7 +201,7 @@ export async function getUserWithNameForProfilePage(req, res) {
         userName: user.userName,
         biography: user.biography,
         profilePicture: user.profilePicture,
-        subcribers: user.subscribers,
+        subscribers: user.subscribers,
         subscriptions: user.subscriptions,
         posts: user.posts,
         state: user.state,
@@ -212,7 +224,11 @@ export async function registerUser(req, res) {
       .json({ success: false, message: "All fields are required" });
   }
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email })
+    .populate("subscriptions", "userName biography profilePicture")
+    .populate("subscribers", "userName biography profilePicture")
+    .populate("posts", "title content createdAt");
+
   if (existingUser) {
     return res
       .status(400)
@@ -265,7 +281,10 @@ export async function registerUser(req, res) {
 export async function loginUser(req, res) {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture")
+      .populate("posts", "title content createdAt");
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -299,6 +318,8 @@ export async function loginUser(req, res) {
         profilePicture: user.profilePicture,
         conversations: user.conversations,
         notifications: user.notifications,
+        subscriptions: user.subscriptions,
+        subscribers: user.subscribers,
         posts: user.posts,
         state: user.state,
         token: generateToken(user._id),
@@ -464,29 +485,31 @@ export async function subscribeToUser(req, res) {
       userToSubscribe.subscribers = userToSubscribe.subscribers.filter(
         (id) => id.toString() !== currentUserId.toString()
       );
-
-      await currentUser.save();
-      await userToSubscribe.save();
-
-      return res.status(200).json({
-        success: true,
-        message: "Unsubscribed successfully",
-        myInfo: getUserInfo(currentUser),
-        subscribedUserInfo: getUserInfo(userToSubscribe),
-      });
+    } else {
+      currentUser.subscriptions.push(userIdToSubscribe);
+      userToSubscribe.subscribers.push(currentUserId);
     }
-
-    currentUser.subscriptions.push(userIdToSubscribe);
-    userToSubscribe.subscribers.push(currentUserId);
 
     await currentUser.save();
     await userToSubscribe.save();
 
-    res.status(200).json({
+    const updatedCurrentUser = await User.findById(currentUserId)
+      .populate("subscriptions", "userName biography profilePicture")
+      .populate("subscribers", "userName biography profilePicture")
+      .lean();
+
+    const updatedSubscribedUser = await User.findById(userIdToSubscribe)
+      .populate("subscribers", "userName biography profilePicture")
+      .populate("subscriptions", "userName biography profilePicture")
+      .lean();
+
+    return res.status(200).json({
       success: true,
-      message: "Subscription successful",
-      myInfo: getUserInfo(currentUser),
-      subscribedUserInfo: getUserInfo(userToSubscribe),
+      message: isSubscribed
+        ? "Unsubscribed successfully"
+        : "Subscription successful",
+      myInfo: updatedCurrentUser,
+      subscribedUserInfo: updatedSubscribedUser,
     });
   } catch (error) {
     res.status(500).json({

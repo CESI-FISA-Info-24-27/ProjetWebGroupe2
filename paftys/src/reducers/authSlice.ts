@@ -42,6 +42,8 @@ export const login = createAsyncThunk<
         profilePicture: data.profilePicture,
         conversations: data.conversations,
         notifications: data.notifications,
+        subscribers: data.subscribers,
+        subscriptions: data.subscriptions,
         posts: data.posts,
       },
       token: data.token,
@@ -75,6 +77,8 @@ export const signup = createAsyncThunk<
         profilePicture: data.profilePicture,
         conversations: data.conversations,
         notifications: data.notifications,
+        subscribers: data.subscribers,
+        subscriptions: data.subscriptions,
         posts: data.posts,
       },
       token: data.token,
@@ -116,6 +120,12 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       Cookies.remove("token");
+    },
+    updateSubscriptions(state, action) {
+      if (state.user && action.payload) {
+        state.user.subscriptions = action.payload.subscriptions;
+        state.user.subscribers = action.payload.subscribers;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -166,5 +176,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, updateSubscriptions } = authSlice.actions;
 export default authSlice.reducer;

@@ -6,6 +6,7 @@ import {
 import { CardTitle } from "../ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { NavLink } from "react-router-dom";
+import defaultProfile from "@/assets/default.png";
 
 interface UserComponentProps {
   image: string;
@@ -34,7 +35,9 @@ export default function ProfileComponent({
         src={getProfilePictureUrl(image, baseUrl)}
         alt={`@${userName}`}
       />
-      <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
+      <AvatarFallback>
+        <img src={defaultProfile} alt="default profile"></img>
+      </AvatarFallback>
     </Avatar>
   );
 
