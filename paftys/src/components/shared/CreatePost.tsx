@@ -46,14 +46,8 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
   };
 
   return (
-    <div className="border p-4 rounded-2xl shadow mt-4 bg-white lg:w-[70%] dark:bg-zinc-900 w-full">
+    <div className="border p-4 rounded-2xl shadow mt-4 bg-white w-[95%] sm:w-[90%] lg:w-[70%] dark:bg-zinc-900 w-full">
       <div className="flex items-start gap-4">
-        <ProfileComponent
-          image={user.profilePicture}
-          userName={user.userName}
-          biography={user.biography}
-          condensed={true}
-        />
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-3">
           <Textarea
             placeholder={repliesTo ? "Votre réponse..." : "Quoi de neuf ?"}
@@ -72,7 +66,7 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
           )}
 
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between">
-            <Input
+            {/* <Input
               type="file"
               accept="image/*"
               onChange={(e) => {
@@ -83,7 +77,7 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
                 reader.readAsDataURL(file);
               }}
               className="w-full sm:w-auto"
-            />
+            /> */}
             <Button type="submit" className="w-full cursor-pointer sm:w-auto">
               {repliesTo ? "Répondre" : "Publier"}
             </Button>

@@ -79,42 +79,44 @@ export function PostPage() {
   }
 
   return (
-    <div className="flex flex-col p-4 min-h-screen w-full pb-14">
-      <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
-        <PostComponent
-          postData={post}
-          showReplyButton={authUser?.state !== "suspended" || false}
-          onReplyClick={handleReplyClick}
-        />
-      </Card>
-
-      {showReplyForm && (
-        <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
-          <CreatePost repliesTo={post._id} />
+    <div className="flex flex-col p-4 h-screen w-full pb-14">
+      <div className="max-h-screen overflow-y-auto custom-scrollbar">
+        <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
+          <PostComponent
+            postData={post}
+            showReplyButton={authUser?.state !== "suspended" || false}
+            onReplyClick={handleReplyClick}
+          />
         </Card>
-      )}
 
-      {!isEmptyHelper(responses) && (
-        <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
-          Réponse{responses.length > 1 ? "s" : ""} :
-          <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4 gap-2">
-            {responses.map((response: Post) => (
-              <div className="mb-5">
-                <PostComponent key={response._id} postData={response}  />
-              </div>
-            ))}
-          </div>
-        </Card>
-      )}
-
-      {isEmptyHelper(responses) &&
-        (!showNoResponseMessage ? (
-          <LoadingComponent message="Chargement des réponses..." />
-        ) : (
-          <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
-            Aucune réponse pour le moment.
+        {showReplyForm && (
+          <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
+            <CreatePost repliesTo={post._id} />
           </Card>
-        ))}
+        )}
+
+        {!isEmptyHelper(responses) && (
+          <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
+            Réponse{responses.length > 1 ? "s" : ""} :
+            <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4 gap-2">
+              {responses.map((response: Post) => (
+                <div className="mb-5">
+                  <PostComponent key={response._id} postData={response} />
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
+
+        {isEmptyHelper(responses) &&
+          (!showNoResponseMessage ? (
+            <LoadingComponent message="Chargement des réponses..." />
+          ) : (
+            <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
+              Aucune réponse pour le moment.
+            </Card>
+          ))}
+      </div>
     </div>
   );
 }
