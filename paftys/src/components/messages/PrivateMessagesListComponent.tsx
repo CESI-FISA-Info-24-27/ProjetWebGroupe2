@@ -69,7 +69,7 @@ export default function PrivateMessagesListComponent({
             return (
               <div
                 key={conv._id}
-                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg bg-sidebar"
+                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg"
                 onClick={() => onSelectConversation(conv)}
               >
                 <MessageDisplayComponent

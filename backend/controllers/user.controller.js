@@ -269,6 +269,7 @@ export async function registerUser(req, res) {
         conversations: newUser.conversations,
         notifications: newUser.notifications,
         posts: newUser.posts,
+        role: newUser.role,
         state: newUser.state,
         token: generateToken(newUser._id),
       },
@@ -524,9 +525,80 @@ export async function subscribeToUser(req, res) {
   }
 }
 
+export async function toggleBannedUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.state = user.state === "banned" ? "normal" : "banned";
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      data: getUserInfoWithDash(user),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error toggling banned state",
+      error: error.message,
+    });
+  }
+}
+
+export async function toggleSuspendedUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.state = user.state === "suspended" ? "normal" : "suspended";
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      data: getUserInfoWithDash(user),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error toggling suspended state",
+      error: error.message,
+    });
+  }
+}
+
+
 function getUserInfo(user) {
   return {
     id: user._id,
+    userName: user.userName,
+    email: user.email,
+    biography: user.biography,
+    profilePicture: user.profilePicture,
+    subscriptions: user.subscriptions,
+    subscribers: user.subscribers,
+    posts: user.posts,
+    state: user.state,
+  };
+}
+
+function getUserInfoWithDash(user) {
+  return {
+    _id: user._id,
     userName: user.userName,
     email: user.email,
     biography: user.biography,

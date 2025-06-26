@@ -6,8 +6,8 @@ const API_BASE_URL = import.meta.env.VITE_DB_URI + "/api/users";
 
 // État du slice
 interface UserState {
-  users: User[];
   selectedUser: User | null;
+  users: any[];
   loading: boolean;
   error: string | null;
 }
@@ -79,6 +79,41 @@ export const toggleSubscription = createAsyncThunk<
     );
   }
 });
+
+export const toggleBanUser = createAsyncThunk<any, {id: string, token: any}>(
+  "user/toggleBanUser",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      const res = await axios.put(`${API_BASE_URL}/admin/toggleBan/${id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message ||
+          "Erreur lors du chargement de l'utilisateur"
+      );
+    }
+  }
+);
+
+export const toggleSuspendUser = createAsyncThunk<any, { id: string, token: any}>(
+  "user/toggleSuspendUser",
+  async ({ id, token }, thunkAPI) => {
+    try {
+      const res = await axios.put(`${API_BASE_URL}/admin/toggleSuspend/${id}`,  {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message ||
+          "Erreur lors du chargement de l'utilisateur"
+      );
+    }
+  }
+);
+
 // Slice Redux Toolkit
 const userSlice = createSlice({
   name: "user",
@@ -135,6 +170,34 @@ const userSlice = createSlice({
             };
           }
         }
+      })
+      .addCase(toggleBanUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(toggleBanUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = state.users.map(user =>
+          user._id === action.payload._id ? action.payload : user
+        );
+      })
+      .addCase(toggleBanUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(toggleSuspendUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(toggleSuspendUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = state.users.map(user =>
+          user._id === action.payload._id ? action.payload : user
+        );
+      })
+      .addCase(toggleSuspendUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

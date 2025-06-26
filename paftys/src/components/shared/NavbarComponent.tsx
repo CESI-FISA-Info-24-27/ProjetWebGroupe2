@@ -1,11 +1,13 @@
 import logo from "@/assets/p_logo_paftys.svg";
 import { logout } from "@/reducers/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
 import { ModeToggle } from "./ModeToggleComponent";
+import isEmptyHelper from "@/utils/isEmptyHelper";
 
 export default function RightSidebar() {
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
   const handleLogout = () => {
     dispatch(logout());
     window.location.href = "/login";
@@ -49,17 +51,6 @@ export default function RightSidebar() {
               </div>
             </NavLink>
             <NavLink
-              to="/notifications"
-              className={({ isActive }) => linkClass(isActive)}
-            >
-              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
-                <div className="flex items-center gap-4">
-                  <i className="bi bi-bell leading-none align-middle"></i>
-                  Notifications
-                </div>
-              </div>
-            </NavLink>
-            <NavLink
               to="/myProfile"
               className={({ isActive }) => linkClass(isActive)}
             >
@@ -67,6 +58,18 @@ export default function RightSidebar() {
                 <div className="flex items-center gap-4">
                   <i className="bi bi-person leading-none align-middle"></i>
                   Mon profil
+                </div>
+              </div>
+            </NavLink>
+            <NavLink
+              to="/admin"
+              hidden={isEmptyHelper(user) || (user?.role !== "admin" && user?.role !== "moderator")}
+              className={({ isActive }) => linkClass(isActive)}
+            >
+              <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
+                <div className="flex items-center gap-4">
+                  <i className="bi bi-gear leading-none align-middle"></i>
+                  Modération
                 </div>
               </div>
             </NavLink>
@@ -109,16 +112,6 @@ export default function RightSidebar() {
           <i className="bi bi-chat-left"></i>
         </NavLink>
         <NavLink
-          to="/notifications"
-          className={({ isActive }) =>
-            `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : ""
-            }`
-          }
-        >
-          <i className="bi bi-bell"></i>
-        </NavLink>
-        <NavLink
           to="/myProfile"
           className={({ isActive }) =>
             `text-2xl transition-transform duration-300 ${
@@ -128,6 +121,18 @@ export default function RightSidebar() {
         >
           <i className="bi bi-person"></i>
         </NavLink>
+        {!(isEmptyHelper(user) || (user?.role !== "admin" && user?.role !== "moderator")) && (
+        <NavLink
+          to="/admin"
+          className={({ isActive }) =>
+            `text-2xl transition-transform duration-300 ${
+              isActive ? "text-purple-700 -translate-y-1" : ""
+              }`
+            }
+            >
+                <i className="bi bi-gear"></i>            
+          </NavLink>
+        )}
       </div>
     </>
   );
