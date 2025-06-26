@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MessageDisplayComponent from "./MessageDisplayComponent";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import NewConversationModal from "./NewConversationModal";
+import { useState } from "react";
 
 export default function PrivateMessagesListComponent({
   onSelectConversation,
@@ -19,11 +21,12 @@ export default function PrivateMessagesListComponent({
   const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/`;
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleNewConversation = () => setModalOpen(true);
+
   useEffect(() => {
     dispatch(fetchConversations());
   }, []);
-
-  const handleNewConversation = () => console.log("Nouvelle conversation");
 
   const parseOtherUserData = (conv: any) => {
     const other = conv.participants.find(
@@ -81,6 +84,11 @@ export default function PrivateMessagesListComponent({
             })}
         </div>
       </ScrollArea>
+      <NewConversationModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        currentUserId={user?.id || ""}
+      />
     </div>
   );
 }

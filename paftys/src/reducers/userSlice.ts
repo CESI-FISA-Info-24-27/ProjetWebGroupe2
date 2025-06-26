@@ -10,6 +10,8 @@ interface UserState {
   users: any[];
   loading: boolean;
   error: string | null;
+  followedUsers: any[],
+
 }
 
 const initialState: UserState = {
@@ -17,6 +19,9 @@ const initialState: UserState = {
   selectedUser: null,
   loading: false,
   error: null,
+  followedUsers: [],
+
+
 };
 
 export const fetchUsers = createAsyncThunk<User[], string>(
@@ -114,6 +119,32 @@ export const toggleSuspendUser = createAsyncThunk<any, { id: string, token: any}
   }
 );
 
+
+export const fetchFollowedUsers = createAsyncThunk<any[], void>(
+  "user/fetchFollowedUsers",
+  async (_, thunkAPI) => {
+    try {
+      const token = Cookies.get("token");
+      const res = await axios.get(`${API_BASE_URL}/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const user = res.data.data;
+      const combined = [...user.subscribers, ...user.subscriptions];
+      const unique = [
+        ...new Map(combined.map((u: any) => [u._id, u])).values(),
+      ];
+
+      return unique;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors du chargement des abonnés"
+      );
+    }
+  }
+);
+
+
 // Slice Redux Toolkit
 const userSlice = createSlice({
   name: "user",
@@ -198,7 +229,19 @@ const userSlice = createSlice({
       .addCase(toggleSuspendUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(fetchFollowedUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchFollowedUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.followedUsers = action.payload;
+      })
+      .addCase(fetchFollowedUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
+      
   },
 });
 

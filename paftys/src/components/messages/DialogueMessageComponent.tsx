@@ -79,10 +79,7 @@ export default function DialogueMessageComponent({
       </div>
 
       {/* Zone d'envoi */}
-      <div
-        className="border-t border-sidebar-border p-2 pb-16
-      "
-      >
+      <div className="border-t border-sidebar-border p-2 pb-16 md:pb-4 ">
         <div className="flex gap-2">
           <Textarea
             className="flex-1 resize-none"

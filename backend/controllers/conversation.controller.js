@@ -67,6 +67,22 @@ export async function createConversation(req, res) {
       .json({ success: false, message: "You are not in the conversation." });
   }
   try {
+    // Check if a conversation with the same participants already exists
+    const existingConversation = await Conversation.findOne({
+      participants: {
+        $all: req.body.participants,
+        $size: req.body.participants.length,
+      },
+    });
+
+    if (existingConversation) {
+      return res.status(200).json({
+        success: true,
+        data: existingConversation,
+        message: "Conversation already exists",
+      });
+    }
+
     const newConversation = await Conversation.create({
       participants: req.body.participants,
       messages: [],
