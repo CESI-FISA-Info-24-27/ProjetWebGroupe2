@@ -14,7 +14,8 @@ export function PostPage() {
   const dispatch = useAppDispatch();
   const postData = useAppSelector((state) => state.post.posts);
   const loading = useAppSelector((state) => state.post.loading);
-
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const handleReplyClick = () => setShowReplyForm(true);
   const parsedPosts = postData.map((post) => ({
     ...post,
     createdAt: new Date(post.createdAt),
@@ -63,7 +64,8 @@ export function PostPage() {
   return (
     <div className="flex flex-col p-4 h-screen w-full">
       <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
-        <PostComponent {...post} />
+        <PostComponent postData={post} showReplyButton={true} onReplyClick={handleReplyClick}/>
+
       </Card>
 
       {!isEmptyHelper(responses) && (
@@ -71,9 +73,17 @@ export function PostPage() {
           Réponse{responses.length > 1 ? "s" : ""} :
           <div className="w-full h-[1px] bg-gray-300 my-4 custom-scrollbar">
             {responses.map((post: Post) => (
-              <PostComponent key={post._id} {...post} />
+              <PostComponent key={post._id} postData={post} />
+              
             ))}
+            {showReplyForm && (
+    <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
+      <PostForm replyTo={post._id} />
+    </Card>
+)}
+
           </div>
+          
         </Card>
       )}
 
