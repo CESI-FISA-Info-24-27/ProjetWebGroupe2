@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { fetchPostLikers } from "@/reducers/postSlice";
 import { Link } from "react-router-dom";
 import { updatePost } from "@/reducers/postSlice";
+import { toast } from "sonner";
 
 export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
@@ -134,6 +135,9 @@ export default function PostComponent(postData: Post) {
                   await dispatch(
                     updatePost({ postId: postData._id, text: editedText })
                   );
+                  toast.success("Post édité avec succès !", {
+                    position: "bottom-center",
+                  });
                   setEditing(false);
                 }}
               >
