@@ -74,9 +74,10 @@ export default function ProfileComponent({
                     src={getProfilePictureUrl(image, baseUrl)}
                     alt={`@${userName}`}
                   />
-                  <AvatarFallback>{userName[0]?.toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>                      
+                    {typeof userName === "string" && userName.length > 0 ? userName[0].toUpperCase(): "?"}</AvatarFallback>
                 </Avatar>
-                <p className="font-semibold text-sm">@{userName}</p>
+                  <p className="font-semibold text-sm">@{userName || "Utilisateur"}</p>
               </div>
               <p className="text-sm text-gray-100 break-words">{biography}</p>
             </div>

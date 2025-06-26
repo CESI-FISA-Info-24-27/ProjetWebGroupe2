@@ -106,27 +106,27 @@ export async function getPostsByUser(req, res) {
 
 export async function createPost(req, res) {
   try {
-    const content = req.body.content;
-    const tags = Array.from(
-      new Set(
-        (content.text.match(/#\w+/g) || []).map((tag) =>
-          tag.substring(1).toLowerCase()
-        )
-      )
-    );
-
-    const newPost = new Post({
+      const { content, tags = [], repliesTo } = req.body;
+      const newPost = new Post({
       userData: req.user._id,
-      content: req.body.content,
-      repliesTo: req.body.repliesTo || null,
-      tags: tags,
+            content,
+      tags,
+      repliesTo: repliesTo || null,
     });
+
     const savedPost = await newPost.save();
+
+    if (repliesTo) {
+      await Post.findByIdAndUpdate(repliesTo, {
+        $push: { replies: savedPost._id },
+      });
+    }
+
+    await savedPost.populate("userData", "userName profilePicture biography");
+
     res.status(201).json({ success: true, data: savedPost });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error creating post", error });
+    res.status(500).json({ success: false, message: "Error creating post", error });
   }
 }
 export async function updatePost(req, res) {
