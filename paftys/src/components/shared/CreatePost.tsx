@@ -9,16 +9,17 @@ import { createPost } from "@/reducers/postSlice";
 
 interface CreatePostProps {
   repliesTo?: string;
+  onPostCreated?: () => void;
 }
 
-export default function CreatePost({ repliesTo }: CreatePostProps) {
+export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps) {
   const token = useAppSelector((state) => state.auth.token);
   const user = useAppSelector((state) => state.auth.user);
   const [text, setText] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [tags, setTags] = useState("");
 
-  if (!user) return null; // sécurité si non connecté
+  if (!user) return null;
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +27,7 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
     if (!text.trim()) return;
 
     try {
-      const newPost = await dispatch(
+      await dispatch(
         createPost({
           content: { text, images: image ? [image] : [] },
           tags: tags
@@ -35,15 +36,17 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
             .filter(Boolean),
           repliesTo,
         })
-      ).unwrap(); // unwrap pour récupérer directement la valeur ou gérer erreur
-
+      ).unwrap();
       setText("");
       setImage(null);
       setTags("");
+
+      onPostCreated?.();
     } catch (err) {
       console.error("Erreur lors de la création du post :", err);
     }
   };
+
 
   return (
     <div className="border p-4 rounded-2xl shadow mt-4 bg-white lg:w-[70%] dark:bg-zinc-900 w-full">

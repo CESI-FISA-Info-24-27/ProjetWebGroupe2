@@ -53,7 +53,7 @@ export default function HomeComponent() {
     <div className="flex flex-col md:flex-row h-screen w-full justify-between md:pb-0">
       <div className="flex flex-col items-center w-full md:w-[70%] h-full overflow-y-auto custom-scrollbar">
         {!isEmptyHelper(authUser) && authUser?.state !== "suspended" && (
-          <CreatePost />
+          <CreatePost onPostCreated={() => dispatch(fetchPosts({ page }))} />
         )}
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
