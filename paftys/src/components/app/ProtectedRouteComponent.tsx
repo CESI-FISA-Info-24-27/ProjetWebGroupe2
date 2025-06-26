@@ -8,17 +8,18 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRouteComponent = ({ children }: ProtectedRouteProps) => {
-  const { loading } = useAppSelector((state) => state.auth);
+  const { user, loading } = useAppSelector((state) => state.auth);
   const token = Cookies.get("token");
 
-  // Tant que Redux est en train de charger (ex: après login)
-  if (loading) return null; // ou un spinner si tu veux
+  if (loading) return null;
 
-  // Pas de token → redirection vers login
   if (!token) {
     return <Navigate to="/login" replace />;
   }
 
+  if (user?.state === "banned") {
+    return <Navigate to="/access-denied" replace />;
+  }
   // Auth OK → afficher la page
   return children;
 };

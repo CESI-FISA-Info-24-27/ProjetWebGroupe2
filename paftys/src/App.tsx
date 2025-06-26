@@ -16,12 +16,14 @@ import { useAppSelector } from "./redux/hooks.ts";
 import { Toaster } from "sonner"; // <-- Add this import
 
 import AdminPage from "./pages/AdminPage.tsx";
+import AccessDenied from "./components/404/AccessDeniedComponent.tsx";
 const App = () => {
   const location = useLocation();
   const hideSidebar =
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
     location.pathname === "/verify-email" ||
+    location.pathname === "/access-denied" ||
     location.pathname === "/404";
   const user = useAppSelector((state) => state.auth.user);
 
@@ -95,6 +97,7 @@ const App = () => {
             }
           />
           <Route path="/404" element={<NotFoundPage />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </div>
