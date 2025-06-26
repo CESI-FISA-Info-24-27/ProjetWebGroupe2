@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { createPost } from "@/reducers/postSlice";
 
 interface CreatePostProps {
-  repliesTo?: string; // ID du post auquel on répond
+  repliesTo?: string; 
 }
 
 export default function CreatePost({ repliesTo }: CreatePostProps) {

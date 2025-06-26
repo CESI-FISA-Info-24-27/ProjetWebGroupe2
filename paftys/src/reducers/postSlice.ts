@@ -83,7 +83,7 @@ export const fetchPostById = createAsyncThunk<Post[], { postId: string }>(
       const res = await axios.get(
         `${dotenv.VITE_DB_URI}/api/posts/replies/${postId}`
       );
-      return res.data.data; // tableau de posts : post + replies
+      return res.data.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || "Erreur lors du chargement du post"
