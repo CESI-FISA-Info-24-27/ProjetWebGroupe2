@@ -7,7 +7,7 @@ export default function AccessDenied() {
       <div className="flex flex-col items-center justify-center h-full w-full">
         <h1 className="text-4xl font-bold mb-4">403</h1>
         <div className="text-lg w-full max-w-lg text-center mb-4">
-          Accès refusé. Vous avez été bannis.
+          Accès refusé. Vous avez été banni.
         </div>
         <NavLink to="/login">
           <Button className="cursor-pointer">Retourner à la connexion</Button>
