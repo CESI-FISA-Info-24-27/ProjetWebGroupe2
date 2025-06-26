@@ -119,7 +119,7 @@ export default function PostComponent(postData: Post) {
           )}
         </div>
       </CardHeader>
-      <CardContent className="px-4">
+      <CardContent className="px-4 break-normal">
         {editing ? (
           <div className="flex flex-col gap-2">
             <textarea
@@ -145,7 +145,7 @@ export default function PostComponent(postData: Post) {
             </div>
           </div>
         ) : (
-          <p>
+          <p className="break-words whitespace-pre-wrap w-full overflow-hidden">
             {renderTextWithHashtags(
               shouldTruncate && !expanded
                 ? postData.content.text.slice(0, 240) + "..."

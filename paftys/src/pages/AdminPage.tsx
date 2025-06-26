@@ -27,11 +27,11 @@ export default function AdminPage() {
   return (
     <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full">
       <Card className="w-full h-[10%] flex items-center justify-center">
-        <h1 className="text-4xl font-bold">Services de modération</h1>
+        <h1 className="text-xl md:text-2xl lg:text-4xl font-bold">Services de modération</h1>
       </Card>
       <div className="flex w-full md:h-[85%] lg:flex-row flex-col h-[75%] m-4 gap-4 custom-scrollbar">
         <Card className="flex flex-col gap-0 w-full overflow-y-auto custom-scrollbar">
-          <h2 className="text-center text-4xl">Liste des utilisateurs</h2>
+          <h2 className="text-center text-xl md:text-2xl lg:text-4xl">Liste des utilisateurs</h2>
           <div className="w-full flex items-center justify-around p-4">
             <Input className="m-auto !text-xl" value={searchUser} onChange={(e) => setSearchUser(e.target.value)} /> 
             <i className="bi bi-search text-3xl p-5 "></i>

@@ -43,7 +43,7 @@ export default function HomeComponent() {
   }));
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full justify-between">
+    <div className="flex flex-col md:flex-row h-screen w-full justify-between pb-12">
       <div className="flex flex-col items-center w-full md:w-[70%] h-full overflow-y-auto custom-scrollbar">
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (

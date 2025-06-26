@@ -133,6 +133,7 @@ export default function RightSidebar() {
                 <i className="bi bi-gear"></i>            
           </NavLink>
         )}
+        <ModeToggle />
       </div>
     </>
   );
