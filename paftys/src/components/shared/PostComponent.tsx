@@ -139,6 +139,7 @@ export default function PostComponent({
             />
             <div className="flex gap-2">
               <Button
+                className="cursor-pointer"
                 onClick={async () => {
                   await dispatch(
                     updatePost({ postId: postData._id, text: editedText })

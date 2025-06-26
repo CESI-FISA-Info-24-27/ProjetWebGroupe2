@@ -46,7 +46,7 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
   };
 
   return (
-    <div className="border p-4 rounded-2xl shadow bg-white lg:w-[70%] dark:bg-zinc-900 w-full">
+    <div className="border p-4 rounded-2xl shadow mt-4 bg-white lg:w-[70%] dark:bg-zinc-900 w-full">
       <div className="flex items-start gap-4">
         <ProfileComponent
           image={user.profilePicture}

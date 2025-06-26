@@ -12,10 +12,11 @@ import {
   fetchConversations,
 } from "@/reducers/conversationSlice";
 
-interface Props {
+type Props = {
   open: boolean;
   onClose: () => void;
-}
+  currentUserId: string;
+};
 
 export default function NewConversationModal({ open, onClose }: Props) {
   const dispatch = useAppDispatch();
@@ -53,26 +54,34 @@ export default function NewConversationModal({ open, onClose }: Props) {
           <DialogTitle>Nouvelle conversation</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
-          {users.map((user) => (
-            <Button
-              key={user._id}
-              variant="ghost"
-              className="flex items-center gap-3 justify-start cursor-pointer"
-              onClick={() => handleCreateConversation(user._id)}
-            >
-              <Avatar>
-                <img
-                  src={
-                    user.profilePicture
-                      ? `${baseUrl}/uploads/profiles/${user.profilePicture}`
-                      : "https://via.placeholder.com/40"
-                  }
-                  alt=""
-                />
-              </Avatar>
-              <span>{user.userName}</span>
-            </Button>
-          ))}
+          {users.length === 0 ? (
+            <div className="text-left text-xl text-gray-500">
+              Vous n&apos;avez pas d&apos;amis à qui parler pour l&apos;instant.
+              Abonnez vous à d&apos;autres utilisateurs pour commencer une
+              conversation !
+            </div>
+          ) : (
+            users.map((user) => (
+              <Button
+                key={user._id}
+                variant="ghost"
+                className="flex items-center gap-3 justify-start cursor-pointer"
+                onClick={() => handleCreateConversation(user._id)}
+              >
+                <Avatar>
+                  <img
+                    src={
+                      user.profilePicture
+                        ? `${baseUrl}/uploads/profiles/${user.profilePicture}`
+                        : "https://via.placeholder.com/40"
+                    }
+                    alt=""
+                  />
+                </Avatar>
+                <span>{user.userName}</span>
+              </Button>
+            ))
+          )}
         </div>
       </DialogContent>
     </Dialog>
