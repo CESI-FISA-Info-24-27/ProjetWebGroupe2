@@ -47,6 +47,8 @@ export default function PostComponent({
   const isAuthor = postData.userData?._id === userId;
 
 
+  const [editing, setEditing] = useState(false);
+  const [editedText, setEditedText] = useState(postData?.content.text);
 
   if (!postData.content || !postData.content.text) return null;
   const createdAt =
@@ -141,6 +143,7 @@ export default function PostComponent({
             />
             <div className="flex gap-2">
               <Button
+                className="cursor-pointer"
                 onClick={async () => {
                   await dispatch(
                     updatePost({ postId: postData._id, text: editedText })
@@ -196,14 +199,12 @@ export default function PostComponent({
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
                 {postLikers.length === 0 ? (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-center">
-                        Personne n'a encore liké ce post.
-                      </p>
-                      <div className="bi bi-emoji-frown text-5xl"></div>
-                    </div>
-                  </>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center">
+                      Personne n'a encore liké ce post.
+                    </p>
+                    <div className="bi bi-emoji-frown text-5xl"></div>
+                  </div>
                 ) : (
                   <>
                     {" "}
@@ -242,6 +243,13 @@ export default function PostComponent({
             <div className="text-sm">{postData.replies.length}</div>
           </div>
         </div>
+        {showReplyButton && (
+          <div className="mt-4">
+            <Button type="button" onClick={onReplyClick} className="w-full">
+              Répondre à ce post
+            </Button>
+          </div>
+        )}
       </CardContent>
                 {showReplyButton && (
             <div className="mt-4">

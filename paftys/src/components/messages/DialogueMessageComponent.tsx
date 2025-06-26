@@ -93,12 +93,9 @@ export default function DialogueMessageComponent({
               }
             }}
           />
-          <div className="flex flex-col gap-2 justify-end">
+          <div className="flex flex-col justify-center">
             <Button onClick={handleSendMessage} title="Envoyer le message">
-              <i className="bi bi-send text-xl" />
-            </Button>
-            <Button title="Joindre un fichier">
-              <i className="bi bi-paperclip text-xl" />
+              <i className="bi bi-send text-xl cursor-pointer" />
             </Button>
           </div>
         </div>

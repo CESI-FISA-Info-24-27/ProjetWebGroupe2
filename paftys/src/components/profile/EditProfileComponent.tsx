@@ -81,7 +81,9 @@ export default function EditProfileComponent({ user }: { user: User }) {
 
   const resetProfilePicture = () => {
     setSelectedImage(null);
-    setProfilePicturePreview(initialProfilePicture);
+    setProfilePicturePreview(
+      `${baseUrl}/uploads/profiles/${initialProfilePicture}`
+    );
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }

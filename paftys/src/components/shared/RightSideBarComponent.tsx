@@ -37,7 +37,7 @@ export default function RightSideBar() {
   }, []);
 
   return (
-    <div className="hidden md:flex w-[30%] h-full bg-sidebar text-sidebar-foreground border-l border-sidebar-border p-4 flex-col gap-6 overflow-y-auto transition-colors">
+    <div className="hidden md:flex w-[30%] h-screen bg-sidebar text-sidebar-foreground border-l border-sidebar-border p-4 flex-col gap-6 overflow-y-auto transition-colors">
       <div className="flex flex-col">
         <h2 className="text-xl font-semibold mb-2">Comptes recommandés</h2>
         <div className="flex flex-col gap-4">

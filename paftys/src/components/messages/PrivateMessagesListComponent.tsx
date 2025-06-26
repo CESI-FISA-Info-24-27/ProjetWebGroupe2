@@ -64,11 +64,19 @@ export default function PrivateMessagesListComponent({
           </Button>
         </div>
       </div>
-
       <ScrollArea className="flex-1 border-r border-sidebar-border overflow-y-auto pb-14">
         <div className="flex flex-col gap-4 py-2 px-4 bg-sidebar text-sidebar-foreground">
           {loading && <p className="text-foreground">Chargement...</p>}
+          {!loading && conversations.length === 0 && (
+            <p className="text-muted-foreground text-center py-8">
+              Vous n&apos;avez encore aucune conversation privée.
+              <br />
+              Cliquez sur <span className="font-bold">+</span> pour en démarrer
+              une !
+            </p>
+          )}
           {!loading &&
+            conversations.length > 0 &&
             conversations.map((conv) => {
               const otherUser = parseOtherUserData(conv);
               return (
