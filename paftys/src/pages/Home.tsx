@@ -13,6 +13,7 @@ import CreatePost from "@/components/shared/CreatePost";
 export default function HomeComponent() {
   const [page, setPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
+  const authUser = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchPosts({ page }));
@@ -51,7 +52,9 @@ export default function HomeComponent() {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full justify-between p-4 pb-12 md:pb-0">
       <div className="flex flex-col items-center w-full md:w-[70%] h-full overflow-y-auto custom-scrollbar">
-        <CreatePost />
+        {!isEmptyHelper(authUser) && authUser?.state !== "suspended" && (
+          <CreatePost />
+        )}
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
             <div className="mt-4 w-[95%] sm:w-[90%] lg:w-[70%]" key={post._id}>

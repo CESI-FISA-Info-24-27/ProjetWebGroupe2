@@ -14,6 +14,7 @@ export function PostPage() {
   const dispatch = useAppDispatch();
   const postData = useAppSelector((state) => state.post.posts);
   const loading = useAppSelector((state) => state.post.loading);
+  const authUser = useAppSelector((state) => state.auth.user);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const handleReplyClick = () => setShowReplyForm(true);
   const handlePostSubmit = () => {
@@ -31,15 +32,13 @@ export function PostPage() {
     date: post.date ? new Date(post.date) : new Date(),
   }));
 
-
-const post = parsedPosts.find((p) => p._id === postId);
-
+  const post = parsedPosts.find((p) => p._id === postId);
 
   let responses: Post[] = [];
   if (post && post.replies && post.replies.length > 0) {
     responses = post.replies
       .map((replyId) => parsedPosts.find((p) => p._id === replyId))
-      .filter((p): p is Post => !!p); 
+      .filter((p): p is Post => !!p);
 
     responses.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
@@ -62,7 +61,7 @@ const post = parsedPosts.find((p) => p._id === postId);
   }, [responses, loading]);
 
   if (loading && isEmptyHelper(parsedPosts)) {
-    return ( 
+    return (
       <div className="flex flex-col p-4 min-h-screen w-full ">
         <LoadingComponent message="Chargement du post..." />
       </div>
@@ -84,21 +83,19 @@ const post = parsedPosts.find((p) => p._id === postId);
       <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
         <PostComponent
           postData={post}
-          showReplyButton={true}
+          showReplyButton={authUser?.state !== "suspended" || false}
           onReplyClick={handleReplyClick}
         />
       </Card>
 
       {showReplyForm && (
-      <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
-
-          <CreatePost repliesTo={post._id}/>
+        <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
+          <CreatePost repliesTo={post._id} />
         </Card>
       )}
 
       {!isEmptyHelper(responses) && (
         <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
-
           Réponse{responses.length > 1 ? "s" : ""} :
           <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4">
             {responses.map((response: Post) => (
