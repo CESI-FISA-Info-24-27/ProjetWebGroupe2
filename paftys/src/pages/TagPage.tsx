@@ -64,10 +64,9 @@ export default function TagPage() {
                 className="mt-4 w-[95%] sm:w-[90%] lg:w-[70%]"
                 key={post._id}
               >
-                <PostComponent {...post} />
+                <PostComponent postData={post} />
               </div>
             ))}
-
           {isEmptyHelper(parsedPosts) && (
             <div className="flex flex-col items-center justify-center h-full">
               <p className="text-gray-500 mt-4 text-2xl">
