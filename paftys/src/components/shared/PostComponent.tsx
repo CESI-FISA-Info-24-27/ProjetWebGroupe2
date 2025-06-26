@@ -99,7 +99,7 @@ export default function PostComponent({
 
   return (
     <Card className="w-full gap-2">
-      <CardHeader className="flex flex-row justify-between px-4">
+      <CardHeader className="flex flex-row justify-between px-4 flex-wrap">
         <div className="flex flex-row items-center gap-2">
           <ProfileComponent
             image={postData.userData.profilePicture}

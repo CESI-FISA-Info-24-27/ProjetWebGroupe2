@@ -31,18 +31,16 @@ export function PostPage() {
     date: post.date ? new Date(post.date) : new Date(),
   }));
 
-  // Trouver le post principal (celui qui n'a pas de repliedTo)
+
 const post = parsedPosts.find((p) => p._id === postId);
 
 
-  // Récupérer les réponses via post.replies (tableau d'IDs)
   let responses: Post[] = [];
   if (post && post.replies && post.replies.length > 0) {
     responses = post.replies
       .map((replyId) => parsedPosts.find((p) => p._id === replyId))
-      .filter((p): p is Post => !!p); // filtre les undefined
+      .filter((p): p is Post => !!p); 
 
-    // Trier du plus récent au plus ancien (dernier commentaire en haut)
     responses.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
@@ -64,8 +62,8 @@ const post = parsedPosts.find((p) => p._id === postId);
   }, [responses, loading]);
 
   if (loading && isEmptyHelper(parsedPosts)) {
-    return (
-      <div className="flex flex-col p-4 h-screen w-full">
+    return ( 
+      <div className="flex flex-col p-4 min-h-screen w-full ">
         <LoadingComponent message="Chargement du post..." />
       </div>
     );
@@ -73,7 +71,7 @@ const post = parsedPosts.find((p) => p._id === postId);
 
   if (!post) {
     return (
-      <div className="flex flex-col p-4 h-screen w-full">
+      <div className="flex flex-col p-4 min-h-screen w-full">
         <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
           Post non trouvé
         </Card>
@@ -82,7 +80,7 @@ const post = parsedPosts.find((p) => p._id === postId);
   }
 
   return (
-    <div className="flex flex-col p-4 h-full w-full">
+    <div className="flex flex-col p-4 min-h-screen w-full pb-14">
       <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
         <PostComponent
           postData={post}
@@ -92,13 +90,15 @@ const post = parsedPosts.find((p) => p._id === postId);
       </Card>
 
       {showReplyForm && (
-        <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
+      <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
+
           <CreatePost repliesTo={post._id}/>
         </Card>
       )}
 
       {!isEmptyHelper(responses) && (
-        <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
+        <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
+
           Réponse{responses.length > 1 ? "s" : ""} :
           <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4">
             {responses.map((response: Post) => (
