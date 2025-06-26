@@ -108,10 +108,10 @@ export default function MyProfilePage() {
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
                   {subscriptions && subscriptions.length > 0 ? (
                     <span className="text-purple-500">
-                      {subscriptions.length} Abbonnements
+                      {subscriptions.length} Abonnements
                     </span>
                   ) : (
-                    <span className="text-gray-500">0 Abbonnements</span>
+                    <span className="text-gray-500">0 Abonnements</span>
                   )}
                 </div>
               </HoverCardTrigger>
@@ -128,7 +128,7 @@ export default function MyProfilePage() {
                 ) : (
                   <>
                     <p className="self-center">
-                      {subscriptions.length} Abbonnements{" "}
+                      {subscriptions.length} Abonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
@@ -155,7 +155,7 @@ export default function MyProfilePage() {
             <DialogTrigger>
               <Button className="cursor-pointer">Modifier le profil</Button>
             </DialogTrigger>
-            <DialogContent className="min-w-[40em]">
+            <DialogContent className="max-w-screen custom-scrollbar overflow-y-auto max-h-[90%]">
               <EditProfileComponent user={user} />
             </DialogContent>
           </Dialog>

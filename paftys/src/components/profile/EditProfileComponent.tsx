@@ -99,7 +99,7 @@ export default function EditProfileComponent({ user }: { user: User }) {
             Modifier le profil de {user?.userName}
           </h1>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4 min-w-[250px] h-full">
             <Label htmlFor="username">Nom d'utilisateur</Label>
             <div className="flex justify-between items-center gap-1.5">

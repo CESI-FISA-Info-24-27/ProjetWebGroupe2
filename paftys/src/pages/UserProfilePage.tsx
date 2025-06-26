@@ -174,7 +174,7 @@ export default function UserProfilePage() {
                   <>
                     {" "}
                     <p className="self-center">
-                      {subscriptions.length} Abbonnements{" "}
+                      {subscriptions.length} Abonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
