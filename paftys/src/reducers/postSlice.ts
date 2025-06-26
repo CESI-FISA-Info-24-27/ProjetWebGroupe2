@@ -91,7 +91,31 @@ export const fetchPostById = createAsyncThunk<Post, { postId: string }>(
     }
   }
 );
+export const createPost = createAsyncThunk<Post, Partial<Post>>(
+  "post/createPost",
+  async (newPostData, thunkAPI) => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) throw new Error("Token manquant");
 
+      const res = await axios.post(
+        `${dotenv.VITE_DB_URI}/api/posts`,
+        newPostData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Erreur lors de la création du post"
+      );
+    }
+  }
+);
 export const fetchPostsByUserId = createAsyncThunk<Post[], { userId: string }>(
   "post/fetchPostsByUserId",
   async ({ userId }, thunkAPI) => {
@@ -182,6 +206,33 @@ const postSlice = createSlice({
       .addCase(fetchPostLikers.fulfilled, (state, action) => {
         const { postId, users } = action.payload;
         state.postLikersByPostId[postId] = users;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+         state.loading = false;
+         const newPost = action.payload;
+
+        // Ajouter le nouveau post en tête de liste
+        state.posts = [newPost, ...state.posts];
+
+        // Si c'est une réponse, on ajoute son id dans replies du post parent
+        if (newPost.repliesTo) {
+          const parentIndex = state.posts.findIndex(
+            (p) => p._id === newPost.repliesTo
+          );
+          if (parentIndex !== -1) {
+            const parentPost = state.posts[parentIndex];
+            if (!parentPost.replies) {
+              parentPost.replies = [];
+            }
+            parentPost.replies.push(newPost._id);
+
+            // On remplace le post parent modifié (immutabilité)
+            state.posts[parentIndex] = { ...parentPost };
+          }}
+        })
+      .addCase(createPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       })
       .addCase(fetchPostsByUserId.pending, (state) => {
         state.loading = true;

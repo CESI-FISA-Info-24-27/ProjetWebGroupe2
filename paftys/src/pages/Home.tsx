@@ -8,6 +8,7 @@ import RightSideBar from "@/components/shared/RightSideBarComponent";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import CreatePost from "@/components/shared/CreatePost";
 
 export default function HomeComponent() {
   const [page, setPage] = useState(1);
@@ -45,6 +46,7 @@ export default function HomeComponent() {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full justify-between pb-12 md:pb-0">
       <div className="flex flex-col items-center w-full md:w-[70%] h-full overflow-y-auto custom-scrollbar">
+      <CreatePost />
         {!isEmptyHelper(parsedPosts) &&
           parsedPosts.map((post: Post) => (
             <div className="mt-4 w-[95%] sm:w-[90%] lg:w-[70%]" key={post._id}>
