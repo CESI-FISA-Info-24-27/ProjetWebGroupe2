@@ -46,10 +46,6 @@ export default function PostComponent({
   const hasLiked = Array.isArray(postData.likes) && postData.likes.includes(userId);
   const isAuthor = postData.userData?._id === userId;
 
-
-  const [editing, setEditing] = useState(false);
-  const [editedText, setEditedText] = useState(postData?.content.text);
-
   if (!postData.content || !postData.content.text) return null;
   const createdAt =
     postData.createdAt instanceof Date
@@ -251,13 +247,6 @@ export default function PostComponent({
           </div>
         )}
       </CardContent>
-                {showReplyButton && (
-            <div className="mt-4">
-              <Button type="button" onClick={onReplyClick} className="w-full">
-                Répondre à ce post
-              </Button>
-            </div>
-          )}
     </Card>
   );
 }
