@@ -207,29 +207,31 @@ const postSlice = createSlice({
         const { postId, users } = action.payload;
         state.postLikersByPostId[postId] = users;
       })
-      .addCase(createPost.fulfilled, (state, action) => {
-         state.loading = false;
-         const newPost = action.payload;
+.addCase(createPost.fulfilled, (state, action) => {
+  state.loading = false;
+  const newPost = action.payload;
 
-        // Ajouter le nouveau post en tête de liste
-        state.posts = [newPost, ...state.posts];
+  // Ajouter le nouveau post dans la liste globale, **à la fin**
+  // (ou à un autre endroit, mais pas en première position)
+  state.posts.push(newPost);
 
-        // Si c'est une réponse, on ajoute son id dans replies du post parent
-        if (newPost.repliesTo) {
-          const parentIndex = state.posts.findIndex(
-            (p) => p._id === newPost.repliesTo
-          );
-          if (parentIndex !== -1) {
-            const parentPost = state.posts[parentIndex];
-            if (!parentPost.replies) {
-              parentPost.replies = [];
-            }
-            parentPost.replies.push(newPost._id);
+  // Si c’est une réponse, on ajoute son id dans replies du post parent
+  if (newPost.repliesTo) {
+    const parentIndex = state.posts.findIndex(
+      (p) => p._id === newPost.repliesTo
+    );
+    if (parentIndex !== -1) {
+      const parentPost = state.posts[parentIndex];
+      if (!parentPost.replies) {
+        parentPost.replies = [];
+      }
+      parentPost.replies.push(newPost._id);
+      state.posts[parentIndex] = { ...parentPost };
+    }
+  }
+})
 
-            // On remplace le post parent modifié (immutabilité)
-            state.posts[parentIndex] = { ...parentPost };
-          }}
-        })
+
       .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

@@ -83,14 +83,6 @@ const handleSubmit = async (e: React.FormEvent) => {
               }}
               className="w-full sm:w-auto"
             />
-
-            <Input
-              placeholder="Tags (séparés par virgules)"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="w-full sm:w-1/2"
-            />
-
             <Button type="submit" className="w-full sm:w-auto">
               {repliesTo ? "Répondre" : "Publier"}
             </Button>

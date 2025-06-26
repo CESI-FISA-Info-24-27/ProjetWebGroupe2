@@ -16,7 +16,14 @@ export function PostPage() {
   const loading = useAppSelector((state) => state.post.loading);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const handleReplyClick = () => setShowReplyForm(true);
+    const handlePostSubmit = () => {
+    setShowReplyForm(false);
+  };
 
+  const toggleReplyForm = () => {
+    setShowReplyForm((prev) => !prev);
+  };
+  
   const parsedPosts = postData.map((post) => ({
     ...post,
     createdAt: new Date(post.createdAt),

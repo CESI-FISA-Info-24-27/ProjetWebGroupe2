@@ -28,7 +28,8 @@ export default function PostComponent({
 }) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
-
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
   useEffect(() => {
     dispatch(
       fetchPostLikers({ postId: postData._id, userIds: postData.likes })
@@ -240,6 +241,7 @@ export default function PostComponent({
             </div>
           )}
       </CardContent>
+    
     </Card>
   );
 }
