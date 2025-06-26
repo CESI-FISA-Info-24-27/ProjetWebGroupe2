@@ -97,9 +97,11 @@ export function PostPage() {
       {!isEmptyHelper(responses) && (
         <Card className="w-full lg:w-[70%] mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-md mb-4 break-words overflow-x-hidden">
           Réponse{responses.length > 1 ? "s" : ""} :
-          <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4">
+          <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4 gap-2">
             {responses.map((response: Post) => (
-              <PostComponent key={response._id} postData={response} />
+              <div className="mb-5">
+                <PostComponent key={response._id} postData={response}  />
+              </div>
             ))}
           </div>
         </Card>
