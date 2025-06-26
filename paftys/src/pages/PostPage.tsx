@@ -16,14 +16,14 @@ export function PostPage() {
   const loading = useAppSelector((state) => state.post.loading);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const handleReplyClick = () => setShowReplyForm(true);
-    const handlePostSubmit = () => {
+  const handlePostSubmit = () => {
     setShowReplyForm(false);
   };
 
   const toggleReplyForm = () => {
     setShowReplyForm((prev) => !prev);
   };
-  
+
   const parsedPosts = postData.map((post) => ({
     ...post,
     createdAt: new Date(post.createdAt),
@@ -31,8 +31,19 @@ export function PostPage() {
     date: post.date ? new Date(post.date) : new Date(),
   }));
 
-  const post = parsedPosts[0];
-  const responses = parsedPosts.slice(1);
+  // Trouver le post principal (celui qui n'a pas de repliedTo)
+  const post = parsedPosts.find((p) => !p.repliesTo);
+
+  // Récupérer les réponses via post.replies (tableau d'IDs)
+  let responses: Post[] = [];
+  if (post && post.replies && post.replies.length > 0) {
+    responses = post.replies
+      .map((replyId) => parsedPosts.find((p) => p._id === replyId))
+      .filter((p): p is Post => !!p); // filtre les undefined
+
+    // Trier du plus récent au plus ancien (dernier commentaire en haut)
+    responses.sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
 
   useEffect(() => {
     if (postId) {
@@ -81,7 +92,7 @@ export function PostPage() {
 
       {showReplyForm && (
         <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
-          <CreatePost repliesTo={post._id} />
+          <CreatePost repliesTo={post._id}/>
         </Card>
       )}
 

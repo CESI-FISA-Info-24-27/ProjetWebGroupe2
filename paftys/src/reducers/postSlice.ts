@@ -211,11 +211,7 @@ const postSlice = createSlice({
   state.loading = false;
   const newPost = action.payload;
 
-  // Ajouter le nouveau post dans la liste globale, **à la fin**
-  // (ou à un autre endroit, mais pas en première position)
   state.posts.push(newPost);
-
-  // Si c’est une réponse, on ajoute son id dans replies du post parent
   if (newPost.repliesTo) {
     const parentIndex = state.posts.findIndex(
       (p) => p._id === newPost.repliesTo
