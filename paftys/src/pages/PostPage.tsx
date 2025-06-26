@@ -1,7 +1,7 @@
+import CreatePost from "@/components/shared/CreatePost";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import PostComponent from "@/components/shared/PostComponent";
 import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import type Post from "@/models/Post";
 import { fetchPostById } from "@/reducers/postSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -16,6 +16,7 @@ export function PostPage() {
   const loading = useAppSelector((state) => state.post.loading);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const handleReplyClick = () => setShowReplyForm(true);
+
   const parsedPosts = postData.map((post) => ({
     ...post,
     createdAt: new Date(post.createdAt),
@@ -62,34 +63,35 @@ export function PostPage() {
   }
 
   return (
-    <div className="flex flex-col p-4 h-screen w-full">
+    <div className="flex flex-col p-4 h-full w-full">
       <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
-        <PostComponent postData={post} showReplyButton={true} onReplyClick={handleReplyClick}/>
-
+        <PostComponent
+          postData={post}
+          showReplyButton={true}
+          onReplyClick={handleReplyClick}
+        />
       </Card>
 
-      {!isEmptyHelper(responses) && (
-        <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
-          Réponse{responses.length > 1 ? "s" : ""} :
-          <div className="w-full h-[1px] bg-gray-300 my-4 custom-scrollbar">
-            {responses.map((post: Post) => (
-              <PostComponent key={post._id} postData={post} />
-              
-            ))}
-            {showReplyForm && (
-    <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
-      <PostForm replyTo={post._id} />
-    </Card>
-)}
+      {showReplyForm && (
+        <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
+          <CreatePost repliesTo={post._id} />
+        </Card>
+      )}
 
+      {!isEmptyHelper(responses) && (
+        <Card className="w-full lg:w-[70%] mx-auto p-8 rounded-xl shadow-md mb-4">
+          Réponse{responses.length > 1 ? "s" : ""} :
+          <div className="ml-6 mt-4 border-l-2 border-gray-300 pl-4">
+            {responses.map((response: Post) => (
+              <PostComponent key={response._id} postData={response} />
+            ))}
           </div>
-          
         </Card>
       )}
 
       {isEmptyHelper(responses) &&
         (!showNoResponseMessage ? (
-          <LoadingComponent message={"Chargement des réponses..."} />
+          <LoadingComponent message="Chargement des réponses..." />
         ) : (
           <Card className="w-full lg:w-[70%] mx-auto p-8 items-center rounded-xl shadow-md mb-4">
             Aucune réponse pour le moment.
