@@ -30,18 +30,14 @@ export default function DialogueMessageComponent({
     if (!messageText.trim() || !conversation?._id) return;
 
     dispatch(
-      addMessage({
-        id: conversation._id,
-        content: { text: messageText },
-      })
+      addMessage({ id: conversation._id, content: { text: messageText } })
     );
-
     setMessageText("");
   };
 
   if (!conversation) {
     return (
-      <div className="w-[60vw] h-[calc(100vh-20px)] bg-sidebar text-sidebar-foreground rounded-r-2xl flex items-center justify-center transition-colors">
+      <div className="flex items-center justify-center h-full bg-sidebar text-sidebar-foreground">
         <p>Sélectionnez une conversation</p>
       </div>
     );
@@ -52,22 +48,22 @@ export default function DialogueMessageComponent({
   );
 
   return (
-    <div className="w-[60vw] rounded-r-2xl justify-between h-[calc(100vh-20px)] bg-sidebar text-sidebar-foreground flex flex-col transition-colors">
-      <div className="border-b border-sidebar-border">
-        <div className="m-2">
-          <ProfileComponent
-            image={
-              other?.profilePicture ||
-              "https://randomuser.me/api/portraits/men/21.jpg"
-            }
-            userName={other?.userName || "Utilisateur inconnu"}
-            biography={other?.biography || "Pas de bio"}
-            condensed={false}
-          />
-        </div>
+    <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground transition-colors">
+      {/* Header */}
+      <div className="border-b border-sidebar-border p-2">
+        <ProfileComponent
+          image={
+            other?.profilePicture ||
+            "https://randomuser.me/api/portraits/men/21.jpg"
+          }
+          userName={other?.userName || "Utilisateur inconnu"}
+          biography={other?.biography || "Pas de bio"}
+          condensed={false}
+        />
       </div>
 
-      <div className="flex-1 flex-col overflow-y-auto p-4 gap-1 flex custom-scrollbar">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 gap-1 flex flex-col custom-scrollbar">
         {sortedMessages.map((msg, idx) => (
           <SingularMessageComponent
             key={msg._id || idx}
@@ -79,36 +75,30 @@ export default function DialogueMessageComponent({
             }
           />
         ))}
-
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-sidebar-border h-38 flex flex-col justify-center">
-        <div className="flex items-center">
-          <div className="w-9/10 p-2">
-            <Textarea
-              className="resize-none h-30"
-              placeholder="Entrez votre message ici..."
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSendMessage();
-                }
-              }}
-            />
-          </div>
-          <div className="flex flex-col gap-2 w-24 mr-2">
-            <Button
-              className="cursor-pointer"
-              title="Envoyer le message"
-              onClick={handleSendMessage}
-            >
-              <i className="bi bi-send text-xl"></i>
+      {/* Zone d'envoi */}
+      <div className="border-t border-sidebar-border p-2 pb-16 md:pb-4 ">
+        <div className="flex gap-2">
+          <Textarea
+            className="flex-1 resize-none"
+            placeholder="Entrez votre message ici..."
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+          />
+          <div className="flex flex-col gap-2 justify-end">
+            <Button onClick={handleSendMessage} title="Envoyer le message">
+              <i className="bi bi-send text-xl" />
             </Button>
-            <Button className="cursor-pointer" title="Joindre un fichier">
-              <i className="bi bi-paperclip text-xl"></i>
+            <Button title="Joindre un fichier">
+              <i className="bi bi-paperclip text-xl" />
             </Button>
           </div>
         </div>

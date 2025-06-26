@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MessageDisplayComponent from "./MessageDisplayComponent";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import NewConversationModal from "./NewConversationModal";
+import { useState } from "react";
 
 export default function PrivateMessagesListComponent({
   onSelectConversation,
@@ -19,13 +21,12 @@ export default function PrivateMessagesListComponent({
   const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/`;
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleNewConversation = () => setModalOpen(true);
+
   useEffect(() => {
     dispatch(fetchConversations());
   }, []);
-
-  const handleNewConversation = () => {
-    console.log("Nouvelle conversation");
-  };
 
   const parseOtherUserData = (conv: any) => {
     const other = conv.participants.find(
@@ -48,39 +49,46 @@ export default function PrivateMessagesListComponent({
   };
 
   return (
-    <ScrollArea className="border-r rounded-l-2xl border-sidebar-border h-[calc(100vh-20px)]">
-      <div className="flex flex-col bg-sidebar text-sidebar-foreground gap-4 py-2 px-4 transition-colors">
-        <div className="flex justify-end">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-foreground hover:text-purple-500 cursor-pointer"
-            onClick={handleNewConversation}
-            title="Nouvelle conversation"
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
-        </div>
-
-        {loading && <p className="text-foreground">Chargement...</p>}
-        {!loading &&
-          conversations.map((conv) => {
-            const otherUser = parseOtherUserData(conv);
-            return (
-              <div
-                key={conv._id}
-                className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg"
-                onClick={() => onSelectConversation(conv)}
-              >
-                <MessageDisplayComponent
-                  username={otherUser.userName}
-                  profilePic={otherUser.profilePicture}
-                  preview={getLastMessage(conv)}
-                />
-              </div>
-            );
-          })}
+    <div className="flex flex-col h-full w-full md:rounded-l-2xl overflow-hidden">
+      <div className="flex justify-end p-2 border-b border-sidebar-border">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-foreground hover:text-purple-500"
+          onClick={handleNewConversation}
+          title="Nouvelle conversation"
+        >
+          <Plus className="h-5 w-5" />
+        </Button>
       </div>
-    </ScrollArea>
+
+      <ScrollArea className="flex-1">
+        <div className="flex flex-col gap-4 py-2 px-4 bg-sidebar text-sidebar-foreground">
+          {loading && <p className="text-foreground">Chargement...</p>}
+          {!loading &&
+            conversations.map((conv) => {
+              const otherUser = parseOtherUserData(conv);
+              return (
+                <div
+                  key={conv._id}
+                  className="cursor-pointer transition-transform duration-300 hover:translate-y-[-2px] hover:bg-muted rounded-lg"
+                  onClick={() => onSelectConversation(conv)}
+                >
+                  <MessageDisplayComponent
+                    username={otherUser.userName}
+                    profilePic={otherUser.profilePicture}
+                    preview={getLastMessage(conv)}
+                  />
+                </div>
+              );
+            })}
+        </div>
+      </ScrollArea>
+      <NewConversationModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        currentUserId={user?.id || ""}
+      />
+    </div>
   );
 }

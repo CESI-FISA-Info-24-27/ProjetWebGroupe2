@@ -4,16 +4,7 @@ import UserPostsComponent from "@/components/profile/UserPostsComponent";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import { fetchPostsByUserId } from "@/reducers/postSlice";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import EditProfileComponent from "@/components/profile/EditProfileComponent";
 import {
   HoverCard,
@@ -28,7 +19,11 @@ import { useEffect, useState } from "react";
 export default function MyProfilePage() {
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
-  dispatch(fetchPostsByUserId({ userId: user?.id || "" }));
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchPostsByUserId({ userId: user.id }));
+    }
+  }, [dispatch, user?.id]);
 
   const baseUrl = import.meta.env.VITE_DB_URI;
   const profilePictureUrl = `${baseUrl}/uploads/profiles/${user?.profilePicture}`;
@@ -45,20 +40,20 @@ export default function MyProfilePage() {
   }, [user]);
 
   return !isEmptyHelper(user) ? (
-    <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full pb-14">
-      <Card className="w-full lg:w-[70%] mx-auto p-6 flex flex-col items-center rounded-xl shadow-md mb-4">
-        <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-2xl font-semibold text-center">
+    <div className="flex flex-col items-center min-h-screen p-4 max-w-[100%] w-full text-foreground transition-colors">
+      <Card className="w-full gap-0 lg:max-w-[70%] mx-auto p-4 flex flex-col items-center rounded-xl shadow-md mb-4 text-sidebar-foreground transition-colors">
+        <div className="flex flex-row justify-around w-full items-center gap-4">
+          <div className="flex flex-col items-center gap-2">
+            <h2 className="text-xl font-semibold text-center">
               {user ? user.userName : "Utilisateur inconnu"}
             </h2>
             <img
               src={user?.profilePicture ? profilePictureUrl : defaultProfile}
               alt="Photo de profil"
-              className="w-32 h-32 lg:w-40 lg:h-40 rounded-full object-cover mb-4 border-2 border-gray-200"
+              className="w-12 h-12 lg:w-28 lg:h-28 rounded-full object-cover mb-2 border-2 border-sidebar-border"
             />
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0">
+          <div className="flex flex-row items-center gap-2">
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
@@ -67,20 +62,18 @@ export default function MyProfilePage() {
                       {subscribers.length} Abonnés
                     </span>
                   ) : (
-                    <span className="text-gray-500">0 Abonnés</span>
+                    <span className="text-muted-foreground">0 Abonnés</span>
                   )}
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-4">
+              <HoverCardContent className="flex flex-col gap-4 bg-sidebar text-sidebar-foreground transition-colors">
                 {!subscribers || subscribers.length === 0 ? (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-center">
-                        Personne n'est encore abonné à ce profil.
-                      </p>
-                      <div className="bi bi-emoji-frown text-5xl"></div>
-                    </div>
-                  </>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center">
+                      Personne n'est encore abonné à ce profil.
+                    </p>
+                    <div className="bi bi-emoji-frown text-5xl"></div>
+                  </div>
                 ) : (
                   <>
                     <p className="self-center">{subscribers.length} Abonnés </p>
@@ -111,20 +104,18 @@ export default function MyProfilePage() {
                       {subscriptions.length} Abonnements
                     </span>
                   ) : (
-                    <span className="text-gray-500">0 Abonnements</span>
+                    <span className="text-muted-foreground">0 Abonnements</span>
                   )}
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-4">
+              <HoverCardContent className="flex flex-col gap-4 bg-sidebar text-sidebar-foreground transition-colors">
                 {!subscriptions || subscriptions.length === 0 ? (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-center">
-                        Ce profil ne suit actuellement personne.
-                      </p>
-                      <div className="bi bi-emoji-frown text-5xl"></div>
-                    </div>
-                  </>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center">
+                      Ce profil ne suit actuellement personne.
+                    </p>
+                    <div className="bi bi-emoji-frown text-5xl"></div>
+                  </div>
                 ) : (
                   <>
                     <p className="self-center">
@@ -153,14 +144,28 @@ export default function MyProfilePage() {
 
           <Dialog>
             <DialogTrigger>
-              <Button className="cursor-pointer">Modifier le profil</Button>
+              {/* Mobile: icon button, Desktop: normal button */}
+              <Button
+                className="cursor-pointer p-2 md:hidden"
+                variant="ghost"
+                size="icon"
+                aria-label="Modifier le profil"
+              >
+                <span className="bi bi-pencil-square text-xl" />
+              </Button>
+              <Button
+                className="cursor-pointer hidden md:inline-flex"
+                aria-label="Modifier le profil"
+              >
+                Modifier le profil
+              </Button>
             </DialogTrigger>
             <DialogContent className="max-w-screen custom-scrollbar overflow-y-auto max-h-[90%]">
               <EditProfileComponent user={user} />
             </DialogContent>
           </Dialog>
         </div>
-        <p className="text-base text-white text-center m-0">
+        <p className="text-base text-muted-foreground text-center m-0">
           {user
             ? user.biography
               ? user.biography
@@ -172,7 +177,7 @@ export default function MyProfilePage() {
     </div>
   ) : (
     <div className="flex items-center justify-center min-h-screen">
-      <p className="text-gray-500">Chargement...</p>
+      <p className="text-muted-foreground">Chargement...</p>
     </div>
   );
 }

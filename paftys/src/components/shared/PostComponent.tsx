@@ -111,7 +111,7 @@ export default function PostComponent(postData: Post) {
             <Button
               variant="ghost"
               size="icon"
-              className="ml-2"
+              className="ml-2 cursor-pointer"
               onClick={() => setEditing(true)}
               title="Éditer le post"
             >
