@@ -17,19 +17,10 @@ import { Link } from "react-router-dom";
 import { updatePost } from "@/reducers/postSlice";
 import { toast } from "sonner";
 
-export default function PostComponent({
-  postData,
-  showReplyButton = false,
-  onReplyClick,
-}: {
-  postData: Post;
-  showReplyButton?: boolean;
-  onReplyClick?: () => void;
-}) {
+export default function PostComponent(postData: Post) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyContent, setReplyContent] = useState("");
+
   useEffect(() => {
     dispatch(
       fetchPostLikers({ postId: postData._id, userIds: postData.likes })
@@ -99,7 +90,7 @@ export default function PostComponent({
 
   return (
     <Card className="w-full gap-2">
-      <CardHeader className="flex flex-row justify-between px-4 flex-wrap">
+      <CardHeader className="flex flex-row justify-between px-4">
         <div className="flex flex-row items-center gap-2">
           <ProfileComponent
             image={postData.userData.profilePicture}
@@ -175,10 +166,11 @@ export default function PostComponent({
           </p>
         )}
 
-        <div className="flex flex-row items-center gap-6 mt-4">
-          <div className="flex flex-row items-center gap-1">
+        <div className="flex flex-row items-center gap-6">
+          <div className="flex flex-row items-center mt-4 gap-1">
             <HoverCard>
               <HoverCardTrigger>
+                {" "}
                 <Button
                   type="button"
                   onClick={handleLike}
@@ -194,13 +186,20 @@ export default function PostComponent({
               </HoverCardTrigger>
               <HoverCardContent className="flex flex-col gap-4">
                 {postLikers.length === 0 ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <p className="text-center">Personne n'a encore liké ce post.</p>
-                    <div className="bi bi-emoji-frown text-5xl"></div>
-                  </div>
+                  <>
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-center">
+                        Personne n'a encore liké ce post.
+                      </p>
+                      <div className="bi bi-emoji-frown text-5xl"></div>
+                    </div>
+                  </>
                 ) : (
                   <>
-                    <p className="self-center">{postData.likes.length} Likes</p>
+                    {" "}
+                    <p className="self-center">
+                      {postData.likes.length} Likes{" "}
+                    </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
@@ -220,10 +219,10 @@ export default function PostComponent({
                 )}
               </HoverCardContent>
             </HoverCard>
+
             <div className="text-sm">{postData.likes.length}</div>
           </div>
-
-          <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center mt-4 gap-1">
             <Link
               to={`/post/${postData._id}`}
               className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
@@ -233,15 +232,7 @@ export default function PostComponent({
             <div className="text-sm">{postData.replies.length}</div>
           </div>
         </div>
-          {showReplyButton && (
-            <div className="mt-4">
-              <Button type="button" onClick={onReplyClick} className="w-full">
-                Répondre à ce post
-              </Button>
-            </div>
-          )}
       </CardContent>
-    
     </Card>
   );
 }
