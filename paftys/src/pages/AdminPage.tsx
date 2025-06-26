@@ -42,9 +42,9 @@ export default function AdminPage() {
               <AdminProfileCard key={user.id} user={user} />
           ))}
         </Card>
-        <Card className="w-full">
+        {/* <Card className="w-full">
           Signalements
-        </Card>
+        </Card> */}
       </div>
     </div>
   );

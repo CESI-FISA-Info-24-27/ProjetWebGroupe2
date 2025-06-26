@@ -18,7 +18,10 @@ export default function AdminProfileCard({user} : {user:any}) {
 
   return (
     <Card className="flex flex-row items-center justify-center transition-all duration-300 ease-in-out lg:hover:scale-102 m-4 p-2">
-      <Link to={"/profile/" + user?.userName} className="w-[70%] lg:text-xl md:text-lg hover:text-purple-600">{user?.userName}</Link>
+      <Link to={"/profile/" + user?.userName} className="w-[70%] lg:text-xl md:text-lg hover:text-purple-600">
+        {user?.userName} {" "}
+        ({user?.state === "banned" ? "Bannis" : (user?.state === "suspended" ? "Suspendu" : "Aucune restriction")})
+      </Link>
       {user.state === "normal" && (
         <>
         <Button onClick={() => toggleSuspend(user?._id)} title="Suspendre l'utilisateur" className="w-10 h-10 bg-gray-600 hover:bg-gray-500 cursor-pointer">
