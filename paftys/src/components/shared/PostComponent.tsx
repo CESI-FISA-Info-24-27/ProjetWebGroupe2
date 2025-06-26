@@ -98,7 +98,7 @@ export default function PostComponent({
 
   return (
     <Card className="w-full gap-2">
-      <CardHeader className="flex flex-row justify-between px-4 flex-wrap">
+      <CardHeader className="flex flex-row justify-between px-4">
         <div className="flex flex-row items-center gap-2">
           <ProfileComponent
             image={postData.userData.profilePicture}
@@ -174,10 +174,11 @@ export default function PostComponent({
           </p>
         )}
 
-        <div className="flex flex-row items-center gap-6 mt-4">
-          <div className="flex flex-row items-center gap-1">
+        <div className="flex flex-row items-center gap-6">
+          <div className="flex flex-row items-center mt-4 gap-1">
             <HoverCard>
               <HoverCardTrigger>
+                {" "}
                 <Button
                   type="button"
                   onClick={handleLike}
@@ -201,7 +202,10 @@ export default function PostComponent({
                   </div>
                 ) : (
                   <>
-                    <p className="self-center">{postData.likes.length} Likes</p>
+                    {" "}
+                    <p className="self-center">
+                      {postData.likes.length} Likes{" "}
+                    </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
@@ -221,10 +225,10 @@ export default function PostComponent({
                 )}
               </HoverCardContent>
             </HoverCard>
+
             <div className="text-sm">{postData.likes.length}</div>
           </div>
-
-          <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center mt-4 gap-1">
             <Link
               to={`/post/${postData._id}`}
               className="p-0 h-fit cursor-pointer rounded-full hover:bg-transparent dark:hover:bg-transparent transition-transform duration-300 hover:translate-y-[-2px]"
