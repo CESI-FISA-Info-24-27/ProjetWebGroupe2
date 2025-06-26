@@ -84,7 +84,7 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
               }}
               className="w-full sm:w-auto"
             />
-            <Button type="submit" className="w-full sm:w-auto">
+            <Button type="submit" className="w-full cursor-pointer sm:w-auto">
               {repliesTo ? "Répondre" : "Publier"}
             </Button>
           </div>

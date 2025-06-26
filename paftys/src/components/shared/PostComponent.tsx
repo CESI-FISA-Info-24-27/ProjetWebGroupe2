@@ -28,8 +28,7 @@ export default function PostComponent({
 }) {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [replyContent, setReplyContent] = useState("");
+
   useEffect(() => {
     dispatch(
       fetchPostLikers({ postId: postData._id, userIds: postData.likes })
@@ -46,7 +45,7 @@ export default function PostComponent({
   const isAuthor = postData.userData._id === userId;
 
   const [editing, setEditing] = useState(false);
-  const [editedText, setEditedText] = useState(postData.content.text);
+  const [editedText, setEditedText] = useState(postData?.content.text);
 
   if (!postData.content || !postData.content.text) return null;
   const createdAt =
@@ -195,7 +194,9 @@ export default function PostComponent({
               <HoverCardContent className="flex flex-col gap-4">
                 {postLikers.length === 0 ? (
                   <div className="flex flex-col items-center gap-2">
-                    <p className="text-center">Personne n'a encore liké ce post.</p>
+                    <p className="text-center">
+                      Personne n'a encore liké ce post.
+                    </p>
                     <div className="bi bi-emoji-frown text-5xl"></div>
                   </div>
                 ) : (
@@ -233,15 +234,14 @@ export default function PostComponent({
             <div className="text-sm">{postData.replies.length}</div>
           </div>
         </div>
-          {showReplyButton && (
-            <div className="mt-4">
-              <Button type="button" onClick={onReplyClick} className="w-full">
-                Répondre à ce post
-              </Button>
-            </div>
-          )}
+        {showReplyButton && (
+          <div className="mt-4">
+            <Button type="button" onClick={onReplyClick} className="w-full">
+              Répondre à ce post
+            </Button>
+          </div>
+        )}
       </CardContent>
-    
     </Card>
   );
 }
