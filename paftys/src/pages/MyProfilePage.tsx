@@ -40,7 +40,7 @@ export default function MyProfilePage() {
   }, [user]);
 
   return !isEmptyHelper(user) ? (
-    <div className="flex flex-col items-center min-h-screen p-4 max-w-[100%] w-full text-foreground transition-colors">
+    <div className="flex flex-col items-center h-screen p-4 pb-14 max-w-[100%] w-full text-foreground transition-colors">
       <Card className="w-full gap-0 lg:max-w-[70%] mx-auto p-4 flex flex-col items-center rounded-xl shadow-md mb-4 text-sidebar-foreground transition-colors">
         <div className="flex flex-row justify-around w-full items-center gap-4">
           <div className="flex flex-col items-center gap-2">
