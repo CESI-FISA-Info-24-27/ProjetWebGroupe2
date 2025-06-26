@@ -14,9 +14,13 @@ export default function UserPostsComponent() {
   return (
     <Card className="w-full lg:w-[70%] overflow-y-auto custom-scrollbar max-h-full mx-auto p-6 flex flex-col items-center rounded-xl shadow-md">
       {!isEmptyHelper(parsedPosts) &&
-        parsedPosts.map((post: any) => (
-          <PostComponent key={post._id} {...post} />
-        ))}
+        parsedPosts
+          .sort((post: any) => post.createdAt)
+          .map((post: any) => (
+            <div className="mt-4 w-[95%] sm:w-[90%] lg:w-[70%]" key={post._id}>
+              <PostComponent {...post} />
+            </div>
+          ))}
       {isEmptyHelper(parsedPosts) && (
         <div className="text-center">
           Aucun post trouvé pour cet utilisateur.
