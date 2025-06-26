@@ -325,6 +325,7 @@ export async function loginUser(req, res) {
         notifications: user.notifications,
         subscriptions: user.subscriptions,
         subscribers: user.subscribers,
+        role: user.role,
         posts: user.posts,
         state: user.state,
         token: generateToken(user._id),
