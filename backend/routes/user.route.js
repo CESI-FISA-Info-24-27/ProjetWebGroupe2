@@ -12,6 +12,7 @@ import {
   getUserWithNameForProfilePage,
   toggleBannedUser,
   toggleSuspendedUser,
+  getMostFollowedUsers,
 } from "../controllers/user.controller.js";
 import { uploadProfilePicture } from "../config/multer.js";
 import { protectAdmin, protectOwn } from "../middlewares/auth.middleware.js";
@@ -28,6 +29,7 @@ router.get("/forProfilePageUserName/:userName", getUserWithNameForProfilePage);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/subscribe", protectOwn, subscribeToUser);
+router.get("/most-followed", getMostFollowedUsers);
 
 // Profile update route with file upload support
 router.put(
