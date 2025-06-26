@@ -41,8 +41,8 @@ export default function MyProfilePage() {
 
   return !isEmptyHelper(user) ? (
     <div className="flex flex-col items-center min-h-screen p-4 max-w-[100%] w-full text-foreground transition-colors">
-      <Card className="w-full  lg:max-w-[70%] mx-auto p-4 flex flex-col items-center rounded-xl shadow-md mb-4 text-sidebar-foreground transition-colors">
-        <div className="flex flex-row justify-around w-full items-center mb-4 gap-4">
+      <Card className="w-full gap-0 lg:max-w-[70%] mx-auto p-4 flex flex-col items-center rounded-xl shadow-md mb-4 text-sidebar-foreground transition-colors">
+        <div className="flex flex-row justify-around w-full items-center gap-4">
           <div className="flex flex-col items-center gap-2">
             <h2 className="text-xl font-semibold text-center">
               {user ? user.userName : "Utilisateur inconnu"}
@@ -53,7 +53,7 @@ export default function MyProfilePage() {
               className="w-12 h-12 lg:w-28 lg:h-28 rounded-full object-cover mb-2 border-2 border-sidebar-border"
             />
           </div>
-          <div className="flex flex-row items-center gap-2 mb-2 md:mb-0">
+          <div className="flex flex-row items-center gap-2">
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
