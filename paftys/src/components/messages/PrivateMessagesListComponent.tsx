@@ -50,19 +50,22 @@ export default function PrivateMessagesListComponent({
 
   return (
     <div className="flex flex-col h-full w-full md:rounded-l-2xl overflow-hidden">
-      <div className="flex justify-end p-2 border-b border-sidebar-border">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-foreground hover:text-purple-500"
-          onClick={handleNewConversation}
-          title="Nouvelle conversation"
-        >
-          <Plus className="h-5 w-5" />
-        </Button>
+      <div className="flex justify-end items-center p-2 border-b border-r border-sidebar-border text-wrap">
+        <div className="flex flex-row items-center">
+          <p className="pl-4"> Créer une conversation...</p>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-foreground hover:text-purple-500 cursor-pointer"
+            onClick={handleNewConversation}
+            title="Nouvelle conversation"
+          >
+            <Plus className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 border-r border-sidebar-border">
         <div className="flex flex-col gap-4 py-2 px-4 bg-sidebar text-sidebar-foreground">
           {loading && <p className="text-foreground">Chargement...</p>}
           {!loading &&
