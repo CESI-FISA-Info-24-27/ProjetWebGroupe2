@@ -17,7 +17,17 @@ import { Link } from "react-router-dom";
 import { updatePost } from "@/reducers/postSlice";
 import { toast } from "sonner";
 
-export default function PostComponent(postData: Post) {
+export default function PostComponent({
+  postData,
+  showReplyButton = false,
+  onReplyClick,
+}: {
+  postData: Post;
+  showReplyButton?: boolean;
+  onReplyClick?: () => void;
+}) {
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
   const [expanded, setExpanded] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -33,18 +43,18 @@ export default function PostComponent(postData: Post) {
 
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
 
-  const hasLiked = postData.likes.includes(userId);
-  const isAuthor = postData.userData._id === userId;
+  const hasLiked = Array.isArray(postData.likes) && postData.likes.includes(userId);
+  const isAuthor = postData.userData?._id === userId;
 
-  const [editing, setEditing] = useState(false);
-  const [editedText, setEditedText] = useState(postData.content.text);
+
 
   if (!postData.content || !postData.content.text) return null;
   const createdAt =
     postData.createdAt instanceof Date
       ? postData.createdAt
       : new Date(postData.createdAt);
-
+  const [editing, setEditing] = useState(false);
+  const [editedText, setEditedText] = useState(postData.content?.text ?? "");
   const toggleExpanded = () => setExpanded((prev) => !prev);
   const shouldTruncate = postData.content.text.length > 240;
 
@@ -233,6 +243,13 @@ export default function PostComponent(postData: Post) {
           </div>
         </div>
       </CardContent>
+                {showReplyButton && (
+            <div className="mt-4">
+              <Button type="button" onClick={onReplyClick} className="w-full">
+                Répondre à ce post
+              </Button>
+            </div>
+          )}
     </Card>
   );
 }

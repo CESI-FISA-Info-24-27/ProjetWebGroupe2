@@ -18,7 +18,7 @@ export default function UserPostsComponent() {
           .sort((post: any) => post.createdAt)
           .map((post: any) => (
             <div className="mt-4 w-[95%] sm:w-[90%] lg:w-[70%]" key={post._id}>
-              <PostComponent {...post} />
+              <PostComponent key={post._id} postData={post} />
             </div>
           ))}
       {isEmptyHelper(parsedPosts) && (
