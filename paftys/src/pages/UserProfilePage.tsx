@@ -77,7 +77,7 @@ export default function UserProfilePage() {
   }, [user]);
 
   return !isEmptyHelper(user) ? (
-    <div className="flex flex-col items-center h-screen p-4 max-w-[100%] w-full pb-14">
+    <div className="flex flex-col items-center h-screen p-4 max-w-full w-full overflow-x-hidden pb-14">
       <Toaster richColors />
       <Card className="w-full lg:w-[70%] mx-auto p-6 flex flex-col items-center rounded-xl shadow-md mb-4">
         <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
@@ -174,7 +174,7 @@ export default function UserProfilePage() {
                   <>
                     {" "}
                     <p className="self-center">
-                      {subscriptions.length} Abbonnements{" "}
+                      {subscriptions.length} Abonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
@@ -205,7 +205,6 @@ export default function UserProfilePage() {
             : "Aucune biographie."}
         </p>
       </Card>
-
       <UserPostsComponent />
     </div>
   ) : (

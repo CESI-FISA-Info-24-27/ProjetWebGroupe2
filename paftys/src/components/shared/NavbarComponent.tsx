@@ -4,6 +4,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
 import { ModeToggle } from "./ModeToggleComponent";
 import isEmptyHelper from "@/utils/isEmptyHelper";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { Button } from "../ui/button";
 
 export default function RightSidebar() {
   const dispatch = useAppDispatch();
@@ -63,7 +70,10 @@ export default function RightSidebar() {
             </NavLink>
             <NavLink
               to="/admin"
-              hidden={isEmptyHelper(user) || (user?.role !== "admin" && user?.role !== "moderator")}
+              hidden={
+                isEmptyHelper(user) ||
+                (user?.role !== "admin" && user?.role !== "moderator")
+              }
               className={({ isActive }) => linkClass(isActive)}
             >
               <div className="flex p-2 pl-10 text-2xl cursor-pointer pr-4">
@@ -121,19 +131,38 @@ export default function RightSidebar() {
         >
           <i className="bi bi-person"></i>
         </NavLink>
-        {!(isEmptyHelper(user) || (user?.role !== "admin" && user?.role !== "moderator")) && (
-        <NavLink
-          to="/admin"
-          className={({ isActive }) =>
-            `text-2xl transition-transform duration-300 ${
-              isActive ? "text-purple-700 -translate-y-1" : ""
+        {!(
+          isEmptyHelper(user) ||
+          (user?.role !== "admin" && user?.role !== "moderator")
+        ) && (
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `text-2xl transition-transform duration-300 ${
+                isActive ? "text-purple-700 -translate-y-1" : ""
               }`
             }
-            >
-                <i className="bi bi-gear"></i>            
+          >
+            <i className="bi bi-gear"></i>
           </NavLink>
         )}
-        <ModeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="text-2xl">
+              <i className="bi bi-list"></i>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="mb-2 align-end">
+            <DropdownMenuItem asChild>
+              <ModeToggle />
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
+              <Button variant="outline" size="icon">
+                <i className="bi bi-box-arrow-right leading-none align-middle"></i>
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </>
   );

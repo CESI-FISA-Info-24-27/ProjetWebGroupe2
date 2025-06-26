@@ -160,7 +160,7 @@ export default function MyProfilePage() {
                 Modifier le profil
               </Button>
             </DialogTrigger>
-            <DialogContent className="min-w-[22em] bg-sidebar text-sidebar-foreground transition-colors">
+            <DialogContent className="max-w-screen custom-scrollbar overflow-y-auto max-h-[90%]">
               <EditProfileComponent user={user} />
             </DialogContent>
           </Dialog>

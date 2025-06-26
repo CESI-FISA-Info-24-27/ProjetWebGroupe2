@@ -30,7 +30,7 @@ const App = () => {
   return (
     <ThemeProviderComponent defaultTheme="dark">
       <Toaster richColors />
-      <div className="flex flex-row h-full w-full">
+      <div className="flex flex-row h-full w-full overflow-x-hidden">
         {!hideSidebar && <Navbar />}
         <Routes>
           <Route path="/verify-email" element={<VerifyEmail />} />

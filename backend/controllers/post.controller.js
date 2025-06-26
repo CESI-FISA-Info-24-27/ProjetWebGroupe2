@@ -93,10 +93,9 @@ export async function getRepliesByPostId(req, res) {
 
 export async function getPostsByUser(req, res) {
   try {
-    const posts = await Post.find({ userData: req.params.userId }).populate(
-      "userData",
-      "userName profilePicture biography"
-    );
+    const posts = await Post.find({ userData: req.params.userId })
+      .populate("userData", "userName profilePicture biography")
+      .sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res
