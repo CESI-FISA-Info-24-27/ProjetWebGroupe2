@@ -65,7 +65,7 @@ export default function PrivateMessagesListComponent({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 border-r border-sidebar-border">
+      <ScrollArea className="flex-1 border-r border-sidebar-border overflow-y-auto pb-14">
         <div className="flex flex-col gap-4 py-2 px-4 bg-sidebar text-sidebar-foreground">
           {loading && <p className="text-foreground">Chargement...</p>}
           {!loading &&
