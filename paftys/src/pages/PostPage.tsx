@@ -32,7 +32,8 @@ export function PostPage() {
   }));
 
   // Trouver le post principal (celui qui n'a pas de repliedTo)
-  const post = parsedPosts.find((p) => !p.repliesTo);
+const post = parsedPosts.find((p) => p._id === postId);
+
 
   // Récupérer les réponses via post.replies (tableau d'IDs)
   let responses: Post[] = [];
