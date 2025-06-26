@@ -43,6 +43,7 @@
 - Tailwind CSS
 - Redux Toolkit
 - Axios
+- ShadCn
 - Mobile-first / Responsive Design
 
 ---
@@ -62,10 +63,10 @@ Créer un fichier `.env` dans :
 - `/backend` :
   ```env
   PORT= 5000
-  MONGO_URI= url_database
-  JWT_SECRET= jwt_secret
+  MONGO_URI= voir avec un admin
+  JWT_SECRET= voir avec un admin
   ```
-- `/frontend` :
+- `/paftys` :
   ```env
   VITE_DB_URI=http://localhost:5000
   ```
@@ -84,15 +85,16 @@ docker-compose up --build
 ## 🧱 Structure du projet
 
 ```
-paftys/
+projet/
 │
 ├── backend/                # API REST
+│   ├── config/
 │   ├── models/
 │   ├── controllers/
 │   ├── routes/
 │   └── middlewares/
 │
-├── frontend/               # Interface React
+├── paftys/               # Interface React
 │   ├── components/
 │   ├── pages/
 │   ├── redux/

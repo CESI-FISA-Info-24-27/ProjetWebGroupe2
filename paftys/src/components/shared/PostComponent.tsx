@@ -43,7 +43,8 @@ export default function PostComponent({
 
   const userId = useAppSelector((state) => state.auth.user?.id) || "";
 
-  const hasLiked = Array.isArray(postData.likes) && postData.likes.includes(userId);
+  const hasLiked =
+    Array.isArray(postData.likes) && postData.likes.includes(userId);
   const isAuthor = postData.userData?._id === userId;
 
   if (!postData.content || !postData.content.text) return null;

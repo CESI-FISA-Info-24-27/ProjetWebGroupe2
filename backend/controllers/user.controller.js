@@ -582,7 +582,6 @@ export async function toggleSuspendedUser(req, res) {
   }
 }
 
-
 function getUserInfo(user) {
   return {
     id: user._id,
@@ -609,4 +608,36 @@ function getUserInfoWithDash(user) {
     posts: user.posts,
     state: user.state,
   };
+}
+
+export async function getMostFollowedUsers(req, res) {
+  try {
+    const limit = parseInt(req.query.limit) || 5;
+
+    const users = await User.aggregate([
+      {
+        $addFields: {
+          subscribersCount: { $size: { $ifNull: ["$subscribers", []] } },
+        },
+      },
+      { $sort: { subscribersCount: -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: 1,
+          userName: 1,
+          biography: 1,
+          profilePicture: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching most followed users",
+      error: error.message,
+    });
+  }
 }

@@ -103,13 +103,21 @@ export async function getPostsByUser(req, res) {
       .json({ success: false, message: "Error fetching posts by user", error });
   }
 }
-
 export async function createPost(req, res) {
   try {
-      const { content, tags = [], repliesTo } = req.body;
-      const newPost = new Post({
+    const { content, tags = [], repliesTo } = req.body;
+
+    const postText = typeof content === "string" ? content : content?.text;
+    if (postText && postText.length > 500) {
+      return res.status(400).json({
+        success: false,
+        message: "Post is too long. Maximum 500 characters allowed.",
+      });
+    }
+
+    const newPost = new Post({
       userData: req.user._id,
-            content,
+      content,
       tags,
       repliesTo: repliesTo || null,
     });
@@ -126,7 +134,9 @@ export async function createPost(req, res) {
 
     res.status(201).json({ success: true, data: savedPost });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error creating post", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Error creating post", error });
   }
 }
 export async function updatePost(req, res) {

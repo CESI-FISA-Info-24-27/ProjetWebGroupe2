@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTrendingTags } from "@/reducers/tagsSlice";
 import type { AppDispatch, RootState } from "@/redux/store";
@@ -6,34 +6,22 @@ import ProfileComponent from "./ProfileComponent";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { NavLink } from "react-router-dom";
-
-const recommendedUsers = [
-  {
-    id: "1",
-    username: "alice42",
-    profilePicture: "https://randomuser.me/api/portraits/women/42.jpg",
-    bio: "Web developer & coffee lover",
-  },
-  {
-    id: "2",
-    username: "bob_dev",
-    profilePicture: "https://randomuser.me/api/portraits/men/34.jpg",
-    bio: "Full-stack engineer. Building cool stuff.",
-  },
-  {
-    id: "3",
-    username: "dianaUX",
-    profilePicture: "https://randomuser.me/api/portraits/women/55.jpg",
-    bio: "UI/UX designer. Making the web beautiful.",
-  },
-];
+import axios from "axios";
 
 export default function RightSideBar() {
   const dispatch = useAppDispatch();
   const trendingTags = useAppSelector((state) => state.tags.trendingTags);
+  const API_BASE_URL = import.meta.env.VITE_DB_URI + "/api/users";
+
+  const [mostFollowed, setMostFollowed] = useState<any[]>([]);
 
   useEffect(() => {
     dispatch(fetchTrendingTags());
+
+    axios
+      .get(`${API_BASE_URL}/most-followed?limit=3`)
+      .then((res) => setMostFollowed(res.data.data))
+      .catch(() => setMostFollowed([]));
   }, []);
 
   return (
@@ -41,15 +29,19 @@ export default function RightSideBar() {
       <div className="flex flex-col">
         <h2 className="text-xl font-semibold mb-2">Comptes recommandés</h2>
         <div className="flex flex-col gap-4">
-          {recommendedUsers.map((user) => (
-            <ProfileComponent
-              key={user.id}
-              image={user.profilePicture}
-              userName={user.username}
-              biography={user.bio}
-              condensed={false}
-            />
-          ))}
+          {mostFollowed.length > 0 ? (
+            mostFollowed.map((user) => (
+              <ProfileComponent
+                key={user._id}
+                image={user.profilePicture}
+                userName={user.userName}
+                biography={user.biography}
+                condensed={false}
+              />
+            ))
+          ) : (
+            <div className="text-gray-500">Aucun compte recommandé</div>
+          )}
         </div>
       </div>
 
