@@ -27,11 +27,13 @@ export interface UserForPost {
 }
 
 // Thunk pour charger tous les posts
-export const fetchPosts = createAsyncThunk<Post[], { page: number}>(
+export const fetchPosts = createAsyncThunk<Post[], { page: number }>(
   "post/fetchPosts",
   async ({ page }, thunkAPI) => {
     try {
-      const res = await axios.get(dotenv.VITE_DB_URI + "/api/posts/page/" + page);
+      const res = await axios.get(
+        dotenv.VITE_DB_URI + "/api/posts/page/" + page
+      );
 
       return res.data.data;
     } catch (err: any) {
@@ -107,6 +109,32 @@ export const fetchPostsByUserId = createAsyncThunk<Post[], { userId: string }>(
   }
 );
 
+export const updatePost = createAsyncThunk<
+  Post,
+  { postId: string; text: string }
+>("post/updatePost", async ({ postId, text }, thunkAPI) => {
+  try {
+    const token = Cookies.get("token");
+    if (!token) throw new Error("Token manquant");
+
+    const res = await axios.put(
+      `${dotenv.VITE_DB_URI}/api/posts/${postId}`,
+      { text },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Erreur lors de la mise à jour du post"
+    );
+  }
+});
+
 // Slice
 const postSlice = createSlice({
   name: "post",
@@ -178,6 +206,13 @@ const postSlice = createSlice({
       .addCase(fetchPostById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        const updated = action.payload;
+        const index = state.posts.findIndex((post) => post._id === updated._id);
+        if (index !== -1) {
+          state.posts[index] = updated;
+        }
       });
   },
 });
