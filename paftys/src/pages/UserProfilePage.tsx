@@ -1,3 +1,4 @@
+import defaultProfile from "@/assets/default.png";
 import UserPostsComponent from "@/components/profile/UserPostsComponent";
 import LoadingComponent from "@/components/shared/LoadingComponent";
 import ProfileComponent from "@/components/shared/ProfileComponent";
@@ -9,14 +10,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { updateSubscriptions } from "@/reducers/authSlice";
 import { fetchPostsByUserId } from "@/reducers/postSlice";
-import { fetchUserById } from "@/reducers/userSlice";
+import { fetchUserById, toggleSubscription } from "@/reducers/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import isEmptyHelper from "@/utils/isEmptyHelper";
 import { useEffect, useState } from "react";
-import { toggleSubscription } from "@/reducers/userSlice";
 import { toast, Toaster } from "sonner";
-import { updateSubscriptions } from "@/reducers/authSlice";
 
 export default function UserProfilePage() {
   const userName = window.location.pathname.split("/").pop();
@@ -79,65 +79,51 @@ export default function UserProfilePage() {
   return !isEmptyHelper(user) ? (
     <div className="flex flex-col items-center h-screen p-4 max-w-full w-full overflow-x-hidden pb-14">
       <Toaster richColors />
-      <Card className="w-full lg:w-[70%] mx-auto p-6 flex flex-col items-center rounded-xl shadow-md mb-4">
-        <div className="flex flex-col justify-around w-full items-center mb-6 md:flex-row">
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="text-2xl font-semibold text-center">
+      <Card className="w-full gap-0 lg:max-w-[70%] mx-auto p-4 flex flex-col items-center rounded-xl shadow-md mb-4 text-sidebar-foreground transition-colors">
+        <div className="flex flex-row justify-around w-full items-center gap-4">
+          <div className="flex flex-col items-center gap-2">
+            <h2 className="text-xl font-semibold text-center">
               {user ? user.userName : "Utilisateur inconnu"}
             </h2>
             <img
-              src={
-                profilePictureUrl ??
-                "https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-              }
+              src={user?.profilePicture ? profilePictureUrl : defaultProfile}
               alt="Photo de profil"
-              className="w-32 h-32 lg:w-40 lg:h-40 rounded-full object-cover mb-4 border-2 border-gray-200"
+              className="w-12 h-12 lg:w-28 lg:h-28 rounded-full object-cover mb-2 border-2 border-sidebar-border"
             />
-            <Button
-              className="cursor-pointer"
-              onClick={handleSubscriptionToggle}
-            >
-              {subscribers.some((subscribers) => subscribers._id === me?.id)
-                ? "Se désabonner"
-                : "S'abonner"}
-            </Button>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0">
+          <div className="flex flex-row items-center gap-2">
             <HoverCard>
               <HoverCardTrigger>
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
-                  {user?.subscribers && user.subscribers.length > 0 ? (
+                  {subscribers && subscribers.length > 0 ? (
                     <span className="text-purple-500">
                       {subscribers.length} Abonnés
                     </span>
                   ) : (
-                    <span className="text-gray-500">0 Abonnés</span>
+                    <span className="text-muted-foreground">0 Abonnés</span>
                   )}
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-4">
+              <HoverCardContent className="flex flex-col gap-4 bg-sidebar text-sidebar-foreground transition-colors">
                 {!subscribers || subscribers.length === 0 ? (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-center">
-                        Personne n'est encore abonné à ce profil.
-                      </p>
-                      <div className="bi bi-emoji-frown text-5xl"></div>
-                    </div>
-                  </>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center">
+                      Personne n'est encore abonné à ce profil.
+                    </p>
+                    <div className="bi bi-emoji-frown text-5xl"></div>
+                  </div>
                 ) : (
                   <>
-                    {" "}
                     <p className="self-center">{subscribers.length} Abonnés </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {subscribers.map((user) => (
+                          {subscribers.map((sub) => (
                             <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
+                              key={sub._id}
+                              image={sub.profilePicture}
+                              userName={sub.userName}
+                              biography={sub.biography}
                               condensed={false}
                             />
                           ))}
@@ -153,38 +139,35 @@ export default function UserProfilePage() {
                 <div className="cursor-pointer transition-transform duration-300 hover:scale-105">
                   {subscriptions && subscriptions.length > 0 ? (
                     <span className="text-purple-500">
-                      {subscriptions.length} Abbonnements
+                      {subscriptions.length} Abonnements
                     </span>
                   ) : (
-                    <span className="text-gray-500">0 Abbonnements</span>
+                    <span className="text-muted-foreground">0 Abonnements</span>
                   )}
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent className="flex flex-col gap-4">
+              <HoverCardContent className="flex flex-col gap-4 bg-sidebar text-sidebar-foreground transition-colors">
                 {!subscriptions || subscriptions.length === 0 ? (
-                  <>
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-center">
-                        Ce profil ne suit actuellement personne.
-                      </p>
-                      <div className="bi bi-emoji-frown text-5xl"></div>
-                    </div>
-                  </>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-center">
+                      Ce profil ne suit actuellement personne.
+                    </p>
+                    <div className="bi bi-emoji-frown text-5xl"></div>
+                  </div>
                 ) : (
                   <>
-                    {" "}
                     <p className="self-center">
                       {subscriptions.length} Abonnements{" "}
                     </p>
                     <ScrollArea>
                       <div className="max-h-60">
                         <div className="flex flex-col gap-4 w-full">
-                          {subscriptions.map((user) => (
+                          {subscriptions.map((sub) => (
                             <ProfileComponent
-                              key={user._id}
-                              image={user.profilePicture}
-                              userName={user.userName}
-                              biography={user.biography}
+                              key={sub._id}
+                              image={sub.profilePicture}
+                              userName={sub.userName}
+                              biography={sub.biography}
                               condensed={false}
                             />
                           ))}
@@ -196,8 +179,13 @@ export default function UserProfilePage() {
               </HoverCardContent>
             </HoverCard>
           </div>
+          <Button className="cursor-pointer" onClick={handleSubscriptionToggle}>
+            {subscribers.some((subscribers) => subscribers._id === me?.id)
+              ? "Se désabonner"
+              : "S'abonner"}
+          </Button>
         </div>
-        <p className="text-base text-white text-center m-0">
+        <p className="text-base text-muted-foreground text-center m-0">
           {user
             ? user.biography
               ? user.biography
