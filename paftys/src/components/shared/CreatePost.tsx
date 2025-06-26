@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { createPost } from "@/reducers/postSlice";
 
 interface CreatePostProps {
-  repliesTo?: string; 
+  repliesTo?: string;
 }
 
 export default function CreatePost({ repliesTo }: CreatePostProps) {
@@ -19,33 +19,34 @@ export default function CreatePost({ repliesTo }: CreatePostProps) {
   const [tags, setTags] = useState("");
 
   if (!user) return null; // sécurité si non connecté
-const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!text.trim()) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!text.trim()) return;
 
-  try {
-    const newPost = await dispatch(
-      createPost({
-        content: { text, images: image ? [image] : [] },
-        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-        repliesTo,
-      })
-    ).unwrap();  // unwrap pour récupérer directement la valeur ou gérer erreur
+    try {
+      const newPost = await dispatch(
+        createPost({
+          content: { text, images: image ? [image] : [] },
+          tags: tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+          repliesTo,
+        })
+      ).unwrap(); // unwrap pour récupérer directement la valeur ou gérer erreur
 
-
-    setText("");
-    setImage(null);
-    setTags("");
-  } catch (err) {
-    console.error("Erreur lors de la création du post :", err);
-  }
-};
-
+      setText("");
+      setImage(null);
+      setTags("");
+    } catch (err) {
+      console.error("Erreur lors de la création du post :", err);
+    }
+  };
 
   return (
-    <div className="border p-4 rounded-2xl shadow bg-white dark:bg-zinc-900 w-full">
+    <div className="border p-4 rounded-2xl shadow bg-white lg:w-[70%] dark:bg-zinc-900 w-full">
       <div className="flex items-start gap-4">
         <ProfileComponent
           image={user.profilePicture}
