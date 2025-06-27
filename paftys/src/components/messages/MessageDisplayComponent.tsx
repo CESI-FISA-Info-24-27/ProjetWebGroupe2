@@ -14,7 +14,7 @@ export default function MessageDisplayComponent({
       <img src={profilePic} className="h-15 w-15 rounded-full object-cover" />
       <div className="flex flex-col overflow-hidden">
         <p className="text-xl truncate">{username}</p>
-        <p className="text-muted-foreground truncate">{preview}</p>
+        <p className="text-muted-foreground truncate max-w-80">{preview}</p>
       </div>
     </div>
   );
