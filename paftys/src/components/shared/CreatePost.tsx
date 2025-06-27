@@ -72,7 +72,7 @@ export default function CreatePost({
             placeholder={repliesTo ? "Votre réponse..." : "Quoi de neuf ?"}
             value={text}
             onChange={handleTextChange}
-            className="resize-none"
+            className="resize-none break-all"
             rows={3}
           />
           <div className="flex justify-between items-center">
