@@ -58,7 +58,7 @@ export default function DialogueMessageComponent({
           }
           userName={other?.userName || "Utilisateur inconnu"}
           biography={other?.biography || "Pas de bio"}
-          condensed={false}
+          condensed={true}
         />
       </div>
 
