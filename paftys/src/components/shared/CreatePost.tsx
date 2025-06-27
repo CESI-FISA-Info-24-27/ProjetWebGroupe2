@@ -12,19 +12,36 @@ interface CreatePostProps {
   onPostCreated?: () => void;
 }
 
-export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps) {
+export default function CreatePost({
+  repliesTo,
+  onPostCreated,
+}: CreatePostProps) {
   const token = useAppSelector((state) => state.auth.token);
   const user = useAppSelector((state) => state.auth.user);
   const [text, setText] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [tags, setTags] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const CHARACTER_LIMIT = 500;
 
   if (!user) return null;
   const dispatch = useAppDispatch();
 
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length > CHARACTER_LIMIT) {
+      setError("Limite de 500 caractères atteinte.");
+      setText(value.slice(0, CHARACTER_LIMIT));
+    } else {
+      setError(null);
+      setText(value);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() || text.length > CHARACTER_LIMIT) return;
 
     try {
       await dispatch(
@@ -40,13 +57,12 @@ export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps
       setText("");
       setImage(null);
       setTags("");
-
+      setError(null);
       onPostCreated?.();
     } catch (err) {
       console.error("Erreur lors de la création du post :", err);
     }
   };
-
 
   return (
     <div className="border p-4 rounded-2xl shadow mt-4 bg-white w-[95%] sm:w-[90%] lg:w-[70%] dark:bg-zinc-900 w-full">
@@ -55,11 +71,22 @@ export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps
           <Textarea
             placeholder={repliesTo ? "Votre réponse..." : "Quoi de neuf ?"}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={handleTextChange}
             className="resize-none"
             rows={3}
           />
-
+          <div className="flex justify-between items-center">
+            <span
+              className={`text-xs ${
+                text.length >= CHARACTER_LIMIT
+                  ? "text-red-500"
+                  : "text-gray-400"
+              }`}
+            >
+              {text.length}/{CHARACTER_LIMIT}
+            </span>
+            {error && <span className="text-xs text-red-500">{error}</span>}
+          </div>
           {image && (
             <img
               src={image}
@@ -67,7 +94,6 @@ export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps
               className="max-w-xs max-h-48 rounded-xl object-cover"
             />
           )}
-
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between">
             {/* <Input
               type="file"
@@ -81,7 +107,11 @@ export default function CreatePost({ repliesTo, onPostCreated }: CreatePostProps
               }}
               className="w-full sm:w-auto"
             /> */}
-            <Button type="submit" className="w-full cursor-pointer sm:w-auto">
+            <Button
+              type="submit"
+              className="w-full cursor-pointer sm:w-auto"
+              disabled={text.length === 0 || text.length > CHARACTER_LIMIT}
+            >
               {repliesTo ? "Répondre" : "Publier"}
             </Button>
           </div>
